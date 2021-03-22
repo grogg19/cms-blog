@@ -1624,9 +1624,6 @@ class Dropzone extends Emitter {
 //////////////////////////////////////////////////////////
         this.emit("removedfile", file);
 
-        //alert(Object.values(this.getExistingFallback()));
-        //alert(Object.values(this.getA));
-        //alert(this.getFilesWithStatus(Dropzone.ADDED).length)
         if (this.files.length === 0) {
             //return this.emit("reset");
         }
