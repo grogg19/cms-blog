@@ -1,0 +1,60 @@
+# ===================================
+#  Описание полей
+# ===================================
+
+fields:
+    title:
+        form: input
+        label: Заголовок
+        options:
+            type: text
+            placeholder: Введите заголовок
+            id: title
+            class: form-control form-control-style-2 title
+
+    slug:
+        form: input
+        label: Slug
+        options:
+            type: text
+            placeholder: - slug -
+            id: slug
+            class: form-control form-control-style-2 slug
+
+    excerpt:
+        form: textarea
+        label: Краткое описание
+        options:
+            placeholder: Краткое описание...
+            rows: 8
+            cols: 80
+            class: form-control form-control-style-3
+
+    content:
+        form: editor
+        label: Содержимое поста
+        options:
+             class: dx-editor
+             data-editor-height: 150
+             data-editor-maxHeight: 250
+
+    published_at:
+        form: datetimepicker
+        label: Дата публикации
+        options:
+            type: text
+            class: form-control form-control-style-2 col-md-6
+            id: datetimepicker
+
+    published:
+        form: switch
+        label: Публикация
+        options:
+            type: checkbox
+            data-toggle: toggle
+            data-on: Вкл
+            data-off: Выкл
+            data-onstyle: primary
+            data-offstyle: secondary
+
+action: /admin/blog/posts/save

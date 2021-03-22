@@ -1,0 +1,62 @@
+# ===================================================
+#  Описание полей редактирования профиля пользователя
+# ===================================================
+
+fields:
+    first_name:
+        form: input
+        label: Имя
+        options:
+            type: text
+            placeholder: Имя
+            id: first_name
+            class: form-control form-control-style-2 first_name width300
+
+    last_name:
+        form: input
+        label: Фамилия
+        options:
+            type: text
+            placeholder: Фамилия
+            id: last_name
+            class: form-control form-control-style-2 last_name width300
+
+    self_description:
+                form: textarea
+                label: О себе
+                options:
+                    placeholder: Краткая информация о себе...
+                    rows: 8
+                    cols: 80
+                    class: form-control form-control-style-3
+
+    password:
+        form: input
+        label: Новый пароль
+        options:
+            type: password
+            placeholder: Новый пароль
+            id: password
+            class: form-control form-control-style-2 password width300
+
+    password_confirm:
+          form: input
+          label: Подтверждение пароля
+          options:
+              type: password
+              placeholder: Подтверждение пароля
+              id: password_confirm
+              class: form-control form-control-style-2 password_confirm width300
+
+    email:
+          form: input
+          label: Электронная почта
+          options:
+              type: email
+              placeholder: Ваша электронная почта
+              id: email
+              class: form-control form-control-style-2 email width300
+
+action: /admin/account/save
+
+title: Редактирование профиля пользователя

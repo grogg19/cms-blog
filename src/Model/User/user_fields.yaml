@@ -1,0 +1,48 @@
+# ===================================
+#  Описание полей пользователя для формы регистрации
+# ===================================
+
+fields:
+    first_name:
+        form: input
+        options:
+            type: text
+            placeholder: Ваше имя
+            id: first_name
+            class: form-control form-control-style-4 first_name width300
+
+    last_name:
+        form: input
+        options:
+            type: text
+            placeholder: Ваша фамилия
+            id: last_name
+            class: form-control form-control-style-4 last_name width300
+
+    password:
+            form: input
+            options:
+                type: password
+                placeholder: Новый пароль
+                id: password
+                class: form-control form-control-style-4 password width300
+
+    password_confirm:
+                form: input
+                options:
+                    type: password
+                    placeholder: Подтверждение пароля
+                    id: password_confirm
+                    class: form-control form-control-style-4 password_confirm width300
+
+    email:
+            form: input
+            options:
+                type: email
+                placeholder: Ваша электронная почта
+                id: email
+                class: form-control form-control-style-4 email width300
+
+action: /signup
+
+title: Регистрация пользователя

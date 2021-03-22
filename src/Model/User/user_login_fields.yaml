@@ -1,0 +1,24 @@
+# ===================================
+#  Описание полей
+# ===================================
+
+fields:
+    email:
+        form: input
+        options:
+            type: email
+            placeholder: Введите email
+            id: email
+            class: form-control form-control-style-4 email width300 required
+
+    password:
+        form: input
+        options:
+            type: password
+            placeholder: Введите пароль
+            id: password
+            class: form-control form-control-style-4 password width300 required
+
+action: /admin/auth
+
+title: Вход
