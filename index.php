@@ -69,6 +69,8 @@ $router->get(['get', 'post'],'/admin/test', 'Auth\Auth@test');
 $router->get('get','/logout', 'Controllers\BackendControllers\LoginController@logout');
 $router->get(['get', 'post'],'/signup', 'Controllers\BackendControllers\RegisterController@signup');
 
+$router->get('get','/admin/static-pages', 'Controllers\BackendControllers\StaticPagesController@index');
+
 
 // создаем приложение
 $application = new Application($router);

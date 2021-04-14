@@ -26,7 +26,7 @@
                     </div>
                     <div class="dx-separator"></div>
                     <form class="dx-form" name="form_create_post" id="form_create_post" action="<?= (isset($form['action'])) ? $form['action'] : ""?>">
-                        <input type="hidden" name="_token" value="<?=$token?>">
+                        <input type="hidden" name="_token" value="<?=(!empty($token) ? $token : '')?>">
 
                         <div class="dx-box-content">
                             <?php
