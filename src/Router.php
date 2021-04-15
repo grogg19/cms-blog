@@ -15,7 +15,10 @@ use App\Route as Route;
  */
 class Router
 {
-    private $routes; // массив маршрутов
+    /**
+     * @var
+     */
+    private array $routes; // массив маршрутов
 
     /**
      * Метод регистрирует маршруты
@@ -29,9 +32,6 @@ class Router
     }
 
     /**
-     * Метод сравнивает запрос в адресной строке с маршрутами в $this->routes и при совпадении выводит соответствующее
-     * сообщение связанного замыкания или статических методов класса Controller
-     * @param DI $di
      * @return mixed
      * @throws NotFoundException
      */

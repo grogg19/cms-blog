@@ -6,8 +6,12 @@
 namespace App;
 
 use App\Controllers\BackendControllers\AdminImageController;
+use App\Controllers\PublicControllers\StaticPagesController;
 use App\Cookie\Cookie;
+use App\Exception\NotFoundException;
 use App\Router as Router;
+use App\StaticPages\FilesList;
+use App\StaticPages\PageList;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use App\DI\DI;
@@ -30,6 +34,7 @@ class Application
     public function __construct(Router $router)
     {
         $this->router = $router;
+        $this->getRoutesFromStaticPages();
         $this->initialize();
         $this->initSession();
     }
@@ -109,6 +114,22 @@ class Application
         if(!empty(Cookie::get('authUser'))) {
             $this->session->start();
         }
+    }
+
+
+    /**
+     * @throws NotFoundException
+     */
+    private function getRoutesFromStaticPages()
+    {
+        $pages = (new StaticPagesController())->getStaticPages();
+
+        if(is_array($pages)) {
+            foreach ($pages as $url => $page) {
+                $this->router->get('get', $url, 'Controllers\PublicControllers\StaticPagesController@index');
+            }
+        }
+
     }
 
 }
