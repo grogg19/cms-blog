@@ -14,7 +14,7 @@
 		                    <div class="dx-separator"></div>
 		                    <?php foreach ($pages as $page) { ?>
 			                    <ul class="text-left mb-6 mt-6">
-				                    <li><?= $page->getParameter('title') ?></li>
+				                    <li><?= $page->getParameter('title') ?> url: <?= $page->getParameter('url') ?></li>
 			                    </ul>
 			                <?php } ?>
 	                    <?php } ?>
