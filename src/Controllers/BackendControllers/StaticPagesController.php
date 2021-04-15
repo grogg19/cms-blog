@@ -5,9 +5,10 @@ namespace App\Controllers\BackendControllers;
 
 use App\StaticPages\FilesList;
 use App\StaticPages\PageList;
+use App\Controllers\BackendControllers\AdminController;
 use App\View;
 
-class StaticPagesController
+class StaticPagesController extends AdminController
 {
     public function index()
     {

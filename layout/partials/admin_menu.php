@@ -16,6 +16,9 @@
             <li>
                 <a href="/admin/blog/posts"><span class="icon pe-7s-news-paper"></span> Статьи блога</a>
             </li>
+	        <li>
+		        <a href="/admin/static-pages"><span class="icon pe-7s-news-paper"></span> Статические страницы</a>
+	        </li>
 	        <?php if($user->is_superuser === 1) { ?>
             <li>
                 <a href="/admin/user-manager"><span class="icon pe-7s-users"></span> Управление пользователями</a>
