@@ -5,7 +5,6 @@ namespace App\Controllers\PublicControllers;
 
 use App\Config;
 use App\Exception\NotFoundException;
-use App\Redirect;
 use App\Request\Request;
 use App\StaticPages\FilesList;
 use App\StaticPages\Page;
@@ -54,15 +53,17 @@ class StaticPagesController extends PublicController
     public function getStaticPagesUrl(): void
     {
         $config = Config::getInstance()->getConfig('cms');
-        dump($config);
+
         if(!empty($config['staticPages'])) {
+
             $pages = match ($config['staticPages']) {
                 'files' => new FilesList,
                 'db' => throw new NotFoundException('компонент статических страниц пока не работает с БД', 510)
             };
             $this->staticPages = $pages;
+        } else {
+            throw new NotFoundException('В файле конфигурации CMS не указан тип данных статических страниц');
         }
-        throw new NotFoundException('В файле конфигурации CMS не указан тип данных статических страниц');
     }
 
     public function getStaticPages()
