@@ -3,9 +3,7 @@
  * User footer
  */
 use App\View;
-
 ?>
-
     <!-- START: Footer -->
     <footer class="dx-footer">
         <div class="dx-box-1">
@@ -23,16 +21,8 @@ use App\View;
                             <div class="dx-widget-text">
                                 <p class="mb-0">&copy; <?=date('Y')?> <span class="dib">All rights reserved.</span> <span class="dib">Dexad &amp; nK.</span></p>
                             </div>
-                            <div class="dx-widget-text">
-                                <ul class="dx-social-links mnt-3">
-                                    <li><a href="#"><span class="fab fa-behance-square"></span></a></li>
-                                    <li><a href="#"><span class="fab fa-instagram"></span></a></li>
-                                    <li><a href="#"><span class="fab fa-dribbble"></span></a></li>
-                                    <li><a href="#"><span class="fab fa-github"></span></a></li>
-                                </ul>
-                            </div>
+							<?php (new View('partials.footer.social_buttons'))->render(); ?>
                         </div>
-
                     </div>
                     <div class="col-sm-6 col-lg-3">
 
@@ -56,10 +46,8 @@ use App\View;
                                 </li>
                             </ul>
                         </div>
-
                     </div>
                     <div class="col-sm-6 col-lg-3">
-
                         <div class="dx-widget-footer">
                             <div class="dx-widget-title">
                                 Latest Products
@@ -70,29 +58,25 @@ use App\View;
                                 <a href="/product.html">Minist – Subdue Above for Signs Dry is Have Great</a>
                             </div>
                         </div>
-
                     </div>
                     <div class="col-sm-6 col-lg-3">
-
                         <div class="dx-widget-footer">
                             <div class="dx-widget-title">
                                 Latest Posts
                             </div>
                             <a href="/single-post.html" class="dx-widget-post">
 
-        <span class="dx-widget-post-text">
-            <span class="dx-widget-post-title">The Big Thing in Design</span>
-            <span class="dx-widget-post-date">25 Sep 2018</span>
-        </span>
+					        <span class="dx-widget-post-text">
+					            <span class="dx-widget-post-title">The Big Thing in Design</span>
+					            <span class="dx-widget-post-date">25 Sep 2018</span>
+					        </span>
 
                             </a>
                             <a href="/single-post.html" class="dx-widget-post">
-
-        <span class="dx-widget-post-text">
-            <span class="dx-widget-post-title">Will Coding Ever Rule the World?</span>
-            <span class="dx-widget-post-date">24 Sep 2018</span>
-        </span>
-
+					        <span class="dx-widget-post-text">
+					            <span class="dx-widget-post-title">Will Coding Ever Rule the World?</span>
+					            <span class="dx-widget-post-date">24 Sep 2018</span>
+					        </span>
                             </a>
                         </div>
                     </div>
@@ -104,4 +88,4 @@ use App\View;
 </div>
 <?php
 
-(new View('base/footer'))->render();
+(new View('base.footer'))->render();
