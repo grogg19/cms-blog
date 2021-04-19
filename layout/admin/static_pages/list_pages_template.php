@@ -10,6 +10,9 @@
                 <div class="dx-box-decorated">
                     <div class="dx-box-content">
                         <h2 class="h6 mt-5 mb-5"><?= !empty($title) ? $title : ''?></h2>
+<!--	                    <div class="mt-10 mb-10">-->
+		                    <a href="/admin/static-pages/add" ><i class="fas fa-plus"></i></a>
+<!--	                    </div>-->
 	                    <?php if(!empty($pages)) { ?>
 		                    <div class="dx-separator"></div>
 		                    <?php foreach ($pages as $page) { ?>

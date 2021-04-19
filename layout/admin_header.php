@@ -64,30 +64,18 @@ use App\View;
                 </li>
                 <li class="dx-drop-item">
                     <a href="/help-center.html">
-                        Help Center
+                        Страницы
                     </a><ul class="dx-navbar-dropdown">
 
                         <li>
-                            <a href="help-center.html">
-                                Help Center
+                            <a href="/admin/static-pages">
+                                Список статических страниц
                             </a>
                         </li>
                         <li class="dx-drop-item">
-                            <a href="/documentations.html">
-                                Documentations
-                            </a><ul class="dx-navbar-dropdown">
-
-                                <li>
-                                    <a href="/documentations.html">
-                                        Documentations
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/single-documentation.html">
-                                        Single documentation
-                                    </a>
-                                </li>
-                            </ul>
+                            <a href="/admin/static-pages/add">
+                                Добавить
+                            </a>
                         </li>
                         <li class="dx-drop-item">
                             <a href="/articles.html">
@@ -187,7 +175,7 @@ use App\View;
             </ul>
             <ul class="dx-nav dx-nav-align-right">
                 <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
-                    (new View('partials/admin_menu', ['user' => !empty($user) ? $user : '']))->render();
+                    (new View('partials.header.admin_menu', ['user' => !empty($user) ? $user : '']))->render();
                 } else { ?>
                     <li>
                         <a data-fancybox data-type="ajax" data-options='{"ajax" : {"settings" : {"type" : "post"}}  }' data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>
@@ -374,7 +362,7 @@ use App\View;
 
             <ul class="dx-nav dx-nav-align-right">
                 <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
-                    (new View('partials/admin_menu', ['user' => !empty($user) ? $user : '']))->render();
+                    (new View('partials.header.admin_menu', ['user' => !empty($user) ? $user : '']))->render();
                 } else { ?>
                     <li>
                         <a data-fancybox data-type="ajax" data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>
