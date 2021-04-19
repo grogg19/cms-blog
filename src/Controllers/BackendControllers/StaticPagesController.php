@@ -11,6 +11,10 @@ use App\View;
 
 class StaticPagesController extends AdminController
 {
+    /**
+     * Метод выводит список статических страниц
+     * @return View
+     */
     public function index()
     {
         return new View('index', ['view' => 'admin.static_pages.list_pages_template', 'data' => [
@@ -19,6 +23,10 @@ class StaticPagesController extends AdminController
         ]]);
     }
 
+    /**
+     * Форма редакктирования содержимого статическйо страницы
+     * @return View
+     */
     public function editPage()
     {
         return new View('admin', [
@@ -38,5 +46,14 @@ class StaticPagesController extends AdminController
     public function getFields()
     {
         return (new Yaml())->parseFile(__DIR__ . '/../../Model/StaticPage/page_fields.yaml');
+    }
+
+    /**
+     * Удаление страницы
+     * @return bool
+     */
+    public function deletePage(): bool
+    {
+        return false;
     }
 }
