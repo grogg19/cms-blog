@@ -68,7 +68,7 @@ class AdminPostController extends AdminController
         }
 
         return new View('admin', [
-            'view' => 'admin/list_posts',
+            'view' => 'admin.list_posts',
             'data' => [
                 'posts' => $posts
             ],
@@ -88,7 +88,7 @@ class AdminPostController extends AdminController
         }
 
         return new View('admin', [
-            'view' => 'admin/create_post',
+            'view' => 'admin.create_post',
             'data' => [
                 'form' => $this->getFields(),
                 'token' => \Helpers\generateToken()

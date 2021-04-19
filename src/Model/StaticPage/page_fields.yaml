@@ -1,0 +1,55 @@
+# ===================================
+#  Описание полей статической страницы
+# ===================================
+
+fields:
+    title_page:
+        form: input
+        options:
+            type: text
+            placeholder: Заголовок страницы
+            id: title_page
+            class: form-control form-control-style-2 title_page width300
+
+    url_page:
+        form: input
+        options:
+            type: text
+            placeholder: URL
+            id: url_page
+            class: form-control form-control-style-2 url_page width300 mb-10
+
+    content_page:
+        form: editor
+        label: Содержимое страницы
+        options:
+            class: dx-editor
+            data-editor-height: 150
+            data-editor-maxHeight: 250
+
+    isHidden:
+        form: switch
+        label: Показывать на сайте?
+        options:
+            type: checkbox
+            data-toggle: toggle
+            data-on: Да
+            data-off: Нет
+            data-onstyle: primary
+            data-offstyle: secondary
+
+    navigationHidden:
+        form: switch
+        label: Показывать в навигации?
+        options:
+            type: checkbox
+            data-toggle: toggle
+            data-on: Да
+            data-off: Нет
+            data-onstyle: primary
+            data-offstyle: secondary
+
+
+action: /admin/static-pages/add
+
+title: Создание страницы

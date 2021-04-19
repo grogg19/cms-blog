@@ -70,6 +70,7 @@ $router->get('get','/logout', 'Controllers\BackendControllers\LoginController@lo
 $router->get(['get', 'post'],'/signup', 'Controllers\BackendControllers\RegisterController@signup');
 
 $router->get('get','/admin/static-pages', 'Controllers\BackendControllers\StaticPagesController@index');
+$router->get(['get', 'post'],'/admin/static-pages/add', 'Controllers\BackendControllers\StaticPagesController@editPage');
 
 
 // создаем приложение
