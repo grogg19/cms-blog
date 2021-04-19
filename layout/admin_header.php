@@ -4,7 +4,7 @@
  */
 use App\View;
 
-(new View('base/header', ['title' => $title]))->render();
+(new View('base/header', ['title' => !empty($title) ? $title : '']))->render();
 
 ?>
 <!-- START: Navbar -->
@@ -187,7 +187,7 @@ use App\View;
             </ul>
             <ul class="dx-nav dx-nav-align-right">
                 <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
-                    (new View('partials/admin_menu', ['user' => $user]))->render();
+                    (new View('partials/admin_menu', ['user' => !empty($user) ? $user : '']))->render();
                 } else { ?>
                     <li>
                         <a data-fancybox data-type="ajax" data-options='{"ajax" : {"settings" : {"type" : "post"}}  }' data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>
@@ -374,7 +374,7 @@ use App\View;
 
             <ul class="dx-nav dx-nav-align-right">
                 <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
-                    (new View('partials/admin_menu'))->render();
+                    (new View('partials/admin_menu', ['user' => !empty($user) ? $user : '']))->render();
                 } else { ?>
                     <li>
                         <a data-fancybox data-type="ajax" data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>

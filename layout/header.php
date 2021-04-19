@@ -4,7 +4,7 @@
  */
 use App\View;
 
-(new View('base.header', ['title' => $title]))->render();
+(new View('base.header', ['title' => (!empty($title)) ? $title : '']))->render();
 ?>
 <!-- START: Navbar -->
 <nav class="dx-navbar dx-navbar-top dx-navbar-collapse dx-navbar-sticky dx-navbar-expand-lg dx-navbar-dropdown-triangle dx-navbar-autohide">
@@ -186,7 +186,7 @@ use App\View;
             </ul>
             <ul class="dx-nav dx-nav-align-right">
             <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
-                (new View('partials/admin_menu',['user' => $user]))->render();
+                (new View('partials.header.admin_menu',['user' => !empty($user) ? $user : '']))->render();
             } else { ?>
 	            <?php if(!in_array(\Helpers\request()->server('REQUEST_URI'), ['/login', '/signup'])) { ?>
 	            <li>
@@ -375,7 +375,7 @@ use App\View;
 
 	        <ul class="dx-nav dx-nav-align-right">
                 <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
-                    (new View('partials/admin_menu',['user' => $user]))->render();
+                    (new View('partials.header.admin_menu',['user' => $user]))->render();
                 } else { ?>
                     <?php if(!in_array(\Helpers\request()->server('REQUEST_URI'), ['/login', '/signup'])) { ?>
 				        <li>
@@ -407,14 +407,10 @@ use App\View;
 
                     <!-- START: Breadcrumbs -->
                     <ul class="dx-breadcrumbs text-center">
-
                         <li><a href="/index.html">Home</a></li>
-
                         <li>Blog</li>
-
                     </ul>
                     <!-- END: Breadcrumbs -->
-
                 </div>
             </div>
         </div>

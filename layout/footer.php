@@ -29,8 +29,6 @@ use App\View;
                     (new View('partials.footer.footer_menu'))->render();
 	                ?>
                     </div>
-<!--                    <div class="col-sm-6 col-lg-3">-->
-<!--                    </div>-->
                     <div class="col-sm-12 col-lg-6">
                         <?php
                         (new View('partials.footer.latest_posts', (new \App\Controllers\PublicControllers\PublicPostController())->latestPosts()))->render();
