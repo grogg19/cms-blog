@@ -180,13 +180,13 @@ function slugify(s, opt) {
     return opt.lowercase ? s.toLowerCase() : s;
 }
 
-const post_title = document.querySelector('form .title');
-const post_slug = document.querySelector('form .slug');
+const title = document.querySelector('form .title');
+const slug = document.querySelector('form .slug');
 
-if(post_title) {
-    post_title.oninput = async (e) => {
+if(title) {
+    title.oninput = async (e) => {
         e.preventDefault();
-        post_slug.value = slugify(post_title.value);
+        slug.value = '/' + slugify(title.value);
     }
 }
 

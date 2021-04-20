@@ -24,7 +24,7 @@ class StaticPagesController extends AdminController
     }
 
     /**
-     * Форма редакктирования содержимого статическйо страницы
+     * Форма редакктирования содержимого статической страницы
      * @return View
      */
     public function editPage()
@@ -37,6 +37,13 @@ class StaticPagesController extends AdminController
             ],
             'title' => 'Создание новой страницы'
         ]);
+    }
+
+    public function savePage()
+    {
+        if ($_POST) {
+            dump($_POST);
+        }
     }
 
     /**
