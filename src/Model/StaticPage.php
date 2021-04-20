@@ -11,9 +11,7 @@ class StaticPage extends Model
 {
     public $rules = [
         'title'   => 'required',
-        'slug'    => ['required', 'regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
-        'content' => 'required',
-        'excerpt' => 'required',
-        'published_at' => 'required'
+        'url'    => ['required', 'regex:/^[a-z0-9\/\:_\-\*\[\]\+\?\|]*$/i'],
+        'content' => 'required'
     ];
 }

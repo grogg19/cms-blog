@@ -3,23 +3,23 @@
 # ===================================
 
 fields:
-    title_page:
+    title:
         form: input
         options:
             type: text
             placeholder: Заголовок страницы
-            id: title_page
-            class: form-control form-control-style-2 title_page width300
+            id: title
+            class: form-control form-control-style-2 title width300
 
-    url_page:
+    slug:
         form: input
         options:
             type: text
-            placeholder: URL
-            id: url_page
-            class: form-control form-control-style-2 url_page width300 mb-10
+            placeholder: URL /
+            id: slug
+            class: form-control form-control-style-2 slug width300 mb-10
 
-    content_page:
+    content:
         form: editor
         label: Содержимое страницы
         options:
@@ -50,6 +50,6 @@ fields:
             data-offstyle: secondary
 
 
-action: /admin/static-pages/add
+action: /admin/static-pages/save
 
 title: Создание страницы
