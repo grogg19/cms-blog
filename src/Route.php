@@ -92,8 +92,6 @@ class Route
         return true;
     }
 
-    //public function
-
     /**
      * Метод запускает и возвращает результат работы $callback
      * @return mixed
