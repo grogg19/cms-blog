@@ -27,10 +27,16 @@ class StaticPagesController extends AdminController
      */
     public function index()
     {
-        return new View('index', ['view' => 'admin.static_pages.list_pages_template', 'data' => [
-            'title' => 'Контроллер статических страниц',
-            'pages' => (new PageList(new FilesList()))->listPages()
-        ]]);
+        $title = 'Контроллер статических страниц';
+
+        return new View('admin', [
+            'view' => 'admin.static_pages.list_pages_template',
+                'data' => [
+                'title' => $title,
+                'pages' => (new PageList(new FilesList()))->listPages()
+                ],
+            'title' => $title
+        ]);
     }
 
     /**
