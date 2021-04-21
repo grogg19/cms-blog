@@ -29,7 +29,7 @@
 
             <li class=" active">
                 <a href="/posts">
-                    Блог
+                    Все посты
                 </a>
             </li>
             <li>
