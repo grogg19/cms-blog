@@ -143,7 +143,7 @@ class Validation
      */
     public function validateByUnique($key, $dataField): bool
     {
-        return ($this->model::where($key, $dataField)->count()) ? false : true;
+        return !$this->model::where($key, $dataField)->count();
     }
 
     /**
@@ -156,7 +156,7 @@ class Validation
     {
         if(!empty($dataField)) {
             $lengthDataField = mb_strlen($dataField);
-            return ($lengthDataField >= $range[0] && $lengthDataField <= $range[1]) ? true : false;
+            return $lengthDataField >= $range[0] && $lengthDataField <= $range[1];
         }
         return false;
     }
@@ -169,7 +169,7 @@ class Validation
      */
     public function validatePasswordWithConfirmation($password, $passwordConfirmation): bool
     {
-        return ($password === $passwordConfirmation) ? true : false;
+        return $password === $passwordConfirmation;
     }
 
 
@@ -180,8 +180,7 @@ class Validation
      */
     public function validateIsNumber($dataField) : bool
     {
-        $result = (is_numeric($dataField)) ? true : false;
-        return $result;
+        return is_numeric($dataField);
     }
 
     /**
@@ -192,10 +191,8 @@ class Validation
     public function validateEmail($dataField) : bool
     {
         // Если валидация email прошла успешно, filter_var() выдаст этот email с типом данных string,
-        // в этом случае $result = true, иначе false
+        // в этом случае return true, иначе false
 
-        $result = (is_string(filter_var($dataField, FILTER_VALIDATE_EMAIL))) ? true : false;
-
-        return $result;
+        return is_string(filter_var($dataField, FILTER_VALIDATE_EMAIL));
     }
 }

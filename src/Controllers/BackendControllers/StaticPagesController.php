@@ -7,8 +7,9 @@ use App\Parse\Yaml;
 use App\StaticPages\FilesList;
 use App\StaticPages\PageList;
 use App\Controllers\BackendControllers\AdminController;
+use App\Validator\Validation;
 use App\View;
-use App\Model\StaticPage;
+use function Helpers\checkToken;
 
 class StaticPagesController extends AdminController
 {
@@ -50,10 +51,14 @@ class StaticPagesController extends AdminController
 
     public function savePage()
     {
-        if ($_POST) {
-            dump($_POST);
+        if(checkToken()) {
+            //$validateResult = ((new Validation())->validate($this->request->post(), $this->rules));
+            // 
+            //dump($validateResult);
+            dump($this->request->post());
+            dump($this->rules);
         }
-        dump($this->rules);
+
 
     }
 
