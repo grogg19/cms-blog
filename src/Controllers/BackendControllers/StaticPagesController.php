@@ -8,9 +8,18 @@ use App\StaticPages\FilesList;
 use App\StaticPages\PageList;
 use App\Controllers\BackendControllers\AdminController;
 use App\View;
+use App\Model\StaticPage;
 
 class StaticPagesController extends AdminController
 {
+    /**
+     * @var array The rules to be applied to the data.
+     */
+    public $rules = [
+        'title' => 'required',
+        'url'   => ['required', 'regex:/^\/[a-z0-9\/_\-\.]*$/i', 'uniqueUrl']
+    ];
+
     /**
      * Метод выводит список статических страниц
      * @return View
@@ -44,6 +53,8 @@ class StaticPagesController extends AdminController
         if ($_POST) {
             dump($_POST);
         }
+        dump($this->rules);
+
     }
 
     /**
