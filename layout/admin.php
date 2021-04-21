@@ -8,7 +8,7 @@ use App\Controllers\UserController;
 
 
     (new View('admin_header', [
-        'title' => (!empty($title)) ? $title : "",
+        'title' => !empty($title) ? $title : "",
         'user' => (new UserController())->getCurrentUser()
     ]))->render();
 
