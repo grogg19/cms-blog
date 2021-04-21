@@ -64,43 +64,42 @@ class Validation
     /**
      * Метод парсит $rule и осуществляет проверку в зависимости от полученного значения
      * @param $rule
+     * @param $key
      * @param $dataField
-     * @return bool|mixed|string
+     * @return bool|\Closure|string
      */
-    protected function validateMethod($rule, $key, $dataField)
+    protected function validateMethod($rule, $key, $dataField): bool|\Closure|string
     {
         $method = explode(":", $rule, 2);
 
-        if ($method[0] == "required") {
-            return (!$this->validateIsEmpty($dataField)) ?  "Поле должно быть заполнено" : true;
-        }
+        return match ($method[0]) {
+            'required' => !$this->validateIsEmpty($dataField) ?  "Поле должно быть заполнено" : true,
 
-        if ($method[0] == "regex" ) {
-            return (!$this->validateByRegex($dataField, $method[1])) ? "В поле могут быть только латинские буквы, цифры или тире" : true;
-        }
+            'regex' => !$this->validateByRegex($dataField, $method[1]) ? "В поле могут быть только латинские буквы, цифры или тире" : true,
 
-        if ($method[0] == "unique" ) {
-            return (!$this->validateByUnique($key, $dataField)) ? "Такое значение уже существует" : true;
-        }
+            'unique' => !$this->validateByUnique($key, $dataField) ? "Такое значение уже существует" : true,
 
-        if ($method[0] == "between" ) {
-            $range = explode(',',$method[1]); // Получаем параметр диапазона и преобразуем его в массив
-            return (!$this->validateBetweenRange($dataField, $range)) ? "Количество символов должно быть больше или равно ". $range[0] : true;
-        }
+            'between' => function($method, $dataField){
 
-        if ($method[0] == "email" ) {
-            return (!$this->validateEmail($dataField)) ? "Неправильный формат Email" : true;
-        }
+                $range = explode(',',$method[1]); // Получаем параметр диапазона и преобразуем его в массив
+                return !$this->validateBetweenRange($dataField, $range) ? "Количество символов должно быть больше или равно ". $range[0] : true;
 
-        if ($method[0] == "confirmed" ) {
+            },
 
-            if(isset($_POST['password_confirm'])) {
-                return (!$this->validatePasswordWithConfirmation($dataField, $_POST['password_confirm'])) ? "Пароли не совпадают" : true;
-            }
-            return true;
-        }
+            'email' =>!$this->validateEmail($dataField) ? "Неправильный формат Email" : true,
 
-        return 'Метод валидации "' . $method[0] . '" не найден';
+            'confirmed' => function($dataField) {
+
+                if(isset($_POST['password_confirm'])) {
+                    return !$this->validatePasswordWithConfirmation($dataField, $_POST['password_confirm']) ? "Пароли не совпадают" : true;
+                }
+                return true;
+
+            },
+
+            default => 'Метод валидации "' . $method[0] . '" не найден'
+        };
+
     }
 
     /**
