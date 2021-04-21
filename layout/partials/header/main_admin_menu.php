@@ -23,12 +23,12 @@
         </ul>
     </li>
     <li class="dx-drop-item active">
-        <a href="/blog.html">
+        <a href="/posts">
             Блог
         </a><ul class="dx-navbar-dropdown">
 
             <li class=" active">
-                <a href="/blog.html">
+                <a href="/posts">
                     Блог
                 </a>
             </li>
