@@ -4,6 +4,7 @@
  */
 namespace App\Validate;
 
+use App\Validate\Validation\ByRegex;
 use App\Validate\Validation\IsEmpty;
 
 class Validator extends AbstractValidator
@@ -19,53 +20,62 @@ class Validator extends AbstractValidator
     }
 
     /**
-     * @return Validation
+     * @return array
      */
-    public function makeValidation()
+    public function makeValidation(): array
     {
+        $messagesValidations = []; // массив сообщений всех валидаций
+
         foreach ($this->rules as $key => $rule) {
             if (is_array($rule)) {
                 foreach ($rule as $r) {
-                    if(isset($data[$key]) && !isset($message['error'][$key])) {
+                    if(isset($this->data[$key]) && !isset($messagesValidations['error'][$key])) {
+                        //$result = $this->validateMethod($r, $key, $data[$key]);
 
-                        $result = $this->validateMethod($r, $key, $data[$key]);
-
-                        $validation = $this->createValidation($r);
+                        $validation = $this->createValidation($r, $key);
 
                         if($validation->run() !== true) {
-                            $message['error'][$key] = [
+                            $messagesValidations['error'][$key] = [
                                 'field' => $key,
-                                'errorMessage' => $result
+                                'errorMessage' => $validation->getMessage()
                             ];
                         }
                     }
                 }
             } else {
-                if(isset($data[$key]) && !isset($message['error'][$key])){
-                    $result = $this->validateMethod($rule, $key, $data[$key]);
-                    if($result !== true) {
-                        $message['error'][$key] = [
+                if(isset($this->data[$key]) && !isset($messagesValidations['error'][$key])){
+                    //$result = $this->validateMethod($rule, $key, $data[$key]);
+
+                    $validation = $this->createValidation($rule, $key);
+
+                    if($validation->run() !== true) {
+                        $messagesValidations['error'][$key] = [
                             'field' => $key,
-                            'errorMessage' => $result
+                            'errorMessage' => $validation->getMessage()
                         ];
                     }
                 }
             }
         }
 
-
-        return $validation;
+        return $messagesValidations;
     }
 
 
     /**
      * @param string $type
+     * @param string $key
      * @return Validation
      */
-    protected function createValidation(string $type): Validation
+    protected function createValidation(string $type, string $key): Validation
     {
+        if(str_contains($type, ':')) {
+            list($type, $parameters) = explode(':', $type, 2);
+        }
+
         return match ($type) {
-            'required' => new IsEmpty($this->data)
+            'required' => new IsEmpty($this->data[$key]),
+            'regex' => new ByRegex($this->data[$key], $parameters)
         };
     }
 }
