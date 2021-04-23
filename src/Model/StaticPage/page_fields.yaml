@@ -11,13 +11,13 @@ fields:
             id: title
             class: form-control form-control-style-2 title width300
 
-    slug:
+    url:
         form: input
         options:
             type: text
             placeholder: URL /
-            id: slug
-            class: form-control form-control-style-2 slug width300 mb-10
+            id: url
+            class: form-control form-control-style-2 url width300 mb-10
 
     content:
         form: editor
