@@ -23,16 +23,15 @@ class IsEmpty extends Validation
      */
     public function run(): bool
     {
-        return $this->isEmpty($this->data);
+        return $this->isEmpty();
     }
 
     /**
-     * @param $data
      * @return bool
      */
-    private function isEmpty($data): bool
+    private function isEmpty(): bool
     {
-        if (mb_strlen(filter_var($data, FILTER_SANITIZE_STRING )) != 0 && $data != 'undefined') {
+        if (mb_strlen(filter_var($this->data, FILTER_SANITIZE_STRING )) != 0 && $this->data != 'undefined') {
             //if ($dataField !== "" && $dataField !== 'undefined') {
             return true;
         } else {
