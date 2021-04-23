@@ -32,5 +32,5 @@ abstract class AbstractValidator
      * @param string $type
      * @return Validation
      */
-    abstract protected function createValidation(string $type): Validation;
+    abstract protected function createValidation(string $type, string $key): Validation;
 }
