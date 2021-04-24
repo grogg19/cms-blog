@@ -6,6 +6,8 @@ namespace App\Validate;
 
 use App\Validate\Validation\ByRegex;
 use App\Validate\Validation\IsEmpty;
+use App\Validate\Validation\IsUniquePage;
+use App\Validate\Validation\UndefinedValidation;
 
 class Validator extends AbstractValidator
 {
@@ -61,7 +63,6 @@ class Validator extends AbstractValidator
         return $messagesValidations;
     }
 
-
     /**
      * @param string $type
      * @param string $key
@@ -75,7 +76,9 @@ class Validator extends AbstractValidator
 
         return match ($type) {
             'required' => new IsEmpty($this->data[$key]),
-            'regex' => new ByRegex($this->data[$key], $parameters)
+            'regex' => new ByRegex($this->data[$key], $parameters),
+            'uniquePage' => new IsUniquePage($this->data[$key]),
+            default => new UndefinedValidation()
         };
     }
 }
