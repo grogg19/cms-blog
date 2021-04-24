@@ -118,7 +118,7 @@ class Application
 
 
     /**
-     * @throws NotFoundException
+     *
      */
     private function getRoutesFromStaticPages()
     {
