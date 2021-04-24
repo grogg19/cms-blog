@@ -41,6 +41,7 @@ class ByRegex extends Validation
         if(preg_match($this->regex, $this->data)) {
             return true;
         } else {
+            $this->message = "Данные введены неверно";
             return false;
         }
     }
