@@ -17,9 +17,9 @@ class StaticPagesController extends AdminController
     /**
      * @var array The rules to be applied to the data.
      */
-    public $rules = [
+    public array $rules = [
         'title' => 'required',
-        'url'   => ['required', 'regex:/^\/[a-z0-9\/_\-\.]*$/i', 'uniqueUrl']
+        'url'   => ['required', 'regex:/^\/[a-z0-9\/_\-\.]*$/i', 'unique']
     ];
 
     /**
