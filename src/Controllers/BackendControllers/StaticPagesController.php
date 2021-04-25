@@ -67,7 +67,6 @@ class StaticPagesController extends AdminController
         if(checkToken()) {
             $validation = new Validator($this->request->post(), $this->rules);
             $resultValidation = $validation->makeValidation();
-            dump($resultValidation);
             if(empty($resultValidation)) {
 
                 $page = new Page;
@@ -83,7 +82,7 @@ class StaticPagesController extends AdminController
                     'url' => '/admin/static-pages'
                 ]);
             } else {
-                return $resultValidation;
+                return json_encode($resultValidation);
             }
         } else {
             return json_encode([
