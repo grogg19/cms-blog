@@ -34,7 +34,6 @@ class Application
     public function __construct(Router $router)
     {
         $this->router = $router;
-        $this->getRoutesFromStaticPages();
         $this->initialize();
         $this->initSession();
     }
@@ -115,21 +114,4 @@ class Application
             $this->session->start();
         }
     }
-
-
-    /**
-     *
-     */
-    private function getRoutesFromStaticPages()
-    {
-        $pages = (new StaticPagesController())->getStaticPages();
-
-        if(is_array($pages)) {
-            foreach ($pages as $url => $page) {
-                $this->router->get('get', $url, 'Controllers\PublicControllers\StaticPagesController@index');
-            }
-        }
-
-    }
-
 }
