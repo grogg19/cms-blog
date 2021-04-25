@@ -47,4 +47,28 @@ class Router
         throw new NotFoundException ("Такой страницы не существует", 500);
 
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRoutes(): array
+    {
+        return $this->routes;
+    }
+
+    /**
+     * Проверяет маршрут на существование
+     * @param string $uri
+     * @return bool
+     */
+    public function isRouteExist(string $uri): bool
+    {
+        foreach ($this->routes as $route) {
+            if($route->match(strtolower(['get', 'post']), $uri) == true)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
