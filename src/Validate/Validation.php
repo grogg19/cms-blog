@@ -9,7 +9,7 @@ abstract class Validation
     /**
      * @var string
      */
-    protected string $message;
+    protected string $message = '';
 
     /**
      * @var string
