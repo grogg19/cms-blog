@@ -4,10 +4,7 @@
  */
 namespace App\Validate\Validation;
 
-use App\StaticPages\FilesList;
-use App\StaticPages\Page;
-use App\StaticPages\PageList;
-use App\StaticPages\PageListCompatible;
+use App\Router;
 use App\Validate\Validation;
 use App\Config;
 
@@ -33,19 +30,24 @@ class IsUniquePage extends Validation
     }
 
     /**
+     * Проверка уникальности статической страницы
      * @return bool
      */
     private function isUniquePage(): bool
     {
-        if(Config::getInstance()->getConfig('db')['staticPages'] === 'files') {
+        if(Config::getInstance()->getConfig('cms')['staticPages'] === 'files') {
 
-            $pages = new PageList(new FilesList());
-
-            if($pages->getPageByUrl($this->data) !== null) {
-                $this->message = 'Страница с таким URL уже существует';
-                return false;
+            $router = require APP_DIR . '/routes/web.php';
+            if($router instanceof Router) {
+                if($router->isRouteExist($this->data)) {
+                    $this->message = 'Страница с таким URL уже существует';
+                    return false;
+                };
+                return true;
             }
-            return true;
+        } else {
+            $this->message = 'Реализация статических страниц в БД еще не разработана, используй файловую систему';
+            return false;
         }
         return false;
     }
