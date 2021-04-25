@@ -11,8 +11,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Exception;
 
-
-
 /**
  * Class Application
  * @package App
