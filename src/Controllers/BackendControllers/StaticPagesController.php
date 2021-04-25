@@ -5,6 +5,8 @@ namespace App\Controllers\BackendControllers;
 
 use App\Parse\Yaml;
 use App\StaticPages\FilesList;
+use App\StaticPages\File;
+use App\StaticPages\Page;
 use App\StaticPages\PageList;
 use App\Controllers\BackendControllers\AdminController as AdminController;
 use App\Validate\Validator;
@@ -20,7 +22,7 @@ class StaticPagesController extends AdminController
      */
     public array $rules = [
         'title' => 'required',
-        'url'   => ['required', 'regex:/^\/[a-z0-9\/_\-\.]*$/i', 'uniquePage']
+        'slug'   => ['required', 'regex:/^\/[a-z0-9\/_\-\.]*$/i', 'uniquePage']
     ];
 
     /**
@@ -57,14 +59,42 @@ class StaticPagesController extends AdminController
         ]);
     }
 
-    public function savePage()
+    /**
+     * @return array|string
+     */
+    public function savePage(): array|string
     {
         if(checkToken()) {
             $validation = new Validator($this->request->post(), $this->rules);
-            $validation->makeValidation();
-            //$validateResult = ((new Validation())->validate($this->request->post(), $this->rules));
-        }
+            $resultValidation = $validation->makeValidation();
+            dump($resultValidation);
+            if(empty($resultValidation)) {
 
+                $page = new Page;
+                $page->setParameters([
+                    'title' => $this->request->post('title'),
+                    'url' => $this->request->post('slug'),
+                    'isHidden' => !empty($this->request->post('isHidden')) && $this->request->post('isHidden') == 'on' ? 1 : 0,
+                    'navigationHidden' => !empty($this->request->post('navigationHidden')) && $this->request->post('navigationHidden') == 'on' ? 1 : 0,
+                ]);
+                $page->setHtmlContent((string) $this->request->post('content'));
+                $page->makePage(new File);
+                return json_encode([
+                    'url' => '/admin/static-pages'
+                ]);
+            } else {
+                return $resultValidation;
+            }
+        } else {
+            return json_encode([
+                'error' => [
+                    'title' => [
+                        'field' => 'title',
+                        'errorMessage' => 'Session is old, update form!'
+                    ]
+                ]
+            ]);
+        }
 
     }
 
@@ -72,7 +102,7 @@ class StaticPagesController extends AdminController
      * Метод выводит массив генерируемых полей в форме
      * @return array
      */
-    public function getFields()
+    public function getFields(): array
     {
         return (new Yaml())->parseFile(__DIR__ . '/../../Model/StaticPage/page_fields.yaml');
     }
@@ -85,4 +115,6 @@ class StaticPagesController extends AdminController
     {
         return false;
     }
+
+
 }
