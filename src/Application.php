@@ -5,18 +5,12 @@
 
 namespace App;
 
-use App\Controllers\BackendControllers\AdminImageController;
-use App\Controllers\PublicControllers\StaticPagesController;
 use App\Cookie\Cookie;
-use App\Exception\NotFoundException;
 use App\Router as Router;
-use App\StaticPages\FilesList;
-use App\StaticPages\PageList;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use App\DI\DI;
+use Exception;
 
-use function Helpers\printArray;
 
 
 /**
@@ -25,7 +19,7 @@ use function Helpers\printArray;
  */
 class Application
 {
-    private $router; // Маршрутизатор
+    private Router $router; // Маршрутизатор
 
     /**
      * Application constructor.
@@ -55,7 +49,7 @@ class Application
                 // Если нет, то просто выводим с помощью echo
                 echo $result;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // при возникновении исключения запускаем метод renderException()
             $this->renderException($e);
         }
