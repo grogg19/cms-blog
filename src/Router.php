@@ -63,8 +63,7 @@ class Router
     public function isRouteExist(string $uri): bool
     {
         foreach ($this->routes as $route) {
-            if($route->match(['get', 'post'], $uri) == true)
-            {
+            if($route->getPath() === $uri) {
                 return true;
             }
         }
