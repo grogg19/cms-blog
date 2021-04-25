@@ -156,3 +156,7 @@ function session()
 {
     return new Session();
 }
+
+function cleanData(string $data) {
+
+}
