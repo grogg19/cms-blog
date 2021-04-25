@@ -5,7 +5,6 @@
 
 namespace App;
 
-use App\DI\DI;
 use App\Exception\NotFoundException as NotFoundException;
 use App\Route as Route;
 
@@ -64,7 +63,7 @@ class Router
     public function isRouteExist(string $uri): bool
     {
         foreach ($this->routes as $route) {
-            if($route->match(strtolower(['get', 'post']), $uri) == true)
+            if($route->match(['get', 'post'], $uri) == true)
             {
                 return true;
             }
