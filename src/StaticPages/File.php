@@ -30,7 +30,7 @@ class File implements PageCompatible
     }
 
     /**
-     * Метод создает и возвращает новый файл ???????????
+     * Метод создает и возвращает новый файл
      * @param string $url
      * @throws Exception
      */
