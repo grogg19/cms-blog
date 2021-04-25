@@ -6,11 +6,12 @@ namespace App\Controllers\BackendControllers;
 use App\Parse\Yaml;
 use App\StaticPages\FilesList;
 use App\StaticPages\PageList;
-use App\Controllers\BackendControllers\AdminController;
+use App\Controllers\BackendControllers\AdminController as AdminController;
 use App\Validate\Validator;
-use App\Validator\Validation;
 use App\View;
+
 use function Helpers\checkToken;
+use function Helpers\generateToken;
 
 class StaticPagesController extends AdminController
 {
@@ -19,7 +20,7 @@ class StaticPagesController extends AdminController
      */
     public array $rules = [
         'title' => 'required',
-        'url'   => ['required', 'regex:/^\/[a-z0-9\/_\-\.]*$/i', 'unique']
+        'url'   => ['required', 'regex:/^\/[a-z0-9\/_\-\.]*$/i', 'uniquePage']
     ];
 
     /**
@@ -50,7 +51,7 @@ class StaticPagesController extends AdminController
             'view' => 'admin.static_pages.create_page',
             'data' => [
                 'form' => $this->getFields(),
-                'token' => \Helpers\generateToken()
+                'token' => generateToken()
             ],
             'title' => 'Создание новой страницы'
         ]);

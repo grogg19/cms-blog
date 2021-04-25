@@ -66,7 +66,10 @@ class StaticPagesController extends PublicController
         }
     }
 
-    public function getStaticPages()
+    /**
+     * @return array
+     */
+    public function getStaticPages(): array
     {
         return (new PageList($this->staticPages))->listPages();
     }
