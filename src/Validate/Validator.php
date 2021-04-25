@@ -32,7 +32,6 @@ class Validator extends AbstractValidator
             if (is_array($rule)) {
                 foreach ($rule as $r) {
                     if(isset($this->data[$key]) && !isset($messagesValidations['error'][$key])) {
-                        //$result = $this->validateMethod($r, $key, $data[$key]);
 
                         $validation = $this->createValidation($r, $key);
 
@@ -46,7 +45,6 @@ class Validator extends AbstractValidator
                 }
             } else {
                 if(isset($this->data[$key]) && !isset($messagesValidations['error'][$key])){
-                    //$result = $this->validateMethod($rule, $key, $data[$key]);
 
                     $validation = $this->createValidation($rule, $key);
 
