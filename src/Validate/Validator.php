@@ -6,19 +6,26 @@ namespace App\Validate;
 
 use App\Validate\Validation\ByRegex;
 use App\Validate\Validation\IsEmpty;
+use App\Validate\Validation\IsUniqueModel;
 use App\Validate\Validation\IsUniquePage;
 use App\Validate\Validation\UndefinedValidation;
+use Illuminate\Database\Eloquent\Model;
 
 class Validator extends AbstractValidator
 {
+    private Model $model;
+
     /**
      * Validator constructor.
      * @param array $data
      * @param array $rules
      */
-    public function __construct(array $data, array $rules = [])
+    public function __construct(array $data, array $rules = [], $model = null)
     {
         parent::__construct($data, $rules);
+        if($model !== null) {
+            $this->model = $model;
+        }
     }
 
     /**
@@ -76,6 +83,7 @@ class Validator extends AbstractValidator
             'required' => new IsEmpty($this->data[$key]),
             'regex' => new ByRegex($this->data[$key], $parameters),
             'uniquePage' => new IsUniquePage($this->data[$key]),
+            'unique' => new IsUniqueModel($this->model, $key, $this->data[$key]),
             default => new UndefinedValidation()
         };
     }
