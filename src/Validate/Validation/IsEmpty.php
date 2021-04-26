@@ -6,6 +6,10 @@ namespace App\Validate\Validation;
 
 use App\Validate\Validation;
 
+/**
+ * Class IsEmpty
+ * @package App\Validate\Validation
+ */
 class IsEmpty extends Validation
 {
     /**

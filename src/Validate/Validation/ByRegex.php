@@ -6,6 +6,10 @@ namespace App\Validate\Validation;
 
 use App\Validate\Validation;
 
+/**
+ * Class ByRegex
+ * @package App\Validate\Validation
+ */
 class ByRegex extends Validation
 {
 

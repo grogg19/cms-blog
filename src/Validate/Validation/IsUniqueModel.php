@@ -7,6 +7,10 @@ namespace App\Validate\Validation;
 use App\Validate\Validation;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class IsUniqueModel
+ * @package App\Validate\Validation
+ */
 class IsUniqueModel extends Validation
 {
 

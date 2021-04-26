@@ -6,6 +6,10 @@ namespace App\Validate\Validation;
 
 use App\Validate\Validation;
 
+/**
+ * Class BetweenRange
+ * @package App\Validate\Validation
+ */
 class BetweenRange extends Validation
 {
     /**

@@ -8,6 +8,10 @@ use App\Router;
 use App\Validate\Validation;
 use App\Config;
 
+/**
+ * Class IsUniquePage
+ * @package App\Validate\Validation
+ */
 class IsUniquePage extends Validation
 {
 
