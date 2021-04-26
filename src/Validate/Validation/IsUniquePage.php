@@ -16,7 +16,7 @@ class IsUniquePage extends Validation
 {
 
     /**
-     * isUnique constructor.
+     * IsUniquePage constructor.
      * @param string $data
      */
     public function __construct(string $data)

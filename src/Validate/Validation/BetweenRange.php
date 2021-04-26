@@ -18,8 +18,9 @@ class BetweenRange extends Validation
     public string $range;
 
     /**
-     * IsEmpty constructor.
+     * BetweenRange constructor.
      * @param string $data
+     * @param string $range
      */
     public function __construct(string $data, string $range)
     {

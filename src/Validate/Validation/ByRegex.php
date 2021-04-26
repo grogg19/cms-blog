@@ -19,8 +19,9 @@ class ByRegex extends Validation
     public string $regex;
 
     /**
-     * IsEmpty constructor.
+     * ByRegex constructor.
      * @param string $data
+     * @param string $regex
      */
     public function __construct(string $data, string $regex)
     {
