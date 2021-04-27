@@ -7,6 +7,7 @@ namespace App\Controllers\BackendControllers;
 
 use App\DI\DI;
 use App\Parse\Yaml;
+use App\Validate\Validator;
 use App\View;
 use App\Auth\Auth;
 use App\Controllers\Controller;
@@ -22,7 +23,10 @@ use function Helpers\getCurrentDate;
 
 class LoginController extends Controller
 {
-    protected $auth;
+    /**
+     * @var Auth
+     */
+    protected Auth $auth;
 
     public function __construct()
     {
@@ -31,7 +35,10 @@ class LoginController extends Controller
 
     }
 
-    public function form()
+    /**
+     * @return View
+     */
+    public function form(): View
     {
         $fields = (new Yaml())->parseFile(APP_DIR . '/src/Model/User/user_login_fields.yaml');
 
@@ -42,13 +49,10 @@ class LoginController extends Controller
 
     public function adminAuth()
     {
-        $parameters = $this->request->post();
-
-        // Если есть $parameters и токены совпадают,
-        if(!empty($parameters) && checkToken()) {
+        // Если есть данные в request и токены совпадают,
+        if(!empty($this->request->post()) && checkToken()) {
             // то валидируем введеные данные с формы
-            // Создаем экземпляр валидации
-            $validator = new UserFormValidation();
+
 
             // Создаем свои правила валидации
             $ownRules = [
@@ -56,13 +60,15 @@ class LoginController extends Controller
                 'password' => ['required', 'between:6,255', 'confirmed']
             ];
 
+            // Создаем валидатор
+            $validator = new Validator($this->request->post(), User::class, $ownRules);
             // и проверяем данные валидатором созданными правилами $ownRules
-            $resultValidateForms = $validator->validate($parameters, $ownRules);
+            $resultValidateForms = $validator->makeValidation();
 
             // если ошибок в валидации не было,
             if(!isset($resultValidateForms['error']))  {
                 // то ищем юзера с парой email-пароль в бд
-                $user = $this->findUser($parameters['email'], $parameters['password']);
+                $user = $this->findUser($this->request->post('email'), $this->request->post('password'));
                 if($user !== false) {
 
                     // Если есть такой юзер, то авторизуем его и возвращаем на страницу, с которой он логинился
@@ -100,9 +106,9 @@ class LoginController extends Controller
     /**
      * Метод ищет пользователя по $login или $email и если находит, сверяет пароль с $password
      * и возвращает объект пользователя или FALSE при несовпадении пароля
-     * @param $login
+     * @param $email
      * @param $password
-     * @return bool
+     * @return false
      */
     protected function findUser($email, $password)
     {
@@ -134,19 +140,21 @@ class LoginController extends Controller
         Redirect::to('/'); // Редирект на главную страницу
     }
 
-    public function makeUserHash(User $user)
+    /**
+     * @param User $user
+     * @return bool|string
+     */
+    public function makeUserHash(User $user): bool|string
     {
         return hashPassword($user->id . $user->email . $user->password);
     }
 
-    public function login()
+    public function login(): void
     {
         $this->auth = new Auth();
 
         if($this->auth->getHashUser() !== null)
         {
-
-
             $user = $this->auth->userByHash($this->auth->getHashUser());
 
             if($user !== null) {
@@ -160,7 +168,6 @@ class LoginController extends Controller
             } else {
                 Redirect::to('/login');
             }
-
         }
     }
 }

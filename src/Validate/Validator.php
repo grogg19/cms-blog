@@ -22,7 +22,7 @@ class Validator extends AbstractValidator
      * @param array $data
      * @param array $rules
      */
-    public function __construct(array $data, array $rules = [], $model = null)
+    public function __construct(array $data, $model = null, array $rules = [])
     {
         parent::__construct($data, $rules);
         if($model !== null) {

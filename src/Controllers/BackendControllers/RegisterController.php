@@ -6,6 +6,8 @@
 namespace App\Controllers\BackendControllers;
 
 use App\Controllers\UserController;
+use App\Model\User;
+use App\Validate\Validator;
 use App\Validator\UserFormValidation;
 use App\Parse\Yaml;
 use App\Auth\Auth as Auth;
@@ -18,10 +20,20 @@ use function Helpers\hashPassword;
 use function Helpers\generateRandomHash;
 use function Helpers\generateToken;
 
+/**
+ * Class RegisterController
+ * @package App\Controllers\BackendControllers
+ */
 class RegisterController extends Controller
 {
-    protected $auth;
+    /**
+     * @var Auth
+     */
+    protected Auth $auth;
 
+    /**
+     * RegisterController constructor.
+     */
     public function __construct()
     {
         $this->auth = new Auth();
@@ -41,7 +53,10 @@ class RegisterController extends Controller
         }
     }
 
-    private function form()
+    /**
+     * @return View
+     */
+    private function form(): View
     {
         $fields = (new Yaml())->parseFile(APP_DIR . '/src/Model/User/user_fields.yaml');
 
@@ -50,17 +65,21 @@ class RegisterController extends Controller
         return new View('index', ['view' => 'partials.signup', 'data' => $fields]);
     }
 
-    private function createUser(array $parameters)
+    /**
+     * @param array $parameters
+     * @return false|string
+     */
+    private function createUser(array $parameters): bool|string
     {
 
         // Если есть POST данные и токен соответствует,
         if(!empty($parameters) && checkToken()) {
             // то валидируем введеные данные с формы
             // Создаем экземпляр валидации
-            $validator = new UserFormValidation();
+            $validator = new Validator($parameters, User::class);
 
             // проверяем данные валидатором
-            $resultValidateForms = $validator->validate($parameters);
+            $resultValidateForms = $validator->makeValidation();
 
             // если ошибок в валидации не было,
             if(!isset($resultValidateForms['error']))  {
@@ -75,7 +94,7 @@ class RegisterController extends Controller
                 $user = $userController->addUser($parameters);
 
                 // Если все сохранено, авторизируем пользователя
-                if($user !== false) {
+                if($user !== null && $user instanceof User) {
 
                     // Если есть такой юзер, то авторизуем его и возвращаем на страницу, с которой он логинился
 

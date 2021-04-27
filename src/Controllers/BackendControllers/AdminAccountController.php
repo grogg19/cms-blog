@@ -11,6 +11,7 @@ use App\Config;
 use App\Controllers\BackendControllers\AdminController;
 use App\Model\User;
 use App\Uploader\Upload;
+use App\Validate\Validator;
 use App\Validator\UserFormValidation;
 use App\Controllers\UserController;
 use App\Redirect;
@@ -104,10 +105,6 @@ class AdminAccountController extends AdminController
         // Если есть POST данные и токен соответствует,
         if(!empty($this->request->post()) && checkToken() && !empty($this->session->get('userId'))) {
 
-            // то валидируем введеные данные с формы
-            // Создаем экземпляр валидации
-            $validator = new UserFormValidation();
-
             $userController = new UserController();
             $user = $userController->getUserById($this->session->get('userId'));
 
@@ -131,8 +128,10 @@ class AdminAccountController extends AdminController
                 ];
             }
 
+            // Создаем экземпляр валидации
+            $validator = new Validator($data, User::class, $ownRules);
             // проверяем данные валидатором
-            $resultValidateForms = $validator->validate($data, $ownRules);
+            $resultValidateForms = $validator->makeValidation();
 
             // если ошибок в валидации не было,
             if(!isset($resultValidateForms['error']))  {

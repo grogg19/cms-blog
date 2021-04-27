@@ -6,18 +6,16 @@
 namespace App\Controllers;
 
 use App\Controllers\BackendControllers\UserRoleController;
-use App\Controllers\Controller;
+use App\Controllers\Controller as Controller;
 use App\Model\User;
 use App\Config;
 
 use function Helpers\checkToken;
 use function Helpers\hashPassword;
-use function Helpers\printArray;
 use Illuminate\Database\Eloquent\Collection;
 
 class UserController extends Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -37,7 +35,7 @@ class UserController extends Controller
      * Возвращаем модель данных текущего пользователя
      * @return User|null
      */
-    public function getCurrentUser()
+    public function getCurrentUser(): User|null
     {
         if(session_status() != PHP_SESSION_NONE) {
             if(!empty($this->session->get('userId'))) {
@@ -49,14 +47,12 @@ class UserController extends Controller
 
     /**
      * возвращает коллекцию всех пользователей
-     * @return User[]|\Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function getAllUsers(): Collection
     {
         return User::all();
     }
-
-
 
     /**
      * Добавляет нового пользователя в БД
@@ -89,7 +85,7 @@ class UserController extends Controller
     {
         if(checkToken()) {
             unset($data['_token']);
-            return (User::where('id', $id)->update($data)) ? true : false;
+            return (bool) User::where('id', $id)->update($data);
         } else {
             return false;
         }
@@ -100,9 +96,9 @@ class UserController extends Controller
      * и возвращает объект пользователя или FALSE при несовпадении пароля
      * @param $login
      * @param $password
-     * @return bool
+     * @return User|null
      */
-    public function findUser($login, $password)
+    public function findUser($login, $password): User|null
     {
         // Ищем пользователя с логином $login
         $userData = User::where('login', $login)
@@ -115,15 +111,14 @@ class UserController extends Controller
                 // Если пароль совпал, возвращается объект этого пользователя
                 return $userData;
             } else {
-                // Иначе возвращается FALSE
+                // Иначе возвращается Null
                 return null;
             }
         } else {
-            // Иначе возвращается пустой массив
+            // Иначе возвращается null
             return null;
         }
     }
-
 
     /**
      * метод возвращает пользователя найденного по хэшу
@@ -143,7 +138,7 @@ class UserController extends Controller
      * @param User $user
      * @return bool|string
      */
-    public function makeUserHash(User $user)
+    public function makeUserHash(User $user): bool|string
     {
         return hashPassword($user->id . $user->email . $user->password);
     }
@@ -159,7 +154,10 @@ class UserController extends Controller
         return SITE_ROOT . $path . DIRECTORY_SEPARATOR ;
     }
 
-    public function getUserRoles()
+    /**
+     * @return \App\Model\UserRole[]|Collection
+     */
+    public function getUserRoles(): Collection|array
     {
         return (new UserRoleController())->getUserRolesList();
     }

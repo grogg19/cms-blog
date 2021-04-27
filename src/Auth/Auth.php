@@ -24,12 +24,12 @@ use function Helpers\printArray;
 
 class Auth implements AuthInterface
 {
-    /**
-     * @var
-     */
-    protected $hashUser;
+//    /**
+//     * @var
+//     */
+//    protected $hashUser;
 
-    protected $session;
+    protected Session $session;
 
     public function __construct()
     {
@@ -37,7 +37,7 @@ class Auth implements AuthInterface
     }
 
     /**
-     * @return mixed
+     * @return false|mixed
      */
     public function isAuthorized()
     {
@@ -49,7 +49,7 @@ class Auth implements AuthInterface
     }
 
     /**
-     * @return mixed
+     * @return null
      */
     public function getHashUser()
     {
@@ -74,7 +74,11 @@ class Auth implements AuthInterface
     }
 
 
-    protected function userById($id)
+    /**
+     * @param $id
+     * @return User|bool
+     */
+    protected function userById($id): User|bool
     {
         if(!empty($id)) {
             $user = (new UserController())->getUserById($id);
@@ -83,7 +87,11 @@ class Auth implements AuthInterface
         return true;
     }
 
-    public function userByHash($hash)
+    /**
+     * @param $hash
+     * @return bool|User
+     */
+    public function userByHash($hash): bool|User
     {
         if(!empty($hash)) {
             $user = User::where('persist_code', $hash)->first();
@@ -92,15 +100,22 @@ class Auth implements AuthInterface
         return false;
     }
 
-    public function setUserAttributes(User $user)
+    /**
+     * @param User $user
+     */
+    public function setUserAttributes(User $user): void
     {
         $this->session->set('userName', $user->first_name . ' ' . $user->last_name);
         $this->session->set('userId', $user->id);
         $this->session->set('config', Config::getInstance());
     }
 
-    // Проверка авторизации
-    public function checkRole(object $instance)
+    /**
+     * Проверка авторизации
+     * @param object $instance
+     * @return object
+     */
+    public function checkRole(object $instance): object
     {
         if($this->session->get('authAuthorized') == true ) {
             return $instance;
@@ -114,10 +129,10 @@ class Auth implements AuthInterface
      * @param User $user
      * @return bool
      */
-    public function checkPersistCode(User $user)
+    public function checkPersistCode(User $user): bool
     {
         if(isset($_COOKIE['persistCode'])) {
-            return ($user->persist_code === $_COOKIE['persistCode'] ) ? true : false;
+            return $user->persist_code === $_COOKIE['persistCode'];
         }
         return false;
     }

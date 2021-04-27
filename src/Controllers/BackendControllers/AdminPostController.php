@@ -9,17 +9,17 @@ use App\Config;
 use App\Controllers\PostController;
 use App\Controllers\UserController;
 use App\Cookie\Cookie;
+use App\Model\Post;
 use App\Parse\Yaml;
 use App\Redirect;
 use App\Request\Request;
+use App\Validate\Validator;
 use App\View;
 use App\Model\Post as ModelPost;
 use App\Model\Image;
-use App\Validator\PostFormValidation;
-use App\Controllers\BackendControllers\AdminController;
-use App\Controllers\BackendControllers\AdminImageController;
+use App\Controllers\BackendControllers\AdminController as AdminController;
+use App\Controllers\BackendControllers\AdminImageController as AdminImageController;
 
-use function Helpers\printArray;
 use Illuminate\Database\QueryException;
 use App\Uploader\Upload;
 
@@ -139,7 +139,7 @@ class AdminPostController extends AdminController
     {
         if(!empty($request->post('idPost'))) {
 
-            $post = (new PostController())->getPostById($request->post('idPost'));
+            $post = (new PostController())->getPostById((int) $request->post('idPost'));
 
         } else {
 
@@ -189,7 +189,7 @@ class AdminPostController extends AdminController
     {
         // Валидируем данные формы
         if(checkToken()) {
-            $validateResult = ((new PostFormValidation)->validate($this->request->post(), (new ModelPost())->rules));
+            $validateResult = new Validator($this->request->post(), Post::class);
 
             // Если валидация полей не прошла и вернулся массив с ошибками
             if(!empty($validateResult)) {
@@ -225,7 +225,10 @@ class AdminPostController extends AdminController
 
     }
 
-    public function imgUpload()
+    /**
+     * @return false|string
+     */
+    public function imgUpload(): false|string
     {
 
         if(!empty($this->request->post('imgToDelete')))
@@ -245,7 +248,7 @@ class AdminPostController extends AdminController
      * @param $fileName
      * @return string
      */
-    public function imgDelete($fileName)
+    public function imgDelete($fileName): string
     {
         if(!empty(Cookie::getArray('uploadImages'))) {
             $cookieArray = Cookie::getArray('uploadImages');
@@ -257,12 +260,18 @@ class AdminPostController extends AdminController
         return (new AdminImageController())->imageDestructor([$fileName]);
     }
 
-    public function getImages()
+    /**
+     * @return false|string
+     */
+    public function getImages(): false|string
     {
         return (new AdminImageController())->getImageNameFromStorages();
     }
 
-    public function onCloseCleanImage()
+    /**
+     * Очистка куки изображений при выходе
+     */
+    public function onCloseCleanImage(): void
     {
         if(!empty(Cookie::getArray('uploadImages'))) {
             (new AdminImageController())->cacheImageClean();

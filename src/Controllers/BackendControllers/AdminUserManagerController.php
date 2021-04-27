@@ -10,11 +10,13 @@ use App\Controllers\UserController;
 use App\Redirect;
 use App\View;
 use function Helpers\checkToken;
-use function Helpers\printArray;
 
 class AdminUserManagerController extends AdminController
 {
-    private $userController;
+    /**
+     * @var UserController
+     */
+    private UserController $userController;
 
     public function __construct()
     {
@@ -30,7 +32,10 @@ class AdminUserManagerController extends AdminController
         }
     }
 
-    public function index()
+    /**
+     * @return View
+     */
+    public function index(): View
     {
         return new View('admin', [
             'view' => 'admin.users_manager.list',
@@ -50,8 +55,7 @@ class AdminUserManagerController extends AdminController
      * Возвращает сообщение в формате JSON
      * @return string
      */
-
-    public function userChangeData()
+    public function userChangeData(): string
     {
         if(checkToken() && !empty($this->request->post('user'))) {
 
@@ -78,8 +82,4 @@ class AdminUserManagerController extends AdminController
             ]);
         }
     }
-
-
-
-
 }
