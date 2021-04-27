@@ -61,11 +61,12 @@ class StaticPagesController extends AdminController
 
     /**
      * @return array|string
+     * @throws \App\Exception\ValidationException
      */
     public function savePage(): array|string
     {
         if(checkToken()) {
-            $validation = new Validator($this->request->post(), null, $this->rules);
+            $validation = new Validator($this->request->post(), '', $this->rules);
             $resultValidation = $validation->makeValidation();
             if(empty($resultValidation)) {
 
