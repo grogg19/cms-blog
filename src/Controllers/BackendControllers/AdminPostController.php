@@ -15,7 +15,6 @@ use App\Redirect;
 use App\Request\Request;
 use App\Validate\Validator;
 use App\View;
-use App\Model\Post as ModelPost;
 use App\Model\Image;
 use App\Controllers\BackendControllers\AdminController as AdminController;
 use App\Controllers\BackendControllers\AdminImageController as AdminImageController;
@@ -189,7 +188,8 @@ class AdminPostController extends AdminController
     {
         // Валидируем данные формы
         if(checkToken()) {
-            $validateResult = new Validator($this->request->post(), Post::class);
+            $validator = new Validator($this->request->post(), Post::class);
+            $validateResult = $validator->makeValidation();
 
             // Если валидация полей не прошла и вернулся массив с ошибками
             if(!empty($validateResult)) {
