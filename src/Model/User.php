@@ -21,8 +21,8 @@ class User extends Model
         'first_name' => 'required',
         'last_name' => 'required',
         'email' => ['required', 'between:6,255', 'email', 'unique:users'],
-        'password' => ['required', 'between:6,255', 'confirmed'],
-        'password_confirmation' => ['required_with:password', 'between:6,255']
+        'password' => ['required', 'between:6,255'],
+        'password_confirmation' => ['identity_with:password', 'between:6,255']
     ];
 
     /**
