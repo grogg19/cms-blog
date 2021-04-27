@@ -5,6 +5,7 @@
 namespace App\Validate;
 
 use App\Validate\Validation\ByRegex;
+use App\Validate\Validation\Identity;
 use App\Validate\Validation\IsEmpty;
 use App\Validate\Validation\IsUniqueModel;
 use App\Validate\Validation\IsUniquePage;
@@ -84,6 +85,7 @@ class Validator extends AbstractValidator
             'regex' => new ByRegex($this->data[$key], $parameters),
             'uniquePage' => new IsUniquePage($this->data[$key]),
             'unique' => new IsUniqueModel($this->model, $key, $this->data[$key]),
+            'identity_with' => new Identity($this->data[$key], $this->data[$parameters]),
             default => new UndefinedValidation()
         };
     }
