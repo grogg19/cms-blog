@@ -21,6 +21,7 @@ class Validator extends AbstractValidator
     /**
      * Validator constructor.
      * @param array $data
+     * @param string $model
      * @param array $rules
      */
     public function __construct(array $data, string $model, array $rules = [])
@@ -29,7 +30,6 @@ class Validator extends AbstractValidator
             $this->model = new $model;
         }
         parent::__construct($data, $rules);
-        //dd($this->data, $this->rules);
     }
 
     /**
