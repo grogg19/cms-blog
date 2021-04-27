@@ -31,6 +31,9 @@ class Validator extends AbstractValidator
 
         if($model !== '') {
             $this->model = new $model;
+            if(empty($this->rules)) {
+                $this->rules = $this->model->rules;
+            }
         }
     }
 
@@ -87,15 +90,13 @@ class Validator extends AbstractValidator
         if(str_contains($type, ':')) {
             list($type, $parameters) = explode(':', $type, 2);
         }
-
-        dd($this->data[$key], $this->data[$parameters],'123');
         return match ($type) {
             'required' => new IsEmpty($this->data[$key]),
             'regex' => new ByRegex($this->data[$key], $parameters),
             'between' => new BetweenRange($this->data[$key], $parameters),
             'uniquePage' => new IsUniquePage($this->data[$key]),
             'unique' => new IsUniqueModel($this->model, $key, $this->data[$key]),
-            'identity_with' => new Identity($this->data[$key], $this->data[$parameters]),
+            'identityWith' => new Identity($this->data[$key], $this->data[$parameters]),
             'email' => new IsEmail($this->data[$key]),
             default => new UndefinedValidation($type)
         };
