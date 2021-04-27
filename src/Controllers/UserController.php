@@ -64,12 +64,11 @@ class UserController extends Controller
         $user = new User();
         $user->first_name = $data['first_name'];
         $user->last_name = $data['last_name'];
-        $user->login = $data['login'];
         $user->password = hashPassword($data['password']);
         $user->email = $data['email'];
         $user->persist_code = $data['persist_code'];
         $user->is_activated = $data['is_activated'];
-        $user->role_id = $data['role_id'];
+        $user->role_id = 3;
         $user->save();
 
         return $user;
