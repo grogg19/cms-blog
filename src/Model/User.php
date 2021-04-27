@@ -22,7 +22,7 @@ class User extends Model
         'last_name' => 'required',
         'email' => ['required', 'between:6,255', 'email', 'unique'],
         'password' => ['required', 'between:6,255'],
-        'password_confirmation' => ['identity_with:password', 'between:6,255']
+        'password_confirm' => ['identityWith:password', 'between:6,255']
     ];
 
     /**
