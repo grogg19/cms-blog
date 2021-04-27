@@ -33,8 +33,8 @@ class IsEmail extends Validation
      */
     private function isEmail(): bool
     {
-        if(is_string(filter_var($this->data, FILTER_VALIDATE_EMAIL))) {
-            $this->message = "Формат Email неверный";
+        if(!filter_var($this->data, FILTER_VALIDATE_EMAIL)) {
+            $this->message = 'Формат Email неверный : '. $this->data ;
             return false;
         }
         return true;

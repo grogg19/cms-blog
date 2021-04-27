@@ -56,8 +56,8 @@ class LoginController extends Controller
 
             // Создаем свои правила валидации
             $ownRules = [
-                'email' => ['required', 'email', 'between:2,255'],
-                'password' => ['required', 'between:6,255', 'confirmed']
+                'email' => ['required', 'email'],
+                'password' => ['required', 'between:6,255']
             ];
 
             // Создаем валидатор

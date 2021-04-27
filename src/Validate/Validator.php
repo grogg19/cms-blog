@@ -4,6 +4,7 @@
  */
 namespace App\Validate;
 
+use App\Validate\Validation\BetweenRange;
 use App\Validate\Validation\ByRegex;
 use App\Validate\Validation\Identity;
 use App\Validate\Validation\IsEmail;
@@ -22,12 +23,13 @@ class Validator extends AbstractValidator
      * @param array $data
      * @param array $rules
      */
-    public function __construct(array $data, $model = null, array $rules = [])
+    public function __construct(array $data, string $model, array $rules = [])
     {
-        parent::__construct($data, $rules);
-        if($model !== null) {
-            $this->model = $model;
+        if($model !== '') {
+            $this->model = new $model;
         }
+        parent::__construct($data, $rules);
+        //dd($this->data, $this->rules);
     }
 
     /**
@@ -84,11 +86,12 @@ class Validator extends AbstractValidator
         return match ($type) {
             'required' => new IsEmpty($this->data[$key]),
             'regex' => new ByRegex($this->data[$key], $parameters),
+            'between' => new BetweenRange($this->data[$key], $parameters),
             'uniquePage' => new IsUniquePage($this->data[$key]),
             'unique' => new IsUniqueModel($this->model, $key, $this->data[$key]),
             'identity_with' => new Identity($this->data[$key], $this->data[$parameters]),
             'email' => new IsEmail($this->data[$key]),
-            default => new UndefinedValidation()
+            default => new UndefinedValidation($type)
         };
     }
 }

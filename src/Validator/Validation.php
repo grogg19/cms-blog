@@ -10,6 +10,9 @@ use function Helpers\printArray;
 
 class Validation
 {
+    /**
+     * @var
+     */
     public $model;
 
     /**

@@ -12,9 +12,15 @@ use App\Validate\Validation;
  */
 class UndefinedValidation extends Validation
 {
+    public string $type;
+    public function __construct(string $type)
+    {
+        $this->type = $type;
+    }
+
     public function run(): bool
     {
-        $this->message = 'Неизвестный тип валидации';
+        $this->message = 'Неизвестный тип валидации "' . $this->type . '"';
         return false;
     }
 

@@ -13,9 +13,9 @@ use App\Validate\Validation;
 class BetweenRange extends Validation
 {
     /**
-     * @var string
+     * @var array
      */
-    public string $range;
+    public array $range;
 
     /**
      * BetweenRange constructor.
@@ -25,7 +25,7 @@ class BetweenRange extends Validation
     public function __construct(string $data, string $range)
     {
         $this->data = $data;
-        $this->range = $range;
+        $this->range = explode(',', $range, 2);
     }
 
     /**
