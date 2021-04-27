@@ -6,7 +6,7 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Model\User;
+use App\Model\User as User;
 
 class UserRole extends Model
 {
@@ -20,8 +20,8 @@ class UserRole extends Model
      * @var array Validation rules
      */
     public $rules = [
-        'name' => 'required|between:2,128|unique:user_roles',
-        'code' => 'unique:user_roles',
+        'name' => ['required', 'between:2,128', 'unique'],
+        'code' => 'unique',
     ];
 
     /**
