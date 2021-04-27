@@ -8,11 +8,9 @@ namespace App\Controllers\BackendControllers;
 use App\Controllers\UserController;
 use App\Model\User;
 use App\Validate\Validator;
-use App\Validator\UserFormValidation;
 use App\Parse\Yaml;
 use App\Auth\Auth as Auth;
 use App\View;
-use App\Cookie\Cookie;
 use App\Controllers\Controller;
 
 use function Helpers\checkToken;
@@ -42,7 +40,8 @@ class RegisterController extends Controller
     }
 
     /**
-     *
+     * @return View|bool|string
+     * @throws \App\Exception\ValidationException
      */
     public function signup()
     {
@@ -67,11 +66,11 @@ class RegisterController extends Controller
 
     /**
      * @param array $parameters
-     * @return false|string
+     * @return bool|string
+     * @throws \App\Exception\ValidationException
      */
     private function createUser(array $parameters): bool|string
     {
-
         // Если есть POST данные и токен соответствует,
         if(!empty($parameters) && checkToken()) {
             // то валидируем введеные данные с формы
@@ -80,7 +79,6 @@ class RegisterController extends Controller
 
             // проверяем данные валидатором
             $resultValidateForms = $validator->makeValidation();
-
             // если ошибок в валидации не было,
             if(!isset($resultValidateForms['error']))  {
 
