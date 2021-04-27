@@ -4,6 +4,7 @@
  */
 namespace App\Validate;
 
+use App\Exception\ValidationException;
 use App\Validate\Validation\BetweenRange;
 use App\Validate\Validation\ByRegex;
 use App\Validate\Validation\Identity;
@@ -26,19 +27,23 @@ class Validator extends AbstractValidator
      */
     public function __construct(array $data, string $model, array $rules = [])
     {
+        parent::__construct($data, $rules);
+
         if($model !== '') {
             $this->model = new $model;
         }
-        parent::__construct($data, $rules);
     }
 
     /**
      * @return array
+     * @throws ValidationException
      */
     public function makeValidation(): array
     {
         $messagesValidations = []; // массив сообщений всех валидаций
-
+        if(empty($this->rules)) {
+            throw new ValidationException('Отсутствуют правила валидации', 503);
+        }
         foreach ($this->rules as $key => $rule) {
             if (is_array($rule)) {
                 foreach ($rule as $r) {
@@ -83,6 +88,7 @@ class Validator extends AbstractValidator
             list($type, $parameters) = explode(':', $type, 2);
         }
 
+        dd($this->data[$key], $this->data[$parameters],'123');
         return match ($type) {
             'required' => new IsEmpty($this->data[$key]),
             'regex' => new ByRegex($this->data[$key], $parameters),
