@@ -11,7 +11,6 @@ use App\Validate\Validator;
 use App\View;
 use App\Auth\Auth;
 use App\Controllers\Controller;
-use App\Validator\UserFormValidation;
 use App\Model\User;
 use App\Redirect;
 use App\Cookie\Cookie;
@@ -21,6 +20,10 @@ use function Helpers\checkToken;
 use function Helpers\hashPassword;
 use function Helpers\getCurrentDate;
 
+/**
+ * Class LoginController
+ * @package App\Controllers\BackendControllers
+ */
 class LoginController extends Controller
 {
     /**
@@ -28,6 +31,9 @@ class LoginController extends Controller
      */
     protected Auth $auth;
 
+    /**
+     * LoginController constructor.
+     */
     public function __construct()
     {
         $this->auth = new Auth();
@@ -47,6 +53,10 @@ class LoginController extends Controller
         return new View('index', ['view' => 'partials.login', 'data' => $fields]);
     }
 
+    /**
+     * @return false|string
+     * @throws \App\Exception\ValidationException
+     */
     public function adminAuth()
     {
         // Если есть данные в request и токены совпадают,
@@ -134,7 +144,8 @@ class LoginController extends Controller
     /**
      * Метод выполняет выход пользователя из сессии
      */
-    public function logout() {
+    public function logout()
+    {
         $this->auth->unAuthorize();
         (new ListenerController())->ImageListener();
         Redirect::to('/'); // Редирект на главную страницу
