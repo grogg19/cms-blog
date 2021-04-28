@@ -12,7 +12,7 @@ use App\Controllers\UserController;
     <!-- START: MainContent -->
 <?php
 
-if(isset($view)) {
+if(isset($view) && isset($data)) {
     (new View($view, $data))->render();
 }
 
