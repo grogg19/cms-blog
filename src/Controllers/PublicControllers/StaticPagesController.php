@@ -10,6 +10,7 @@ use App\StaticPages\FilesList;
 use App\StaticPages\Page;
 use App\StaticPages\PageList;
 use App\StaticPages\PageListCompatible;
+use App\View;
 
 class StaticPagesController extends PublicController
 {
@@ -26,25 +27,24 @@ class StaticPagesController extends PublicController
     }
 
     /**
-     * @param Page $page
-     * @return array|void
+     * @return View
      */
     public function index()
     {
 
         $url = (new Request())->server('REQUEST_URI');
+        $page = (new PageList($this->staticPages))->getPageByUrl($url);
 
-        $page = (new PageList($this->staticPages))->getPageByUrl($url) instanceof Page ?? null;
-        dd($page);
-        //dump((new Request())->server('REQUEST_URI'));
-//        if($page->getParameter('isHidden') !== 0) {
-//            $content = strip_tags($page->getHtmlContent(), '<script>');
-//            $pageParameters = $page->getParameters();
-//
-//            return ['view' => 'index', 'content' => $content, 'pageParameters' => $pageParameters];
-//        } else {
-//            return Redirect::to('/404');
-//        }
+//        dd($page);
+//        dump((new Request())->server('REQUEST_URI'));
+        if($page->getParameter('isHidden') !== 0 && $page instanceof Page) {
+            $content = strip_tags($page->getHtmlContent(), '<script>');
+            $pageParameters = $page->getParameters();
+
+            return new View('index', ['view' => 'static_pages', 'data' => ['content' => $content, 'pageParameters' => $pageParameters]]);
+        } else {
+            return Redirect::to('/404');
+        }
     }
 
     /**
