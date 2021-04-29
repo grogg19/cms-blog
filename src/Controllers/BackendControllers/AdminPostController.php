@@ -23,6 +23,8 @@ use Illuminate\Database\QueryException;
 use App\Uploader\Upload;
 
 use function Helpers\checkToken;
+use function Helpers\generateToken;
+use function Helpers\cleanJSTags;
 use function Helpers\parseRequestUri;
 use function Helpers\getDateTimeForDb;
 
@@ -90,7 +92,7 @@ class AdminPostController extends AdminController
             'view' => 'admin.create_post',
             'data' => [
                 'form' => $this->getFields(),
-                'token' => \Helpers\generateToken()
+                'token' => generateToken()
             ],
             'title' => 'Создание новой статьи'
         ]);
@@ -98,7 +100,7 @@ class AdminPostController extends AdminController
 
     /**
      * Выводит форму поста для редактирования
-     * @return View
+     * @return View|false
      */
     public function editPost()
     {
@@ -119,7 +121,7 @@ class AdminPostController extends AdminController
                 'data' => [
                     'form' => $this->getFields(),
                     'post' => $post,
-                    'token' => \Helpers\generateToken(),
+                    'token' => generateToken(),
                     'imgUploadConfig' => Config::getInstance()->getConfig('images')
                 ],
                 'title' => 'Редактирование статьи | ' . $post->title
@@ -128,6 +130,7 @@ class AdminPostController extends AdminController
             // Пока редирект ведет на create, но должен на самом деле редиректиться на список статей пользователя
             Redirect::to('/admin/blog/posts/create');
         }
+        return false;
     }
 
     /**
@@ -146,10 +149,10 @@ class AdminPostController extends AdminController
             $post->user_id = $this->user->id;
         }
 
-        $post->title = $request->post('title');
-        $post->slug = $request->post('slug');
-        $post->excerpt = $request->post('excerpt');
-        $post->content = $request->post('content');
+        $post->title = filter_var($request->post('title'), FILTER_SANITIZE_STRING);
+        $post->slug = filter_var($request->post('slug'), FILTER_SANITIZE_STRING);
+        $post->excerpt = filter_var($request->post('excerpt'), FILTER_SANITIZE_STRING);
+        $post->content = cleanJSTags( (string) $request->post('content'));
         $post->published = (!empty($request->post('published')) && $request->post('published') == 'on') ? 1 : 0;
         $post->published_at = (!empty($request->post('published_at'))) ? getDateTimeForDb($request->post('published_at')) : "";
 
@@ -182,7 +185,8 @@ class AdminPostController extends AdminController
 
     /**
      * Метод валидирует данные, отправляет на сохранение
-     * @return string
+     * @return false|string
+     * @throws \App\Exception\ValidationException
      */
     public function savePost()
     {
@@ -213,6 +217,7 @@ class AdminPostController extends AdminController
                 }
             }
         }
+        return false;
     }
 
     /**
