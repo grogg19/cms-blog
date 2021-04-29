@@ -157,6 +157,10 @@ function session()
     return new Session();
 }
 
-function cleanData(string $data) {
-
+/**
+ * @param string $data
+ * @return string
+ */
+function cleanJSTags(string $data): string {
+    return preg_replace('#<script[^>]*>.*?</script>#is', '', $data);
 }
