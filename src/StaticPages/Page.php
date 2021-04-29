@@ -57,7 +57,7 @@ class Page
      */
     public function getHtmlContent(): string
     {
-        return $this->parameters['htmlContent'];
+        return htmlspecialchars_decode($this->parameters['htmlContent']);
     }
 
     /**
@@ -74,7 +74,7 @@ class Page
      */
     public function setHtmlContent(string $htmlContent): void
     {
-        $this->parameters['htmlContent'] = $htmlContent;
+        $this->parameters['htmlContent'] = htmlspecialchars($htmlContent);
     }
 
     /**
