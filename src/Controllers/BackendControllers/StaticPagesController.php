@@ -77,7 +77,7 @@ class StaticPagesController extends AdminController
                     'isHidden' => !empty($this->request->post('isHidden')) && $this->request->post('isHidden') == 'on' ? 1 : 0,
                     'navigationHidden' => !empty($this->request->post('navigationHidden')) && $this->request->post('navigationHidden') == 'on' ? 1 : 0,
                 ]);
-                $page->setHtmlContent((string) $this->request->post('content'));
+                $page->setHtmlContent( (string) $this->request->post('content'));
                 $page->makePage(new File);
                 return json_encode([
                     'url' => '/admin/static-pages'
