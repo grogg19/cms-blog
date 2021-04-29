@@ -13,6 +13,7 @@ use App\Validate\Validator;
 use App\View;
 
 use function Helpers\checkToken;
+use function Helpers\cleanJSTags;
 use function Helpers\generateToken;
 
 class StaticPagesController extends AdminController
@@ -49,6 +50,7 @@ class StaticPagesController extends AdminController
      */
     public function editPage()
     {
+
         return new View('admin', [
             'view' => 'admin.static_pages.create_page',
             'data' => [
@@ -72,12 +74,12 @@ class StaticPagesController extends AdminController
 
                 $page = new Page;
                 $page->setParameters([
-                    'title' => $this->request->post('title'),
-                    'url' => $this->request->post('slug'),
+                    'title' => filter_var($this->request->post('title'), FILTER_SANITIZE_STRING),
+                    'url' => filter_var($this->request->post('slug'), FILTER_SANITIZE_STRING),
                     'isHidden' => !empty($this->request->post('isHidden')) && $this->request->post('isHidden') == 'on' ? 1 : 0,
                     'navigationHidden' => !empty($this->request->post('navigationHidden')) && $this->request->post('navigationHidden') == 'on' ? 1 : 0,
                 ]);
-                $page->setHtmlContent( (string) $this->request->post('content'));
+                $page->setHtmlContent(cleanJSTags( (string) $this->request->post('content')));
                 $page->makePage(new File);
                 return json_encode([
                     'url' => '/admin/static-pages'
