@@ -10,7 +10,7 @@ namespace App\Controllers\PublicControllers;
 
 use App\Controllers\Controller;
 
-use function Helpers\printArray;
+use function Helpers\cleanJSTags;
 
 class TestController extends Controller
 {
@@ -23,10 +23,7 @@ class TestController extends Controller
 //        echo date(');
 
 //        printArray('Контроллер для тестирования');
-
-        $x = 5;
-
-        echo $x;
-
+        $text = "<script language='JavaScript1.5'>alert(123);</script><b>ggg</b><script>alert('fff')</script>";
+        dump(cleanJSTags($text));
     }
 }
