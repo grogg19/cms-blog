@@ -54,6 +54,7 @@ class File implements PageCompatible
             }
 
             $this->file = new SplFileObject($pathToFile . '.htm', 'w+');
+            chown($this->file->getRealPath(), 'www-data');
 
         } else {
             throw new Exception('Плохой URI', 401);
