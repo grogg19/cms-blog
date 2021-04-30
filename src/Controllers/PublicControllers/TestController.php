@@ -14,6 +14,7 @@ use function Helpers\cleanJSTags;
 
 class TestController extends Controller
 {
+    public string $name;
     public function test()
     {
 //        $arrayOne = [1, 2, 3, 4, 5];
@@ -23,7 +24,8 @@ class TestController extends Controller
 //        echo date(');
 
 //        printArray('Контроллер для тестирования');
-        $text = "<script language='JavaScript1.5'>alert(123);</script><b>ggg</b><script>alert('fff')</script>";
-        dump(cleanJSTags($text));
+        //$text = "<script language='JavaScript1.5'>alert(123);</script><b>ggg</b><script>alert('fff')</script>";
+        dump($this->name);
+
     }
 }
