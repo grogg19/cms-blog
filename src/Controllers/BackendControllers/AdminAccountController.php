@@ -12,7 +12,6 @@ use App\Controllers\BackendControllers\AdminController;
 use App\Model\User;
 use App\Uploader\Upload;
 use App\Validate\Validator;
-use App\Validator\UserFormValidation;
 use App\Controllers\UserController;
 use App\Redirect;
 use App\View;
