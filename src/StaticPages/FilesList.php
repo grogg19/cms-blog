@@ -44,7 +44,7 @@ class FilesList implements PageListCompatible
     private function checkOwnerDir(): bool
     {
         if(!file_exists(APP_DIR . $this->filesDirectory)) {
-            mkdir(APP_DIR . $this->filesDirectory, 0777);
+            mkdir(APP_DIR . $this->filesDirectory, 0775);
         }
         if(fileowner(APP_DIR . $this->filesDirectory) !== 33) {
             return chown(APP_DIR . $this->filesDirectory, 'www-data');
