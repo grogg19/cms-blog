@@ -2,6 +2,7 @@
 
 namespace App\StaticPages;
 
+use App\Exception\HttpException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use App\StaticPages\File as File;
@@ -9,6 +10,17 @@ use App\StaticPages\File as File;
 class FilesList implements PageListCompatible
 {
     private string $filesDirectory =  DIRECTORY_SEPARATOR . 'static-pages';
+
+    /**
+     * FilesList constructor.
+     * @throws HttpException
+     */
+    public function __construct()
+    {
+        if(!$this->checkOwnerDir()) {
+            throw new HttpException('Не хватает прав на запись в каталог ' . $this->filesDirectory, 503);
+        }
+    }
 
     /**
      * Возвращает массив страниц класса Page
@@ -23,5 +35,19 @@ class FilesList implements PageListCompatible
             $files[$filename->getFileName()] = new File($filename->getRealPath());
         }
         return $files;
+    }
+
+    /**
+     * @return bool
+     */
+    private function checkOwnerDir(): bool
+    {
+        if(!file_exists(APP_DIR . $this->filesDirectory)) {
+            mkdir(APP_DIR . $this->filesDirectory, 0777);
+        }
+        if(fileowner(APP_DIR . $this->filesDirectory) !== 33) {
+            return chown(APP_DIR . $this->filesDirectory, 'www-data');
+        }
+        return true;
     }
 }

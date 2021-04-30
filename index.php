@@ -7,7 +7,6 @@ require_once 'bootstrap.php';
 
 use App\Application;
 
-
 $router = require_once 'routes/web.php';
 
 // создаем приложение
