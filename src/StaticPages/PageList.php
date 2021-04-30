@@ -33,6 +33,7 @@ class PageList
     public function listPages(): array
     {
         $pages = [];
+
         foreach ($this->pageList->list() as $item) {
             $pages[$item->parameters['url']] = new Page($item);
         }

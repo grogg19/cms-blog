@@ -28,6 +28,7 @@ class FilesList implements PageListCompatible
      */
     public function list(): array
     {
+
         $files = []; // Список файлов в директории
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(APP_DIR . $this->filesDirectory)) as $filename)
         {
