@@ -24,7 +24,9 @@ class File implements PageCompatible
     public function __construct(string $pathToFile= '')
     {
         if(!empty($pathToFile) && (file_exists($pathToFile))) {
-            $this->file = new SplFileObject($pathToFile, 'r+');
+            dd(fileperms($pathToFile));
+            //if()
+            $this->file = new SplFileObject($pathToFile, 'r');
             $this->getContent();
         }
     }
