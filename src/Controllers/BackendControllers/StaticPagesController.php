@@ -44,8 +44,20 @@ class StaticPagesController extends AdminController
         ]);
     }
 
+    public function createPage()
+    {
+        return new View('admin', [
+            'view' => 'admin.static_pages.create_page',
+            'data' => [
+                'form' => $this->getFields(),
+                'token' => generateToken()
+            ],
+            'title' => 'Создание новой страницы'
+        ]);
+    }
+
     /**
-     * Форма редакктирования содержимого статической страницы
+     * Форма редактирования содержимого статической страницы
      * @return View
      */
     public function editPage()
@@ -57,7 +69,7 @@ class StaticPagesController extends AdminController
                 'form' => $this->getFields(),
                 'token' => generateToken()
             ],
-            'title' => 'Создание новой страницы'
+            'title' => 'Редактирование страницы'
         ]);
     }
 
