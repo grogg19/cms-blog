@@ -52,7 +52,7 @@ class StaticPagesController extends AdminController
     {
 
         return new View('admin', [
-            'view' => 'admin.static_pages.create_page',
+            'view' => 'admin.static_pages.edit_page',
             'data' => [
                 'form' => $this->getFields(),
                 'token' => generateToken()
