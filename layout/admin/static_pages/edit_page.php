@@ -3,7 +3,6 @@
  * Шаблон
  * Редактирование страницы поста
  */
-dump($page);
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
