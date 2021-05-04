@@ -3,6 +3,7 @@
  * Шаблон
  * Редактирование страницы поста
  */
+dump($page);
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -29,7 +30,7 @@
                         <input type="hidden" name="_token" value="<?=(!empty($token) ? $token : '')?>">
                         <div class="dx-box-content">
                             <?php
-                            (new \App\FormRenderer($form['fields']))->render();
+                            (new \App\FormRenderer($form['fields']))->render($page);
                             ?>
                         </div>
                     </form>
