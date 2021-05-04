@@ -180,13 +180,13 @@ function slugify(s, opt) {
     return opt.lowercase ? s.toLowerCase() : s;
 }
 
-const title = document.querySelector('form .title');
-const slug = document.querySelector('form .slug');
+const sourceSlugify = document.querySelector('form .data-source-slugify');
+const targetSlugify = document.querySelector('form .data-target-slugify');
 
-if(title) {
-    title.oninput = async (e) => {
+if(sourceSlugify) {
+    sourceSlugify.oninput = async (e) => {
         e.preventDefault();
-        slug.value = '/' + slugify(title.value);
+        targetSlugify.value = '/' + slugify(sourceSlugify.value);
     }
 }
 
