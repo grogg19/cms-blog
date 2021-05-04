@@ -9,17 +9,17 @@ fields:
             type: text
             placeholder: Заголовок страницы
             id: title
-            class: form-control form-control-style-2 title width300
+            class: form-control form-control-style-2 title width300 data-source-slugify
 
-    slug:
+    url:
         form: input
         options:
             type: text
             placeholder: URL /
-            id: slug
-            class: form-control form-control-style-2 slug width300 mb-10
+            id: url
+            class: form-control form-control-style-2 slug width300 mb-10 data-target-slugify
 
-    content:
+    htmlContent:
         form: editor
         label: Содержимое страницы
         options:
