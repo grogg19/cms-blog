@@ -74,7 +74,7 @@ class Page
      */
     public function setHtmlContent(string $htmlContent): void
     {
-        $this->parameters['htmlContent'] = htmlspecialchars($htmlContent);
+        $this->parameters['htmlContent'] = $htmlContent;
     }
 
     /**
