@@ -26,10 +26,10 @@
                     </div>
                     <div class="dx-separator"></div>
                     <form class="dx-form" name="form_edit_post" id="form_edit_post" action="<?= (isset($form['action'])) ? $form['action'] : ""?>">
-                        <input type="hidden" name="_token" value="<?=$token?>">
+                        <input type="hidden" name="_token" value="<?= !empty($token) ? $token : ''?>">
 
                         <div class="dx-box-content">
-                            <input type="hidden" name="idPost" id="idPost" value="<?=$post->id?>">
+                            <input type="hidden" name="idPost" id="idPost" value="<?=!empty($post->id) ? $post->id : ''?>">
                             <?php
                             (new \App\FormRenderer($form['fields']))->render($post);
                             ?>
