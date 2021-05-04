@@ -4,6 +4,7 @@
 namespace App\Controllers\BackendControllers;
 
 use App\Parse\Yaml;
+use App\Redirect;
 use App\StaticPages\FilesList;
 use App\StaticPages\File;
 use App\StaticPages\Page;
@@ -15,6 +16,7 @@ use App\View;
 use function Helpers\checkToken;
 use function Helpers\cleanJSTags;
 use function Helpers\generateToken;
+use function Helpers\parseRequestUri;
 
 class StaticPagesController extends AdminController
 {
@@ -23,7 +25,7 @@ class StaticPagesController extends AdminController
      */
     public array $rules = [
         'title' => 'required',
-        'slug'   => ['required', 'regex:/^\/[a-z0-9\/_\-\.]*$/i', 'uniquePage']
+        'url'   => ['required', 'regex:/^\/[a-z0-9\/_\-\.]*$/i', 'uniquePage']
     ];
 
     /**
@@ -62,11 +64,21 @@ class StaticPagesController extends AdminController
      */
     public function editPage()
     {
+        $uriData = parseRequestUri();
+
+        $url = ((string) $uriData[2] && $uriData[3] == 'edit') ? '/' . filter_var($uriData[2], FILTER_SANITIZE_STRING) : '';
+
+        if($url == '') {
+            Redirect::to('/admin/static-pages');
+        }
+
+        $page = (new PageList(new FilesList()))->getPageByUrl($url);
 
         return new View('admin', [
             'view' => 'admin.static_pages.edit_page',
             'data' => [
                 'form' => $this->getFields(),
+                'page' => (object) $page->getParameters(),
                 'token' => generateToken()
             ],
             'title' => 'Редактирование страницы'
@@ -80,6 +92,27 @@ class StaticPagesController extends AdminController
     public function savePage(): array|string
     {
         if(checkToken()) {
+
+            if(!empty($this->request->post('edit_form'))) {
+
+                $pages = new PageList(new FilesList());
+                $existPage = $pages->getPageByUrl(filter_var($this->request->post('url'), FILTER_SANITIZE_STRING));
+
+                if($existPage !== null) {
+                    $existPage->deletePage();
+                } else {
+                    return json_encode([
+                        'error' => [
+                            'title' => [
+                                'field' => 'url',
+                                'errorMessage' => 'Такой страницы не существует!'
+                            ]
+                        ]
+                    ]);
+                }
+
+            }
+
             $validation = new Validator($this->request->post(), '', $this->rules);
             $resultValidation = $validation->makeValidation();
             if(empty($resultValidation)) {
@@ -87,11 +120,11 @@ class StaticPagesController extends AdminController
                 $page = new Page;
                 $page->setParameters([
                     'title' => filter_var($this->request->post('title'), FILTER_SANITIZE_STRING),
-                    'url' => filter_var($this->request->post('slug'), FILTER_SANITIZE_STRING),
+                    'url' => filter_var($this->request->post('url'), FILTER_SANITIZE_STRING),
                     'isHidden' => !empty($this->request->post('isHidden')) && $this->request->post('isHidden') == 'on' ? 1 : 0,
                     'navigationHidden' => !empty($this->request->post('navigationHidden')) && $this->request->post('navigationHidden') == 'on' ? 1 : 0,
                 ]);
-                $page->setHtmlContent(cleanJSTags( (string) $this->request->post('content')));
+                $page->setHtmlContent(cleanJSTags((string) $this->request->post('content')));
                 $page->makePage(new File);
                 return json_encode([
                     'url' => '/admin/static-pages'
@@ -129,6 +162,4 @@ class StaticPagesController extends AdminController
     {
         return false;
     }
-
-
 }
