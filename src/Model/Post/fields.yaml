@@ -10,7 +10,7 @@ fields:
             type: text
             placeholder: Введите заголовок
             id: title
-            class: form-control form-control-style-2 title
+            class: form-control form-control-style-2 title data-source-slugify
 
     slug:
         form: input
@@ -19,7 +19,7 @@ fields:
             type: text
             placeholder: - slug -
             id: slug
-            class: form-control form-control-style-2 slug
+            class: form-control form-control-style-2 slug data-target-slugify
 
     excerpt:
         form: textarea
