@@ -28,6 +28,7 @@ dump($page);
                     <div class="dx-separator"></div>
                     <form class="dx-form" name="form_edit_page" id="form_edit_page" action="<?= (isset($form['action'])) ? $form['action'] : ""?>">
                         <input type="hidden" name="_token" value="<?=(!empty($token) ? $token : '')?>">
+	                    <input type="hidden" name="edit_form" value="1">
                         <div class="dx-box-content">
                             <?php
                             (new \App\FormRenderer($form['fields']))->render($page);
