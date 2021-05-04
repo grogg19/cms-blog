@@ -17,7 +17,7 @@
 		                    <div class="dx-separator"></div>
 		                    <?php foreach ($pages as $page) { ?>
 			                    <ul class="text-left mb-6 mt-6">
-				                    <li><?= $page->getParameter('title') ?> url: <?= $page->getParameter('url') ?></li>
+				                    <li><a href="/admin/static-pages<?= $page->getParameter('url');?>/edit"><?= $page->getParameter('title') ?> url: <?= $page->getParameter('url') ?></a></li>
 			                    </ul>
 			                <?php } ?>
 	                    <?php } ?>
