@@ -105,6 +105,18 @@ class Page
         return $this->parameters['url'];
     }
 
+    /**
+     * @return array
+     */
+    public function getFileName(): array
+    {
+        list($fileName, $fileExtension) = explode('.', $this->compatibleDataObject->file->getFilename());
+        return [
+            'name' => $fileName,
+            'ext' => $fileExtension
+        ];
+    }
+
 
     /**
      * @return string
