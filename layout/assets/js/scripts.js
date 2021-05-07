@@ -247,7 +247,21 @@ if(elementsForSend) {
     });
 }
 
+const actionButtons = document.querySelectorAll('[data-type = action]');
 
-
-
-
+if(actionButtons) {
+    actionButtons.forEach(element => {
+        $(element).click(async (e) => {
+            e.preventDefault();
+            let form = document.querySelector('#form_edit_static_pages');
+            form.action = element.getAttribute('data-action');
+            form.method = 'POST';
+            let pageName = document.createElement('input');
+            pageName.name = 'pageName';
+            pageName.type = 'hidden';
+            pageName.value = element.getAttribute('data-value');
+            form.appendChild(pageName);
+            form.submit();
+        });
+    });
+}
