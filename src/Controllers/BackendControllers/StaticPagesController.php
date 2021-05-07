@@ -32,15 +32,16 @@ class StaticPagesController extends AdminController
      * Метод выводит список статических страниц
      * @return View
      */
-    public function index()
+    public function index(): View
     {
         $title = 'Контроллер статических страниц';
 
         return new View('admin', [
             'view' => 'admin.static_pages.list_pages_template',
                 'data' => [
-                'title' => $title,
-                'pages' => (new PageList(new FilesList()))->listPages()
+                    'token' => generateToken(),
+                    'title' => $title,
+                    'pages' => (new PageList(new FilesList()))->listPages()
                 ],
             'title' => $title
         ]);
@@ -64,15 +65,12 @@ class StaticPagesController extends AdminController
      */
     public function editPage()
     {
-        $uriData = parseRequestUri();
 
-        $url = ((string) $uriData[2] && $uriData[3] == 'edit') ? '/' . filter_var($uriData[2], FILTER_SANITIZE_STRING) : '';
-
-        if($url == '') {
+        if(empty($this->request->post('pageName')) && !checkToken()) {
             Redirect::to('/admin/static-pages');
         }
 
-        $page = (new PageList(new FilesList()))->getPageByUrl($url);
+        $page = (new PageList(new FilesList()))->getPageByFileName( (string) $this->request->post('pageName'));
 
         return new View('admin', [
             'view' => 'admin.static_pages.edit_page',
@@ -160,6 +158,24 @@ class StaticPagesController extends AdminController
      */
     public function deletePage(): bool
     {
-        return false;
+        $url = $this->getUrlPageFromUri();
+
+        if($url == '') {
+            Redirect::to('/admin/static-pages');
+        }
+
+        $page = (new PageList(new FilesList()))->getPageByUrl($url);
+        if(!$page->deletePage()) {
+            return false;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    private function getUrlPageFromUri() {
+        $uriData = parseRequestUri();
+        (string) $url = ((string) $uriData[2] && $uriData[3] == 'edit') ? '/' . filter_var($uriData[2], FILTER_SANITIZE_STRING) : '';
+        return $url;
     }
 }
