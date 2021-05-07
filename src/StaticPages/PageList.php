@@ -56,4 +56,20 @@ class PageList
         }
         return null;
     }
+
+    /**
+     * @param string $fileName
+     * @return \App\StaticPages\Page|null
+     */
+    public function getPageByFileName(string $fileName): Page|null
+    {
+        foreach ($this->pageList->list() as $item) {
+
+            if($item->file->getFilename() === $fileName . '.htm') {
+                return new Page($item);
+            }
+
+        }
+        return null;
+    }
 }
