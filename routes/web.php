@@ -43,8 +43,9 @@ $router->get(['get', 'post'],'/signup', 'Controllers\BackendControllers\Register
 
 $router->get('get','/admin/static-pages', 'Controllers\BackendControllers\StaticPagesController@index');
 $router->get(['get', 'post'],'/admin/static-pages/add', 'Controllers\BackendControllers\StaticPagesController@createPage');
-$router->get(['get', 'post'],'/admin/static-pages/*/edit', 'Controllers\BackendControllers\StaticPagesController@editPage');
+$router->get('post','/admin/static-pages/edit', 'Controllers\BackendControllers\StaticPagesController@editPage');
 $router->get('post','/admin/static-pages/save', 'Controllers\BackendControllers\StaticPagesController@savePage');
+$router->get('post','/admin/static-pages/*/delete', 'Controllers\BackendControllers\StaticPagesController@deletePage');
 
 /** статических страниц $pages */
 
