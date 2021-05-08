@@ -14,7 +14,7 @@
 		                    <a href="/admin/static-pages/add" ><i class="fas fa-plus"></i> Добавить страницу</a>
 	                    </div>
 	                    <?php if(!empty($pages)) { ?>
-		                    <div class="dx-separator"></div>
+		                    <div class="dx-separator" id="messageWindow"></div>
 		                    <form class="dx-form" name="form_edit_static_pages" id="form_edit_static_pages" >
 			                    <input type="hidden" name="_token" value="<?=(!empty($token) ? $token : '')?>">
 			                    <div class="row mb-6 mt-6" >
@@ -30,7 +30,7 @@
 				                        <p class="small op-7"><?= $page->getParameter('url'); ?></p>
 			                        </div>
 			                        <div class="col-1 text-center mb-6 mt-6"><a href="/admin/static-pages/edit" data-type="action" data-value="<?=$page->getFileName()['name']?>" data-action="/admin/static-pages/edit" title="Редактировать страницу"><i class="fas fa-pencil-alt"></i></a></div>
-			                        <div class="col-1 text-center mb-6 mt-6"><a href="/admin/static-pages/delete" data-type="action" data-value="<?=$page->getFileName()['name']?>" data-action="/admin/static-pages/delete" title="Удалить страницу"><i class="fas fa-times"></i></a></div>
+			                        <div class="col-1 text-center mb-6 mt-6"><a href="/admin/static-pages/delete" data-type="request" data-value="<?=$page->getFileName()['name']?>" data-action="/admin/static-pages/delete" title="Удалить страницу"><i class="fas fa-times"></i></a></div>
 			                <?php } ?>
 			                    </div>
 		                    </form>
