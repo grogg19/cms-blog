@@ -21,6 +21,9 @@
 				                    <div class="col-lg-10"><b>Заголовок</b></div>
 				                    <div class="col-lg-1 text-center"><b>Изм.</b></div>
 				                    <div class="col-lg-1 text-center"><b>Уд.</b></div>
+				                </div>
+			                    <div class="dx-separator"></div>
+			                    <div class="row mb-6 mt-6" >
 		                    <?php foreach ($pages as $page) { ?>
 			                        <div class="col-lg-10"><?= $page->getParameter('title') ?></div>
 			                        <div class="col-lg-1 text-center"><a href="/admin/static-pages/edit" data-type="action" data-value="<?=$page->getFileName()['name']?>" data-action="/admin/static-pages/edit"><i class="fas fa-edit"></i></a></div>
