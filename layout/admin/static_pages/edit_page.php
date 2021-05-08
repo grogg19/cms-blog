@@ -11,18 +11,12 @@
                 <div class="dx-box dx-box-decorated">
                     <div class="dx-box-content">
                         <h2 class="h6 mb-6">Редактирование страницы</h2>
-
-
                         <!-- START: Breadcrumbs -->
                         <ul class="dx-breadcrumbs text-left dx-breadcrumbs-dark mnb-6 fs-14">
-
                             <li><a href="/admin/static-pages">Статические страницы</a></li>
-
                             <li>Редактирование страницы</li>
-
                         </ul>
                         <!-- END: Breadcrumbs -->
-
                     </div>
                     <div class="dx-separator"></div>
                     <form class="dx-form" name="form_edit_page" id="form_edit_page" action="<?= (isset($form['action'])) ? $form['action'] : ""?>">
@@ -39,7 +33,6 @@
 	                <div class="dx-box-content">
 		                <button class="dx-btn dx-btn-lg" type="submit" name="button" id="save_button" data-form="form_edit_page">Сохранить</button>
 	                </div>
-
                 </div>
             </div>
         </div>
