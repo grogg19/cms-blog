@@ -158,8 +158,7 @@ class StaticPagesController extends AdminController
      */
     public function deletePage(): bool
     {
-        $url = $this->getUrlPageFromUri();
-
+        dd($this->request->post());
         if($url == '') {
             Redirect::to('/admin/static-pages');
         }
@@ -168,14 +167,5 @@ class StaticPagesController extends AdminController
         if(!$page->deletePage()) {
             return false;
         }
-    }
-
-    /**
-     * @return string
-     */
-    private function getUrlPageFromUri() {
-        $uriData = parseRequestUri();
-        (string) $url = ((string) $uriData[2] && $uriData[3] == 'edit') ? '/' . filter_var($uriData[2], FILTER_SANITIZE_STRING) : '';
-        return $url;
     }
 }
