@@ -154,18 +154,25 @@ class StaticPagesController extends AdminController
 
     /**
      * Удаление страницы
-     * @return bool
+     * @return string
      */
-    public function deletePage(): bool
+    public function deletePage(): string
     {
-        dd($this->request->post());
-        if($url == '') {
-            Redirect::to('/admin/static-pages');
+        if(checkToken() && !empty($this->request->post('pageName'))) {
+            $page = (new PageList(new FilesList()))->getPageByFileName( (string) $this->request->post('pageName'));
+            if($page->deletePage()) {
+                return json_encode([
+                    'url' => '/admin/static-pages'
+                ]);
+            }
         }
-
-        $page = (new PageList(new FilesList()))->getPageByUrl($url);
-        if(!$page->deletePage()) {
-            return false;
-        }
+        return json_encode([
+            'error' => [
+                'title' => [
+                    'field' => 'messageWindow',
+                    'errorMessage' => 'Невозможно удалить страницу!'
+                ]
+            ]
+        ]);
     }
 }
