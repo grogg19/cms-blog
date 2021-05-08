@@ -219,6 +219,7 @@ $(document).ready(function() {
 
 const elementSendUrl = document.querySelector('[data-send-url]');
 const elementsForSend = document.querySelectorAll('[data-for-send]');
+
 if(elementsForSend) {
     elementsForSend.forEach(element => {
         $(element).change(async (e) => {
@@ -248,6 +249,7 @@ if(elementsForSend) {
 }
 
 const actionButtons = document.querySelectorAll('[data-type = action]');
+const requestButtons = document.querySelectorAll('[data-type = request]');
 
 if(actionButtons) {
     actionButtons.forEach(element => {
@@ -262,6 +264,36 @@ if(actionButtons) {
             pageName.value = element.getAttribute('data-value');
             form.appendChild(pageName);
             form.submit();
+        });
+    });
+}
+
+if (requestButtons) {
+    requestButtons.forEach(element => {
+        $(element).click(async (e) => {
+            e.preventDefault();
+            let formData = new FormData();
+            formData.append("_token", document.querySelector('[name = _token]').value);
+            formData.append("pageName", element.getAttribute('data-value'));
+
+            let response = await fetch(element.getAttribute('data-action'), {
+                method: 'POST',
+                body: formData
+            });
+
+            let result = await response.json();
+
+            if(result.url) {
+                location.href = result.url;
+            }
+
+            document.querySelector('#messageWindow').removeAttribute('tooltip');
+
+            if (result.error && Object.keys(result.error).length > 0) {
+                for (let key in result.error) {
+                    document.querySelector(result.error[key].field).setAttribute('tooltip', result.error[key].errorMessage);
+                }
+            }
         });
     });
 }
