@@ -53,6 +53,4 @@ foreach ((new StaticPagesController())->getStaticPages() as $url => $page) {
     $router->get('get', $url, 'Controllers\PublicControllers\StaticPagesController@index');
 }
 
-
-
 return $router;
