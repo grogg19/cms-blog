@@ -7,7 +7,7 @@
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-xl-7">
+            <div class="col-xl-10">
                 <div class="dx-box dx-box-decorated">
                     <div class="dx-box-content">
                         <h2 class="h6 mb-6">Редактирование страницы</h2>
@@ -16,7 +16,7 @@
                         <!-- START: Breadcrumbs -->
                         <ul class="dx-breadcrumbs text-left dx-breadcrumbs-dark mnb-6 fs-14">
 
-                            <li><a href="/admin">Раздел администрирования</a></li>
+                            <li><a href="/admin/static-pages">Статические страницы</a></li>
 
                             <li>Редактирование страницы</li>
 
@@ -30,7 +30,9 @@
 	                    <input type="hidden" name="edit_form" value="1">
                         <div class="dx-box-content">
                             <?php
-                            (new \App\FormRenderer($form['fields']))->render($page);
+                            if(!empty($page)) {
+                                (new \App\FormRenderer($form['fields']))->render($page);
+                            }
                             ?>
                         </div>
                     </form>
