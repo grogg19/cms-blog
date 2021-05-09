@@ -49,6 +49,9 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="/layout/assets/css/custom.css">
 
+	<!-- Toasts -->
+	<link rel="stylesheet" type="text/css" href="/layout/assets/css/toasts.css">
+
 
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
