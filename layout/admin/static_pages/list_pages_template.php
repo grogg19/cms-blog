@@ -35,6 +35,9 @@
 			                    </div>
 		                    </form>
 	                    <?php } ?>
+	                    <?php
+	                    (new \App\View('partials.toast_main'))->render();
+	                    ?>
                     </div>
                 </div>
             </div>
