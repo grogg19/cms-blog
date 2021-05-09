@@ -35,11 +35,10 @@ class PublicPostController extends PublicController
 
         $data = [
             'posts' => (new PostController())->getAllPublishedPosts(),
-            'title' => 'Блог',
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
         ];
 
-        return new View('index', ['view' => 'posts', 'data' => $data]);
+        return new View('index', ['view' => 'posts', 'data' => $data, 'title' => 'Блог']);
     }
 
     public function latestPosts()
@@ -54,16 +53,15 @@ class PublicPostController extends PublicController
 
     public function getPost()
     {
-        list($module, $slug) = parseRequestUri(); // $module - каталог, $slug - английское название новости
+        list($module, $slug) = parseRequestUri(); // $module - каталог, $slug - название новости латиницей
 
         $post = (new PostController())->getPostBySlug($slug);
         $data = [
             $module => $post,
-            'title' => 'Блог | ' . $post->title,
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
         ];
 
-        return new View('index', ['view' => 'post', 'data' => $data]);
+        return new View('index', ['view' => 'post', 'data' => $data, 'title' => 'Блог | ' . $post->title ]);
     }
 
 }
