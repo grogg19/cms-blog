@@ -4,6 +4,8 @@
  */
 use App\View;
 
+$post = !empty($post) ? $post : null;
+$imgPath = !empty($imgPath) ? $imgPath : '';
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
@@ -22,10 +24,10 @@ use App\View;
                     <?php } ?>
 
                     <div class="dx-blog-post-box">
-                        <h1 class="h3 dx-blog-post-title"><a href="single-post.html"><?= $post->title ?></a></h1>
+                        <h1 class="h3 dx-blog-post-title"><?= $post->title ?></h1>
                         <ul class="dx-blog-post-info">
                             <li>Дата публикации: <?= \Helpers\getDateTime($post->published_at) ?></li>
-                            <li>Author: <a href="#">John</a></li>
+                            <li>Автор: <a href="#"><?= $post->user->first_name?> <?=$post->user->last_name ?></a></li>
                         </ul>
                     </div>
                     <div class="dx-blog-post-box">

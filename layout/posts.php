@@ -15,14 +15,13 @@ $imgPath = !empty($imgPath) ? $imgPath : '';
                     foreach ($posts as $post) {
                     ?>
                     <div class="dx-blog-item dx-box dx-box-decorated">
-                        <a href="/post<?= $post->slug ?>" class="dx-blog-item-img">
-                            <?php
-                                if(!empty($post->images[0]->file_name)) {
-                                    ?>
-                            <img src="<?=$imgPath . $post->images[0]->file_name?>" alt=""></a>
+                        <a href="/post/<?= $post->slug ?>" class="dx-blog-item-img">
+                            <?php if(!empty($post->images[0]->file_name)) { ?>
+                            <img src="<?=$imgPath . $post->images[0]->file_name?>" alt="">
                             <?php } ?>
+                        </a>
                         <div class="dx-blog-item-cont">
-                            <h2 class="h3 dx-blog-item-title"><a href="/post<?= $post->slug ?>"><?= $post->title ?></a></h2>
+                            <h2 class="h3 dx-blog-item-title"><a href="/post/<?= $post->slug ?>"><?= $post->title ?></a></h2>
                             <ul class="dx-blog-item-info">
                                 <li>Опубликовано: <?= \Helpers\getDateTime($post->published_at) ?></li>
                                 <li>Автор: <a href="#"><?=$post->user->first_name?> <?=$post->user->last_name?></a></li>
@@ -30,7 +29,7 @@ $imgPath = !empty($imgPath) ? $imgPath : '';
                             <div class="dx-blog-item-text">
                                 <p><?= $post->excerpt ?></p>
                             </div>
-                            <a href="/post<?= $post->slug ?>" class="dx-btn dx-btn-lg">Подробнее</a>
+                            <a href="/post/<?= $post->slug ?>" class="dx-btn dx-btn-lg">Подробнее</a>
                         </div>
                     </div>
                     <?php } ?>
