@@ -8,16 +8,16 @@
 namespace App\Controllers\BackendControllers;
 
 use App\Config;
-use App\Controllers\BackendControllers\AdminController;
+use App\Controllers\BackendControllers\AdminController as AdminController;
 use App\Model\User;
 use App\Uploader\Upload;
 use App\Validate\Validator;
 use App\Controllers\UserController;
-use App\Redirect;
 use App\View;
 use App\Parse\Yaml;
 
 use function Helpers\checkToken;
+use function Helpers\generateToken;
 
 class AdminAccountController extends AdminController
 {
@@ -44,7 +44,7 @@ class AdminAccountController extends AdminController
             'data' => [
                 'form' => $this->getUserAccountFields(),
                 'user' => $user,
-                'token' => \Helpers\generateToken(),
+                'token' => generateToken(),
                 'pathToAvatar' => $this->userController->getUserAvatarPath()
             ],
             'title' => 'Редактирование профиля пользователя'
@@ -139,10 +139,10 @@ class AdminAccountController extends AdminController
 
                 if(isset($uploadAvatar->error)) { // если получили сообщение об ошибке, то выведем его в блок аватара
                     return json_encode([
-                        'error' => [
-                            'save' => [
-                                'field' => 'avatar',
-                                'errorMessage' => $uploadAvatar->error
+                        'toast' => [
+                            'typeToast' => 'warning',
+                            'dataToast' => [
+                                'message' => $uploadAvatar->error
                             ]
                         ]
                     ]);
@@ -161,10 +161,10 @@ class AdminAccountController extends AdminController
                     // Если не удалось сохранить изменения, выводим сообщение об этом
                 } else {
                     return json_encode([
-                        'error' => [
-                            'save' => [
-                                'field' => 'email',
-                                'errorMessage' => 'Невозможно обновить данные пользователя'
+                        'toast' => [
+                            'typeToast' => 'warning',
+                            'dataToast' => [
+                                'message' => 'Невозможно обновить данные пользователя'
                             ]
                         ]
                     ]);
@@ -177,10 +177,10 @@ class AdminAccountController extends AdminController
         } else {
             // Если нет, то возвращаем сообщение об ошибке записи в БД.
             return json_encode([
-                'error' => [
-                    'save' => [
-                        'field' => 'email',
-                        'errorMessage' => 'Невозможно обновить данные пользователя'
+                'toast' => [
+                    'typeToast' => 'warning',
+                    'dataToast' => [
+                        'message' => 'Невозможно обновить данные пользователя'
                     ]
                 ]
             ]);
@@ -231,5 +231,4 @@ class AdminAccountController extends AdminController
         }
         return null;
     }
-
 }
