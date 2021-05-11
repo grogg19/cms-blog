@@ -98,10 +98,10 @@ class LoginController extends Controller
                 } else {
                     // Если пользователя нет, возвращаем сообщение, что такого пользователя нет.
                     return json_encode([
-                        'error' => [
-                            'login' => [
-                                'field' => 'email',
-                                'errorMessage' => 'Пользователь с такими данными не найден'
+                        'toast' => [
+                            'typeToast' => 'warning',
+                            'dataToast' => [
+                                'message' => 'Пользователь с такими данными не найден!'
                             ]
                         ]
                     ]);

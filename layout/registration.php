@@ -2,6 +2,9 @@
 /**
  * Шаблон регистрации нового пользователя
  */
+
+use App\FormRenderer;
+use function Helpers\generateToken;
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -13,22 +16,21 @@
                     </div>
                     <div class="dx-separator"></div>
                     <form class="dx-form" name="form_registration" id="form_registration" action="<?= (isset($action)) ? $action : ""?>">
-                        <input type="hidden" name="_token" value="<?=\Helpers\generateToken()?>">
+                        <input type="hidden" name="_token" value="<?= generateToken(); ?>">
                         <div class="dx-box-content">
-
-                            <?php
-                            (new \App\FormRenderer($fields))->render();
-                            ?>
-
+                        <?php
+                        if(!empty($fields)) {
+                            (new FormRenderer($fields))->render();
+                        }
+                        ?>
                         </div>
                     </form>
                     <div class="dx-box-content pt-0">
                         <button class="dx-btn dx-btn-lg" type="button" name="button" id="save_button" data-form="form_registration">Зарегистрироваться</button>
                     </div>
+	                <div id="messageToast"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
