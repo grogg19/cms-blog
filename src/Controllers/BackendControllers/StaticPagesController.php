@@ -16,7 +16,6 @@ use App\View;
 use function Helpers\checkToken;
 use function Helpers\cleanJSTags;
 use function Helpers\generateToken;
-use function Helpers\parseRequestUri;
 
 class StaticPagesController extends AdminController
 {
