@@ -131,15 +131,14 @@ class StaticPagesController extends AdminController
             }
         } else {
             return json_encode([
-                'error' => [
-                    'title' => [
-                        'field' => 'title',
-                        'errorMessage' => 'Session is old, update form!'
+                'toast' => [
+                    'typeToast' => 'warning',
+                    'dataToast' => [
+                        'message' => 'Сессия устарела, обновите страницу!'
                     ]
                 ]
             ]);
         }
-
     }
 
     /**
@@ -166,10 +165,10 @@ class StaticPagesController extends AdminController
             }
         }
         return json_encode([
-            'error' => [
-                'title' => [
-                    'field' => 'messageWindow',
-                    'errorMessage' => 'Невозможно удалить страницу!'
+            'toast' => [
+                'typeToast' => 'warning',
+                'dataToast' => [
+                    'message' => 'Невозможно удалить страницу!'
                 ]
             ]
         ]);
