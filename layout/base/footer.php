@@ -49,9 +49,6 @@
 
 <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 
-<!-- Toasts -->
-<script src="/layout/assets/js/toasts.js"></script>
-
 <!-- The Amdesk -->
 <script src="/layout/assets/js/amdesk.js"></script>
 <script src="/layout/assets/js/amdesk-init.js"></script>
