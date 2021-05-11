@@ -97,9 +97,10 @@ class AdminAccountController extends AdminController
 
     /**
      * Метод обновляет информацию о пользователе и сообщает о результате работы
-     * @return string
+     * @return false|string
+     * @throws \App\Exception\ValidationException
      */
-    public function updateUserProfile()
+    public function updateUserProfile(): false|string
     {
         // Если есть POST данные и токен соответствует,
         if(!empty($this->request->post()) && checkToken() && !empty($this->session->get('userId'))) {
