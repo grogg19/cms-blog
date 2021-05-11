@@ -53,6 +53,10 @@ function listenButtonClick() {
                         document.querySelector('.div-' + result.error[key].field).setAttribute('tooltip', result.error[key].errorMessage);
                     }
                 }
+
+                if(result.toast) {
+                    await getToast(result.toast.typeToast, result.toast.dataToast);
+                }
                 //console.log(result);
             });
         });
@@ -287,13 +291,45 @@ if (requestButtons) {
                 location.href = result.url;
             }
 
-            document.querySelector('#messageWindow').removeAttribute('tooltip');
-
             if (result.error && Object.keys(result.error).length > 0) {
-                for (let key in result.error) {
-                    document.querySelector(result.error[key].field).setAttribute('tooltip', result.error[key].errorMessage);
-                }
+                // for (let key in result.error) {
+                //     document.querySelector(result.error[key].field).setAttribute('tooltip', result.error[key].errorMessage);
+                // }
+
+                await getToast('warning',  result.error);
+
             }
         });
     });
+}
+
+let getToast = async (type, data) => {
+
+    let formData = new FormData();
+    formData.append("_token", document.querySelector('[name = _token]').value);
+    formData.append('typeToast', type);
+    formData.append('dataToast', data.message);
+
+    let response = await fetch('/toasts/index', {
+        method: 'POST',
+        body: formData
+    });
+
+    let result = await response.text();
+    if(result !== '' && result !== 'undefined') {
+        document.querySelector('#messageToast').innerHTML = result;
+
+        let toastTimeout;
+        let toast = document.querySelector(".toast");
+
+        toast.classList.add("toast--active");
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove("toast--active");
+        }, 3500);
+
+        toast.addEventListener("click", () => {
+            toast.classList.remove("toast--active");
+            clearTimeout(toastTimeout);
+        });
+    }
 }
