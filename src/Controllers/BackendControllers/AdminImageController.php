@@ -30,6 +30,7 @@ class AdminImageController
             $listFilesForDelete = $fileNames;
         }
 
+        $message = [];
         foreach ($listFilesForDelete as $fileName) {
 
             $this->deleteImageFromDb($fileName);
