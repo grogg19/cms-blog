@@ -262,7 +262,8 @@ a:hover {
     left: 0;
     background-position: 50% 50%;
     background-size: cover;
-    z-index: -1;
+
+
 }
 
 .bg-image > * {
@@ -273,7 +274,6 @@ a:hover {
     left: 0;
     background-position: 50% 50%;
     background-size: cover;
-    z-index: 1;
 }
 
 .dx-gap,
@@ -2751,7 +2751,7 @@ h6,
     -webkit-transition: background-color .2s ease-in-out;
     -o-transition: background-color .2s ease-in-out;
     transition: background-color .2s ease-in-out;
-    z-index: 1000;
+    z-index: 2;
 }
 
 .dx-navbar .dx-nav-logo {
@@ -3604,7 +3604,7 @@ h6,
 .dx-header {
     position: relative;
     display: block;
-    z-index: 1;
+    /*z-index: 1;*/
 }
 
 /*------------------------------------------------------------------
@@ -3731,7 +3731,7 @@ h6,
     -webkit-transition: visibility .2s ease-in-out, opacity .2s ease-in-out;
     -o-transition: visibility .2s ease-in-out, opacity .2s ease-in-out;
     transition: visibility .2s ease-in-out, opacity .2s ease-in-out;
-    z-index: 1;
+    /*z-index: 1;*/
 }
 
 .dx-portfolio-item .dx-portfolio-item-image {
@@ -3763,7 +3763,7 @@ h6,
     -webkit-transform: scale(1);
         -ms-transform: scale(1);
             transform: scale(1);
-    z-index: 0;
+    /*z-index: 0;*/
 }
 
 .dx-portfolio-item .dx-portfolio-item-info {
@@ -4630,7 +4630,7 @@ h6,
 .dx-sidebar {
     position: relative;
     height: auto;
-    z-index: 1;
+    /*z-index: 1;*/
 }
 
 /*------------------------------------------------------------------
@@ -7398,7 +7398,7 @@ h6,
 .dx-box-decorated {
     position: relative;
     display: block;
-    z-index: 1;
+    /*z-index: 1;*/
 }
 
 .dx-box-1 {
@@ -7985,13 +7985,13 @@ h6,
     visibility: hidden;
     border: 10px solid transparent;
     border-bottom: 8px solid #fff;
-    z-index: 100;
+    z-index: 10;
 }
 
 .dx-dropdown.show > a::before,
 .dx-dropdown.show > button::before {
     visibility: visible;
-    z-index: 102;
+    z-index: 11;
 }
 
 .dx-dropdown .dropdown-menu {
@@ -8003,12 +8003,12 @@ h6,
     border: 0;
     -webkit-box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.05);
             box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.05);
-    z-index: 100;
+    z-index: 10;
 }
 
 .dx-dropdown .dropdown-menu.show {
     visibility: visible;
-    z-index: 102;
+    z-index: 11;
 }
 
 .dx-dropdown .dropdown-menu li > a:not(.dx-btn) {
