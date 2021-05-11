@@ -5,7 +5,7 @@
         </svg>
     </div>
     <div class="toast__content">
-        <h2>Information</h2>
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Labore cumque nesciunt quod, eius error officiis aut excepturi repellat asperiores cum, neque eveniet voluptatum. Quae necessitatibus velit dolore quidem facere repellat!</p>
+        <h2>Информация:</h2>
+        <p><?= !empty($data) ? $data : '' ?></p>
     </div>
 </div>
