@@ -47,7 +47,10 @@ $router->get('post','/admin/static-pages/edit', 'Controllers\BackendControllers\
 $router->get('post','/admin/static-pages/save', 'Controllers\BackendControllers\StaticPagesController@savePage');
 $router->get('post','/admin/static-pages/delete', 'Controllers\BackendControllers\StaticPagesController@deletePage');
 
-/** статических страниц $pages */
+/** маршрут Тостов */
+$router->get('post', '/toasts/index', 'Controllers\ToastsController@index');
+
+/** статических страниц */
 
 foreach ((new StaticPagesController())->getStaticPages() as $url => $page) {
     $router->get('get', $url, 'Controllers\PublicControllers\StaticPagesController@index');
