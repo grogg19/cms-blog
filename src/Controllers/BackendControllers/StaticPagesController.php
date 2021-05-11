@@ -46,7 +46,10 @@ class StaticPagesController extends AdminController
         ]);
     }
 
-    public function createPage()
+    /**
+     * @return View
+     */
+    public function createPage(): View
     {
         return new View('admin', [
             'view' => 'admin.static_pages.create_page',
@@ -62,7 +65,7 @@ class StaticPagesController extends AdminController
      * Форма редактирования содержимого статической страницы
      * @return View
      */
-    public function editPage()
+    public function editPage(): View
     {
 
         if(empty($this->request->post('pageName')) && !checkToken()) {
