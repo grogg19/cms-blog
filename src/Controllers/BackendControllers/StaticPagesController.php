@@ -100,10 +100,10 @@ class StaticPagesController extends AdminController
                     $existPage->deletePage();
                 } else {
                     return json_encode([
-                        'error' => [
-                            'title' => [
-                                'field' => 'url',
-                                'errorMessage' => 'Такой страницы не существует!'
+                        'toast' => [
+                            'typeToast' => 'warning',
+                            'dataToast' => [
+                                'message' => 'Такой страницы не существует!'
                             ]
                         ]
                     ]);
