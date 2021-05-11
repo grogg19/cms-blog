@@ -4,6 +4,8 @@
  */
 
 use App\View;
+use function Helpers\getDateTime;
+
 $posts = !empty($posts) ? $posts : [];
 $imgPath = !empty($imgPath) ? $imgPath : '';
 ?>
@@ -23,7 +25,7 @@ $imgPath = !empty($imgPath) ? $imgPath : '';
                     <div class="dx-blog-item-cont">
                         <h2 class="h3 dx-blog-item-title"><a href="/post/<?= $post->slug ?>"><?= $post->title ?></a></h2>
                         <ul class="dx-blog-item-info">
-                            <li>Опубликовано: <?= \Helpers\getDateTime($post->published_at) ?></li>
+                            <li>Опубликовано: <?= getDateTime($post->published_at) ?></li>
                             <li>Автор: <a href="#"><?=$post->user->first_name?> <?=$post->user->last_name?></a></li>
                         </ul>
                         <div class="dx-blog-item-text">
@@ -33,7 +35,6 @@ $imgPath = !empty($imgPath) ? $imgPath : '';
                     </div>
                 </div>
                 <?php } ?>
-
                 <div class="dx-blog-item pt-0">
                     <a href="#" class="dx-btn dx-btn-lg dx-btn-grey dx-btn-block dx-btn-load" data-btn-loaded="Shown all posts">Показать ещё</a>
                 </div>
