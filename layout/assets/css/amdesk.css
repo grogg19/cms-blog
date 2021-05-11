@@ -2751,7 +2751,7 @@ h6,
     -webkit-transition: background-color .2s ease-in-out;
     -o-transition: background-color .2s ease-in-out;
     transition: background-color .2s ease-in-out;
-    z-index: 2;
+    z-index: 1000;
 }
 
 .dx-navbar .dx-nav-logo {
