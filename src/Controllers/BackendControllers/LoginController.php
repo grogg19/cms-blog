@@ -17,6 +17,7 @@ use App\Cookie\Cookie;
 use App\Controllers\ListenerController;
 
 use function Helpers\checkToken;
+use function Helpers\generateToken;
 use function Helpers\hashPassword;
 use function Helpers\getCurrentDate;
 
@@ -48,7 +49,7 @@ class LoginController extends Controller
     {
         $fields = (new Yaml())->parseFile(APP_DIR . '/src/Model/User/user_login_fields.yaml');
 
-        $fields['token'] = \Helpers\generateToken();
+        $fields['token'] = generateToken();
 
         return new View('index', ['view' => 'partials.login', 'data' => $fields]);
     }
@@ -57,7 +58,7 @@ class LoginController extends Controller
      * @return false|string
      * @throws \App\Exception\ValidationException
      */
-    public function adminAuth()
+    public function adminAuth(): false|string
     {
         // Если есть данные в request и токены совпадают,
         if(!empty($this->request->post()) && checkToken()) {
@@ -110,6 +111,14 @@ class LoginController extends Controller
                 return json_encode($resultValidateForms);
             }
         }
+        return json_encode([
+            'toast' => [
+                'typeToast' => 'warning',
+                'dataToast' => [
+                    'message' => 'Нет хватает данных для записи'
+                ]
+            ]
+        ]);
 
     }
 
@@ -118,11 +127,11 @@ class LoginController extends Controller
      * и возвращает объект пользователя или FALSE при несовпадении пароля
      * @param $email
      * @param $password
-     * @return false
+     * @return User|false
      */
-    protected function findUser($email, $password)
+    protected function findUser($email, $password): User|false
     {
-        // Ищем пользователя с логином $email
+        // Ищем пользователя с $email
         $userData = User::where('email', $email)
             ->first();
 
