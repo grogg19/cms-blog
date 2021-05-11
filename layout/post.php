@@ -22,7 +22,6 @@ $imgPath = !empty($imgPath) ? $imgPath : '';
                             </a>
                         </div>
                     <?php } ?>
-
                     <div class="dx-blog-post-box">
                         <h1 class="h3 dx-blog-post-title"><?= $post->title ?></h1>
                         <ul class="dx-blog-post-info">
@@ -31,10 +30,8 @@ $imgPath = !empty($imgPath) ? $imgPath : '';
                         </ul>
                     </div>
                     <div class="dx-blog-post-box">
-
                         <?= $post->content ?>
                     </div>
-
                     <?php
                     if(!empty($post->images)) {
                         ?>
@@ -42,9 +39,7 @@ $imgPath = !empty($imgPath) ? $imgPath : '';
                             <div class="dx-gallery">
                                 <div class="row vertical-gap">
                                     <?php foreach ($post->images as $key => $image) {
-
                                         if ( $key === 0 ) continue;
-
                                     ?>
                                     <div class="col-6">
                                         <a href="<?=$imgPath . $image->file_name?>" data-fancybox="images" class="dx-gallery-item">
@@ -57,7 +52,6 @@ $imgPath = !empty($imgPath) ? $imgPath : '';
                             </div>
                         </div>
                     <?php } ?>
-
                     <div class="dx-separator"></div>
                     <div class="dx-blog-post-box pt-30 pb-30">
                         <ul class="dx-blog-post-tags mnt-6 mnb-1 db">
@@ -66,12 +60,10 @@ $imgPath = !empty($imgPath) ? $imgPath : '';
                             <li><a href="#">Design</a></li>
                             <li><a href="#">People</a></li>
                         </ul>
-
                     </div>
                 </div>
                 <div class="dx-box mt-55">
                     <h2 class="h4 mb-45">Комментарии:</h2>
-
                     <div class="dx-comment">
                         <div>
                             <div class="dx-comment-img">
@@ -117,7 +109,6 @@ $imgPath = !empty($imgPath) ? $imgPath : '';
                             </div>
                         </div>
                     </div>
-
                     <form action="#" class="dx-form mt-50">
                         <div class="row vertical-gap">
                             <div class="col-md-6">
