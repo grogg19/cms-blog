@@ -14,9 +14,9 @@ use App\View;
 use App\Controllers\Controller;
 
 use function Helpers\checkToken;
+use function Helpers\generateToken;
 use function Helpers\hashPassword;
 use function Helpers\generateRandomHash;
-use function Helpers\generateToken;
 
 /**
  * Class RegisterController
@@ -59,7 +59,7 @@ class RegisterController extends Controller
     {
         $fields = (new Yaml())->parseFile(APP_DIR . '/src/Model/User/user_fields.yaml');
 
-        $fields['token'] = \Helpers\generateToken();
+        $fields['token'] = generateToken();
 
         return new View('index', ['view' => 'partials.signup', 'data' => $fields]);
     }
@@ -105,10 +105,10 @@ class RegisterController extends Controller
                 } else {
                     // Если нет, то возвращаем сообщение об ошибке записи в БД.
                     return json_encode([
-                        'error' => [
-                            'auth' => [
-                                'field' => 'email',
-                                'errorMessage' => 'Ошибка записи в БД'
+                        'toast' => [
+                            'typeToast' => 'warning',
+                            'dataToast' => [
+                                'message' => 'Ошибка записи в БД!'
                             ]
                         ]
                     ]);
@@ -121,10 +121,10 @@ class RegisterController extends Controller
         } else {
             // Если нет, то возвращаем сообщение об ошибке записи в БД.
             return json_encode([
-                'error' => [
-                    'auth' => [
-                        'field' => 'email',
-                        'errorMessage' => 'Невозможно создать пользователя'
+                'toast' => [
+                    'typeToast' => 'warning',
+                    'dataToast' => [
+                        'message' => 'Невозможно создать пользователя!'
                     ]
                 ]
             ]);
