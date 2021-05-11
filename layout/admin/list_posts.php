@@ -2,7 +2,10 @@
 /**
  * Список постов в админке
  */
-use App\View;
+
+use function Helpers\getDateTime;
+
+$posts = !empty($posts) ? $posts : [];
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
@@ -15,7 +18,7 @@ use App\View;
                         <div class="dx-blog-item-cont">
                             <h2 class="h3 dx-blog-item-title"><a href="/admin/blog/posts/<?= $post->id ?>/edit"><?= $post->title ?></a></h2>
                             <ul class="dx-blog-item-info">
-                                <li>Опубликовано: <?= \Helpers\getDateTime($post->published_at) ?></li>
+                                <li>Опубликовано: <?= getDateTime($post->published_at) ?></li>
                                 <?php
                                 // Условие при котором показывается автор статьи
                                 ?>
@@ -28,10 +31,10 @@ use App\View;
                         </div>
                     </div>
                 <?php } ?>
-
                 <div class="dx-blog-item pt-0">
                     <a href="#" class="dx-btn dx-btn-lg dx-btn-grey dx-btn-block dx-btn-load" data-btn-loaded="Shown all posts">Load More Post</a>
                 </div>
+	            <div id="messageToast"></div>
             </div>
         </div>
     </div>

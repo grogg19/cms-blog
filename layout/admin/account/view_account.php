@@ -2,6 +2,8 @@
 /**
  * View Профиля пользователя
  */
+
+$pathAvatar = !empty($pathAvatar) ? $pathAvatar : ''
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -9,7 +11,7 @@
             <div class="col-lg-10 col-xl-7">
                 <div class="dx-box-decorated">
                     <div class="dx-box-content">
-                        <h2 class="h6 mnt-5 mnb-5"><?=$title?></h2>
+                        <h2 class="h6 mnt-5 mnb-5"><?= !empty($title) ? $title : '' ?></h2>
                     </div>
                     <div class="dx-separator"></div>
                     <div class="card" style="border: 0;">
@@ -31,6 +33,7 @@
                                 <a href="/admin/account/edit" class="card-link">Изменить данные профиля</a>
                             </div>
                         <?php } ?>
+	                    <div id="messageToast"></div>
                     </div>
                 </div>
             </div>

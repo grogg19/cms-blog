@@ -14,7 +14,7 @@
 		                    <a href="/admin/static-pages/add" ><i class="fas fa-plus"></i> Добавить страницу</a>
 	                    </div>
 	                    <?php if(!empty($pages)) { ?>
-		                    <div class="dx-separator" id="messageWindow"></div>
+		                    <div class="dx-separator"></div>
 		                    <form class="dx-form" name="form_edit_static_pages" id="form_edit_static_pages" >
 			                    <input type="hidden" name="_token" value="<?=(!empty($token) ? $token : '')?>">
 			                    <div class="row mb-6 mt-6" >
@@ -35,9 +35,7 @@
 			                    </div>
 		                    </form>
 	                    <?php } ?>
-	                    <?php
-	                    (new \App\View('partials.toast_main'))->render();
-	                    ?>
+	                    <div id="messageToast"></div>
                     </div>
                 </div>
             </div>

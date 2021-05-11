@@ -33,6 +33,7 @@
 	                <div class="dx-box-content">
 		                <button class="dx-btn dx-btn-lg" type="submit" name="button" id="save_button" data-form="form_edit_page">Сохранить</button>
 	                </div>
+	                <div id="messageToast"></div>
                 </div>
             </div>
         </div>

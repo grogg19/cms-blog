@@ -64,6 +64,7 @@
                             </div>
                         </div>
                         <!-- END: Dropzone -->
+	                    <div id="messageToast"></div>
                     </div>
                 </div>
             </div>

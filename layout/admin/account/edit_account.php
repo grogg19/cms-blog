@@ -2,6 +2,11 @@
 /**
  * Редактирование аккаунта пользователя
  */
+
+use App\FormRenderer;
+$user = !empty($user) ? $user : null;
+$pathToAvatar = !empty($pathToAvatar) ? $pathToAvatar : '';
+
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -9,14 +14,14 @@
             <div class="col-lg-10 col-xl-7">
                 <div class="dx-box-decorated">
                     <div class="dx-box-content">
-                        <h2 class="h6 mnt-5 mnb-5"><?=$form['title']?></h2>
+                        <h2 class="h6 mnt-5 mnb-5"><?= !empty($form['title']) ? $form['title'] : '' ?></h2>
                     </div>
                     <div class="dx-separator"></div>
                     <form class="dx-form" name="form_edit_user_profile" id="form_edit_user_profile" action="<?= (isset($form['action'])) ? $form['action'] : ""?>">
-                        <input type="hidden" name="_token" value="<?=$token?>">
+                        <input type="hidden" name="_token" value="<?= !empty($token) ? $token : ''?>">
                         <div class="dx-box-content">
                             <?php
-                            (new \App\FormRenderer($form['fields']))->render($user);
+                            (new FormRenderer($form['fields']))->render($user);
                             ?>
                             <div class="dx-form-group-md div-avatar form-element">
                                 <label for="avatar">Аватар:</label>
@@ -32,6 +37,7 @@
                             <div class="dx-form-group-md">
                                 <button class="dx-btn dx-btn-block dx-btn-popup" type="submit" name="button" id="save_button" data-form="form_edit_user_profile">Сохранить</button>
                             </div>
+	                        <div id="messageToast"></div>
                         </div>
                     </form>
                 </div>
