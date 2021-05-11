@@ -102,7 +102,7 @@ class AdminPostController extends AdminController
      * Выводит форму поста для редактирования
      * @return View|false
      */
-    public function editPost()
+    public function editPost(): View|false
     {
         $uriData = parseRequestUri();
 
@@ -188,7 +188,7 @@ class AdminPostController extends AdminController
      * @return false|string
      * @throws \App\Exception\ValidationException
      */
-    public function savePost()
+    public function savePost(): false|string
     {
         // Валидируем данные формы
         if(checkToken()) {
