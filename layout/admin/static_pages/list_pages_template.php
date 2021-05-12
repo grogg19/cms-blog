@@ -30,7 +30,7 @@
 				                        <p class="small op-7"><?= $page->getParameter('url'); ?></p>
 			                        </div>
 			                        <div class="col-1 text-center mb-6 mt-6"><a href="/admin/static-pages/edit" data-type="action" data-value="<?=$page->getFileName()['name']?>" data-action="/admin/static-pages/edit" title="Редактировать страницу"><i class="fas fa-pencil-alt"></i></a></div>
-			                        <div class="col-1 text-center mb-6 mt-6"><a href="/admin/static-pages/delete" data-type="request" data-value="<?=$page->getFileName()['name']?>" data-action="/admin/static-pages/delete" title="Удалить страницу"><i class="fas fa-times"></i></a></div>
+			                        <div class="col-1 text-center mb-6 mt-6"><a href="/admin/static-pages/delete" data-type="request" data-value="<?=$page->getFileName()['name']?>" data-action="/admin/static-pages/delete" title="Удалить страницу" data-field="pageName"><i class="fas fa-times"></i></a></div>
 			                <?php } ?>
 			                    </div>
 		                    </form>
