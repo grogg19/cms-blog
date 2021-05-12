@@ -2977,6 +2977,7 @@ h6,
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
+
 }
 
 .dx-navbar ul > li {
@@ -3052,6 +3053,7 @@ h6,
         -ms-flex-align: center;
             align-items: center;
     width: 100%;
+    height: 100%;
 }
 
 .dx-navbar .dx-navbar-content .dx-nav {
@@ -8003,12 +8005,16 @@ h6,
     border: 0;
     -webkit-box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.05);
             box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.05);
-    z-index: 10;
+
+}
+
+@media screen and (max-width: 760px) {
+
 }
 
 .dx-dropdown .dropdown-menu.show {
     visibility: visible;
-    z-index: 11;
+
 }
 
 .dx-dropdown .dropdown-menu li > a:not(.dx-btn) {

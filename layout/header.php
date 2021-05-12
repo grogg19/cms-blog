@@ -8,16 +8,13 @@ use App\View;
 ?>
 <!-- START: Navbar -->
 <nav class="dx-navbar dx-navbar-top dx-navbar-collapse dx-navbar-sticky dx-navbar-expand-lg dx-navbar-dropdown-triangle dx-navbar-autohide">
-    <div class="container">
-
+    <div class="container" style="height: 100%">
         <a href="/" class="dx-nav-logo">
             <img src="/layout/assets/images/logo.svg" alt="" width="88px">
         </a>
-
         <button class="dx-navbar-burger">
             <span></span><span></span><span></span>
         </button>
-
         <div class="dx-navbar-content">
             <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
                 (new View('partials.header.main_admin_menu'))->render();
@@ -42,11 +39,11 @@ use App\View;
     </div>
 </nav>
 <div class="dx-navbar dx-navbar-fullscreen">
-    <div class="container">
+    <div class="container" style="height: 100%">
         <button class="dx-navbar-burger">
             <span></span><span></span><span></span>
         </button>
-        <div class="dx-navbar-content">
+        <div class="dx-navbar-content" >
             <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
                 (new View('partials.header.main_admin_menu'))->render();
             } else {

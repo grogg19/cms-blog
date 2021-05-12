@@ -9,7 +9,7 @@ use App\View;
 ?>
 <!-- START: Navbar -->
 <nav class="dx-navbar dx-navbar-top dx-navbar-collapse dx-navbar-sticky dx-navbar-expand-lg dx-navbar-dropdown-triangle dx-navbar-autohide">
-    <div class="container">
+    <div class="container" style="height: 100%">
 
         <a href="/" class="dx-nav-logo">
             <img src="/layout/assets/images/logo.svg" alt="" width="88px">
@@ -39,7 +39,7 @@ use App\View;
     </div>
 </nav>
 <div class="dx-navbar dx-navbar-fullscreen">
-    <div class="container">
+    <div class="container" style="height: 100%">
         <button class="dx-navbar-burger">
             <span></span><span></span><span></span>
         </button>
@@ -64,9 +64,7 @@ use App\View;
     </div>
 </div>
 <!-- END: Navbar -->
-
 <div class="dx-main">
-
     <header class="dx-header dx-box-5">
         <div class="bg-image bg-image-parallax">
             <img src="/layout/assets/images/bg_top.jpg" class="jarallax-img" alt="">

@@ -9,7 +9,7 @@
             <span class="dx-nav-signin-img"><?=(!empty($user->avatar)) ? '<img src="/upload/avatars/' . $user->avatar . '" alt="">' : '<img src="/layout/assets/images/avatar-1.png" alt="">' ?></span>
             <span class="dx-nav-signin-name"><?=(\Helpers\session()->get('userName')) ?? "No name"?></span>
         </a>
-        <ul class="dropdown-menu" aria-labelledby="dropdownSignin">
+        <ul class="dropdown-menu" aria-labelledby="dropdownSignin" >
             <li>
                 <a href="/admin/account"><span class="icon pe-7s-user"></span> Аккаунт</a>
             </li>
