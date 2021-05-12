@@ -47,6 +47,9 @@ class LoginController extends Controller
      */
     public function form(): View
     {
+        if($this->session->get('authAuthorized') && !empty($this->session->get('userId'))) {
+            Redirect::to('/admin/blog/posts');
+        }
         $fields = (new Yaml())->parseFile(APP_DIR . '/src/Model/User/user_login_fields.yaml');
 
         $fields['token'] = generateToken();
@@ -115,7 +118,7 @@ class LoginController extends Controller
             'toast' => [
                 'typeToast' => 'warning',
                 'dataToast' => [
-                    'message' => 'Нет хватает данных для записи'
+                    'message' => 'Нет хватает данных для входа, обновите страницу!'
                 ]
             ]
         ]);
