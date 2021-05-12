@@ -278,7 +278,7 @@ if (requestButtons) {
             e.preventDefault();
             let formData = new FormData();
             formData.append("_token", document.querySelector('[name = _token]').value);
-            formData.append("pageName", element.getAttribute('data-value'));
+            formData.append(element.getAttribute('data-field'), element.getAttribute('data-value'));
 
             let response = await fetch(element.getAttribute('data-action'), {
                 method: 'POST',
