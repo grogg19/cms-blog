@@ -5,8 +5,6 @@
 
 namespace App;
 
-use App\DI\DI;
-
 class Route
 {
     private $method;
