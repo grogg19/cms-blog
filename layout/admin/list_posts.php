@@ -6,6 +6,7 @@
 use function Helpers\getDateTime;
 
 $posts = !empty($posts) ? $posts : [];
+$token = !empty($token) ? $token : '';
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
@@ -13,6 +14,7 @@ $posts = !empty($posts) ? $posts : [];
             <div class="col-12">
 	            <h2 class="m-0"><i class="far fa-list-alt"></i> Список статей блога</h2>
 	            <div class="dx-separator mb-10 mt-0"></div>
+	            <input type="hidden" name="_token" value="<?= $token ?>">
                 <?php
                 foreach ($posts as $post) {
                     ?>
@@ -34,10 +36,9 @@ $posts = !empty($posts) ? $posts : [];
 			                        <a href="/admin/blog/posts/<?= $post->id ?>/edit" class="btn btn-primary"><i class="fas fa-pencil-alt mr-7"></i> Редактировать</a>
 		                        </div>
 		                        <div class="col-6 text-right">
-			                        <a class="btn btn-secondary" href="#" role="button"><i class="far fa-trash-alt"></i></a>
+			                        <a class="btn btn-secondary" href="/admin/blog/posts/delete" role="button" data-type="request" data-value="<?= $post->id ?>" data-action="/admin/blog/posts/delete" data-field="postId"><i class="far fa-trash-alt"></i></a>
 		                        </div>
 	                        </div>
-
                         </div>
                     </div>
                 <?php } ?>
