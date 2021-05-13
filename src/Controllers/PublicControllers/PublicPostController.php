@@ -11,27 +11,42 @@ use App\Config;
 use App\Redirect;
 
 use function Helpers\parseRequestUri;
-use function Helpers\printArray;
 
+/**
+ * Class PublicPostController
+ * @package App\Controllers\PublicControllers
+ */
 class PublicPostController extends PublicController
 {
-    private $configImages;
+    /**
+     * @var mixed|null
+     */
+    private mixed $configImages;
 
+    /**
+     * PublicPostController constructor.
+     */
     public function __construct()
     {
         parent::__construct();
         $this->configImages = Config::getInstance()->getConfig('images');
     }
 
+    /**
+     * Выводит все посты на странице
+     * @return View
+     */
     public function index()
     {
         return $this->allPosts();
     }
 
-
-    public function allPosts()
+    /**
+     * Вывод всех опубликованных постов
+     * @return View
+     */
+    public function allPosts(): View
     {
-
         $data = [
             'posts' => (new PostController())->getAllPublishedPosts(),
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
@@ -40,7 +55,11 @@ class PublicPostController extends PublicController
         return new View('index', ['view' => 'posts', 'data' => $data, 'title' => 'Блог']);
     }
 
-    public function latestPosts()
+    /**
+     * Вывод списка последних постов
+     * @return array
+     */
+    public function latestPosts(): array
     {
         $data = [
             'posts' => (new PostController())->getLatestPosts(),
@@ -50,7 +69,11 @@ class PublicPostController extends PublicController
         return ['view' => 'partials/latest_posts', 'latestPosts' => $data];
     }
 
-    public function getPost()
+    /**
+     * Возвращает страницу с постом
+     * @return View
+     */
+    public function getPost(): View
     {
         list($module, $slug) = parseRequestUri(); // $module - каталог, $slug - название новости латиницей
 
@@ -66,7 +89,5 @@ class PublicPostController extends PublicController
 
         Redirect::to('/404');
     }
-
-
 
 }
