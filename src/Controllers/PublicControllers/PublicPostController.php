@@ -5,11 +5,10 @@
 
 namespace App\Controllers\PublicControllers;
 
-use App\Controllers\Post;
-use App\DI\DI;
 use App\View;
 use App\Controllers\PostController;
 use App\Config;
+use App\Redirect;
 
 use function Helpers\parseRequestUri;
 use function Helpers\printArray;
@@ -56,12 +55,18 @@ class PublicPostController extends PublicController
         list($module, $slug) = parseRequestUri(); // $module - каталог, $slug - название новости латиницей
 
         $post = (new PostController())->getPostBySlug($slug);
-        $data = [
-            $module => $post,
-            'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
-        ];
+        if(!empty($post)) {
+            $data = [
+                $module => $post,
+                'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+            ];
 
-        return new View('index', ['view' => 'post', 'data' => $data, 'title' => 'Блог | ' . $post->title ]);
+            return new View('index', ['view' => 'post', 'data' => $data, 'title' => 'Блог | ' . $post->title ]);
+        }
+
+        Redirect::to('/404');
     }
+
+
 
 }
