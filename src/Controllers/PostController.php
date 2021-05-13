@@ -102,4 +102,13 @@ class PostController extends Controller
     {
         $post->save();
     }
+
+    /**
+     * Удаление записи
+     * @param ModelPost $post
+     */
+    public function deletePost(ModelPost $post)
+    {
+        $post->delete();
+    }
 }

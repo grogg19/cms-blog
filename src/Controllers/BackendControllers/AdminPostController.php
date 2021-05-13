@@ -18,6 +18,7 @@ use App\View;
 use App\Model\Image;
 use App\Controllers\BackendControllers\AdminController as AdminController;
 use App\Controllers\BackendControllers\AdminImageController as AdminImageController;
+use Exception;
 
 use Illuminate\Database\QueryException;
 use App\Uploader\Upload;
@@ -71,7 +72,8 @@ class AdminPostController extends AdminController
         return new View('admin', [
             'view' => 'admin.list_posts',
             'data' => [
-                'posts' => $posts
+                'posts' => $posts,
+                'token' => generateToken()
             ],
             'title' => 'Список постов блога'
         ]);
@@ -228,6 +230,33 @@ class AdminPostController extends AdminController
     {
         return (new Yaml())->parseFile(__DIR__ . '/../../Model/Post/fields.yaml');
 
+    }
+
+    /**
+     * @return string
+     */
+    public function deletePost(): string
+    {
+        $controller = new PostController();
+        $post = $controller->getPostById((int) $this->request->post('postId'));
+        try {
+            foreach ($post->images as $image) {
+                $this->imgDelete($image->file_name);
+            }
+            $controller->deletePost($post);
+        } catch (Exception $exception) {
+            return json_encode([
+                'toast' => [
+                    'typeToast' => 'warning',
+                    'dataToast' => [
+                        'message' => 'Ошибка удаления поста! Сообщение: ' . $exception->getMessage()
+                    ]
+                ]
+            ]);
+        }
+        return json_encode([
+            'url' => '/admin/blog/posts'
+        ]);
     }
 
     /**
