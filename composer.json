@@ -20,7 +20,8 @@
         "illuminate/database": "^8.0",
         "php": ">=8.0",
         "symfony/yaml": "^5.1",
-        "illuminate/session": "^8.13"
+        "illuminate/session": "^8.13",
+        "ext-fileinfo": "*"
     },
     "require-dev": {
         "symfony/profiler-pack": "^1.0"
