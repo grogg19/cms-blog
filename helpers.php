@@ -20,8 +20,6 @@ function printArray($data)
     echo "</pre>";
 }
 
-
-
 /**
  * Функция возращает значение из массива $array с ключом $key вида "key1.key2.***.value"
  * @param array $array
@@ -63,7 +61,7 @@ function parseRequestUri()
 /**
  * Функция возвращает дату в формате d.m.Y h:i из параметра $date
  * @param $date
- * @return Значение времени и даты string
+ * @return string
  */
 function getDateTime($date) : string {
     return date('d.m.Y H:i', strtotime($date));
@@ -72,7 +70,7 @@ function getDateTime($date) : string {
 /**
  * Функция возвращает дату в формате Y.m.d  h:i:s из параметра $date
  * @param $date
- * @return Значение времени и даты string
+ * @return string
  */
 function getDateTimeForDb($date) : string {
     return date('Y.m.d  H:i:s', strtotime($date));
@@ -110,11 +108,10 @@ function generateToken() {
  * Функция сверяет полученный токен с токеном из куки и возвращает true при совпадении иначе false
  * @return bool
  */
-function checkToken() {
+function checkToken(): bool
+{
     if (!empty(request()->post('_token'))) {
-        return (Cookie::get('_token') === request()->post('_token')) ? true : false;
-    } else {
-        return false;
+        return Cookie::get('_token') === request()->post('_token');
     }
     return false;
 }
