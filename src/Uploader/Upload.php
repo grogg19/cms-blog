@@ -27,13 +27,14 @@ class Upload extends AdminController
     {
         $configImages = $this->getUploadSettings($configName);
 
-        $files = (count($this->filesToUpload) > 1) ? $this->normalizeFilesArray($this->filesToUpload) : $this->filesToUpload;
+        $files = $this->normalizeFilesArray($this->filesToUpload);
 
         // Проверяем каждое изображение, подходящее под mime-types из массива $configImages['mimeTypes'] и слайсим изображения
         foreach ($files as $file)
         {
             // Проверяем, нет ли ошибки при загрузке файлов
             if($file['error'] == 0) {
+
                 // Проверяем загружаемые файлы на соответствие mime-типам и максимальному размеру для загрузки
                 if(in_array(mime_content_type($file['tmp_name']), $configImages['mimeTypes']) && $file['size'] < ($configImages['maxImageSize'] * pow(1024,2)))
                 {
