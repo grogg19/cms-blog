@@ -24,6 +24,7 @@ $router->get('get','/admin/blog/posts', 'Controllers\BackendControllers\AdminPos
 $router->get('get','/admin/blog/posts/create', 'Controllers\BackendControllers\AdminPostController@createPost');
 $router->get('get','/admin/blog/posts/*/edit', 'Controllers\BackendControllers\AdminPostController@editPost');
 $router->get('post','/admin/blog/posts/save', 'Controllers\BackendControllers\AdminPostController@savePost');
+$router->get('post','/admin/blog/posts/delete', 'Controllers\BackendControllers\AdminPostController@deletePost');
 $router->get('post','/admin/blog/posts/img/upload', 'Controllers\BackendControllers\AdminPostController@imgUpload');
 $router->get(['get', 'post'],'/admin/blog/posts/img/get', 'Controllers\BackendControllers\AdminPostController@getImages');
 
