@@ -25,8 +25,8 @@ $imgPath = !empty($imgPath) ? $imgPath : '';
                     <div class="dx-blog-item-cont">
                         <h2 class="h3 dx-blog-item-title"><a href="/post/<?= $post->slug ?>"><?= $post->title ?></a></h2>
                         <ul class="dx-blog-item-info">
-                            <li>Опубликовано: <?= getDateTime($post->published_at) ?></li>
-                            <li>Автор: <a href="#"><?=$post->user->first_name?> <?=$post->user->last_name?></a></li>
+	                        <li class="d-block"><i class="fas fa-user" title="Автор"></i> <a href="#"><?=$post->user->first_name?> <?=$post->user->last_name?></a></li>
+                            <li class="d-block"><i class="far fa-clock" title="Опубликовано"></i> <?= getDateTime($post->published_at) ?></li>
                         </ul>
                         <div class="dx-blog-item-text">
                             <p><?= $post->excerpt ?></p>
