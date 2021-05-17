@@ -3,7 +3,9 @@
  * Шаблон элемента SWITCH
  */
 ?>
-
+<?php
+$element = !empty($element) ? $element : '';
+?>
 <div class="dx-form-group div-<?=key($element)?> form-element">
     <?php if($element[key($element)]['label']) { ?>
         <label for="<?=key($element)?>"><?=$element[key($element)]['label']?>:</label>
