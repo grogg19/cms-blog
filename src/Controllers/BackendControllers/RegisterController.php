@@ -72,7 +72,7 @@ class RegisterController extends Controller
     private function createUser(array $parameters): bool|string
     {
         // Если есть POST данные и токен соответствует,
-        if(!empty($parameters) && checkToken()) {
+        if(!empty($parameters) && checkToken() && $parameters['agreement'] === 'on') {
             // то валидируем введеные данные с формы
             // Создаем экземпляр валидации
             $validator = new Validator($parameters, User::class);
