@@ -32,5 +32,6 @@ $fields = !empty($fields) ? $fields : [];
             </div>
         </form>
     </div>
+	<div id="messageToast"></div>
 </div>
 <!-- End Login Form -->
