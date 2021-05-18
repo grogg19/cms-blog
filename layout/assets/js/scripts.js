@@ -48,10 +48,10 @@ function listenButtonClick() {
                 });
 
                 if (result.error && Object.keys(result.error).length > 0) {
-
-                    for (var key in result.error) {
+                    for (let key in result.error) {
                         document.querySelector('.div-' + result.error[key].field).setAttribute('tooltip', result.error[key].errorMessage);
                     }
+                    jump(Object.keys(result.error).shift());
                 }
 
                 if(result.toast) {
@@ -333,3 +333,14 @@ let getToast = async (type, data) => {
         });
     }
 }
+
+const jump = async (h) => {
+    let element = document.querySelector('.div-' + h);
+    window.scroll({
+        top: element.offsetTop,
+        left: 0,
+        behavior: "smooth"
+    });
+};
+
+
