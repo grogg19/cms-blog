@@ -64,9 +64,9 @@ function listenButtonClick() {
     const inputs = document.querySelectorAll('[type=text], [type=password], [type=email]');
 
     inputs.forEach(item => {
-        item.addEventListener('focus', async (e) => {
-            document.querySelector('#' + item.id).setAttribute('tooltip', '');
-        });
+        item.oninput = async (e) => {
+            document.querySelector('.div-' + item.id).removeAttribute('tooltip');
+        };
     });
 }
 
@@ -331,5 +331,21 @@ let getToast = async (type, data) => {
             toast.classList.remove("toast--active");
             clearTimeout(toastTimeout);
         });
+    }
+}
+
+const agreement = document.querySelector('#agreement');
+if(agreement) {
+    const saveButton = document.querySelector('#form_signup #save_button');
+    agreement.checked = false;
+    saveButton.setAttribute('disabled', 'disabled');
+
+    agreement.onchange = async (e) => {
+        e.preventDefault();
+        if(saveButton.hasAttribute('disabled')) {
+            saveButton.removeAttribute('disabled');
+        } else {
+            saveButton.setAttribute('disabled', null);
+        }
     }
 }
