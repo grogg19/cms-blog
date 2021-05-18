@@ -28,7 +28,7 @@ class FormRenderer
      * @param string $data
      * @return mixed|void
      */
-    private function generateForms($data = "")
+    private function generateForms(string $data = "")
     {
 
         foreach ($this->elements as $key => $element) {

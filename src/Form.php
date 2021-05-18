@@ -6,12 +6,13 @@
 namespace App;
 
 use App\View;
+use App\Renderable;
 
 /**
  * Class Form
  * @package App
  */
-class Form
+class Form implements Renderable
 {
     /**
      * @var \App\View
