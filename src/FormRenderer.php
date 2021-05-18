@@ -9,8 +9,6 @@ namespace App;
 use App\Form\Input;
 use App\Form\Textarea;
 use App\Form\Editor;
-use function Helpers\printArray;
-
 
 class FormRenderer
 {
