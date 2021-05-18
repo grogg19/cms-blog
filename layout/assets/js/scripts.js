@@ -64,9 +64,9 @@ function listenButtonClick() {
     const inputs = document.querySelectorAll('[type=text], [type=password], [type=email]');
 
     inputs.forEach(item => {
-        item.oninput = async (e) => {
-            document.querySelector('.div-' + item.id).removeAttribute('tooltip');
-        };
+        item.addEventListener('focus', async (e) => {
+            document.querySelector('.div-' + item.id).setAttribute('tooltip', '');
+        });
     });
 }
 
@@ -236,7 +236,7 @@ if(elementsForSend) {
             if (element.getAttribute('data-for-send')) {
                 formData.append("user", element.getAttribute('data-for-send'));
                 if(element.getAttribute('type') === 'checkbox') {
-                        formData.append(element.getAttribute('data-field'), element.checked);
+                    formData.append(element.getAttribute('data-field'), element.checked);
                 } else {
                     formData.append(element.getAttribute('data-field'), element.value);
                 }
@@ -333,19 +333,3 @@ let getToast = async (type, data) => {
         });
     }
 }
-
-// const agreement = document.querySelector('#agreement');
-// if(agreement) {
-//     // const saveButton = document.querySelector('#form_signup #save_button');
-//     // agreement.checked = false;
-//     // saveButton.setAttribute('disabled', 'disabled');
-//
-//     // agreement.onchange = async (e) => {
-//     //     e.preventDefault();
-//     //     if(saveButton.hasAttribute('disabled')) {
-//     //         saveButton.removeAttribute('disabled');
-//     //     } else {
-//     //         saveButton.setAttribute('disabled', null);
-//     //     }
-//     // }
-// }
