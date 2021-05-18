@@ -334,18 +334,18 @@ let getToast = async (type, data) => {
     }
 }
 
-const agreement = document.querySelector('#agreement');
-if(agreement) {
-    const saveButton = document.querySelector('#form_signup #save_button');
-    agreement.checked = false;
-    saveButton.setAttribute('disabled', 'disabled');
-
-    agreement.onchange = async (e) => {
-        e.preventDefault();
-        if(saveButton.hasAttribute('disabled')) {
-            saveButton.removeAttribute('disabled');
-        } else {
-            saveButton.setAttribute('disabled', null);
-        }
-    }
-}
+// const agreement = document.querySelector('#agreement');
+// if(agreement) {
+//     // const saveButton = document.querySelector('#form_signup #save_button');
+//     // agreement.checked = false;
+//     // saveButton.setAttribute('disabled', 'disabled');
+//
+//     // agreement.onchange = async (e) => {
+//     //     e.preventDefault();
+//     //     if(saveButton.hasAttribute('disabled')) {
+//     //         saveButton.removeAttribute('disabled');
+//     //     } else {
+//     //         saveButton.setAttribute('disabled', null);
+//     //     }
+//     // }
+// }
