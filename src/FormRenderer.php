@@ -25,10 +25,10 @@ class FormRenderer
 
     /**
      * Генератор элементов формы
-     * @param string $data
+     * @param null $data
      * @return mixed|void
      */
-    private function generateForms(string $data = "")
+    private function generateForms($data = null)
     {
 
         foreach ($this->elements as $key => $element) {
