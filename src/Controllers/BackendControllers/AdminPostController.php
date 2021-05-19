@@ -9,6 +9,7 @@ use App\Config;
 use App\Controllers\PostController;
 use App\Controllers\UserController;
 use App\Cookie\Cookie;
+use App\Exception\NotFoundException;
 use App\Model\Post;
 use App\Parse\Yaml;
 use App\Redirect;
@@ -103,6 +104,7 @@ class AdminPostController extends AdminController
     /**
      * Выводит форму поста для редактирования
      * @return View|false
+     * @throws NotFoundException
      */
     public function editPost(): View|false
     {
@@ -115,7 +117,9 @@ class AdminPostController extends AdminController
         }
 
         $post = (new PostController())->getPostById($id);
-
+        if($post == null) {
+            throw new NotFoundException('Такого поста не существует');
+        }
         if($post->user_id == $this->session->get('userId') || $this->user->role->permissions == 1)
         {
             return new View('admin', [
