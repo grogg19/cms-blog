@@ -5,6 +5,8 @@
 
 namespace App;
 
+
+use App\Controllers\System\MigrationController;
 use App\Cookie\Cookie;
 use App\Router as Router;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -82,7 +84,7 @@ class Application
 
         // Добавляем подключение к БД
         $capsule->addConnection([
-            'driver'    => 'mysql',
+            'driver'    => $dbConfig['driver'],
             'host'      => $dbConfig['host'],
             'database'  => $dbConfig['database'],
             'username'  => $dbConfig['username'],
@@ -96,6 +98,7 @@ class Application
 
         $capsule->bootEloquent();
 
+        $this->checkMigrations($capsule);
     }
 
     public function initSession()
@@ -104,6 +107,15 @@ class Application
 
         if(!empty(Cookie::get('authUser'))) {
             $this->session->start();
+        }
+    }
+
+    public function checkMigrations(Capsule $capsule)
+    {
+        if(!$capsule->getDatabaseManager()->getSchemaBuilder()->hasTable('migrations')) {
+            (new MigrationController())->makeMigrations();
+            (new View('migrating_process', ['message' => '<a href="/">Перейти на главную страницу</a>']))->render();
+            exit();
         }
     }
 }
