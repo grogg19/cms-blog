@@ -34,7 +34,7 @@ RUN mkdir /var/run/mysqld
 RUN apt install libapache2-mod-php8.0 -y
 #RUN apt-get install mariadb-server -y
 RUN apt-get install mysql-server -y
-RUN apt-get install git nodejs npm composer nano tree vim curl ftp -y
+RUN apt-get install git nodejs npm nano tree vim curl wget ftp -y
 RUN npm install -g bower grunt-cli gulp
 
 RUN apt install mc -y
@@ -78,8 +78,13 @@ ENV MYSQL_PASSWORD=password
 # Setup Mysql DB
 COPY db-init.sh /db-init.sh
 RUN chmod +x /db-init.sh
-#RUN /etc/init.d/mysql start
+
+COPY cs.sh /usr/sbin
+RUN chmod +x /usr/sbin/cs.sh
+
+RUN bash /usr/sbin/cs.sh
 
 CMD service mysql start
+
 
 CMD ["/usr/sbin/run-lamp.sh"]
