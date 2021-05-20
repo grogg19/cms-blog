@@ -98,9 +98,12 @@ class Application
 
         $capsule->bootEloquent();
 
-        $this->checkMigrations($capsule);
+        $this->checkMigrations();
     }
 
+    /**
+     * инициализация сессий если пользователь авторизован
+     */
     public function initSession()
     {
         $this->session = new Session();
@@ -110,12 +113,11 @@ class Application
         }
     }
 
-    public function checkMigrations(Capsule $capsule)
+    /**
+     * Проверка наличия миграций
+     */
+    public function checkMigrations()
     {
-        if(!$capsule->getDatabaseManager()->getSchemaBuilder()->hasTable('migrations')) {
-            (new MigrationController())->makeMigrations();
-            (new View('migrating_process', ['message' => '<a href="/">Перейти на главную страницу</a>']))->render();
-            exit();
-        }
+        (new MigrationController())->makeMigrations();
     }
 }

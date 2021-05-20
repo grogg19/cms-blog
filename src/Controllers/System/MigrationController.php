@@ -16,8 +16,9 @@ class MigrationController extends Controller
 
         if(!empty($migration->getMigrationFiles())) {
             $migration->makeMigration();
+
+            (new View('migrating_done', ['message' => 'БД в актуальном состоянии.']))->render();
         }
 
-        (new View('migrating_process', ['message' => 'БД в актуальном состоянии.']))->render();
     }
 }

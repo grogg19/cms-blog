@@ -35,7 +35,7 @@ class Migration
         $migrations = DB::table('migrations')->get();
 
         foreach ($migrations as $migration) {
-            array_push($migrationsFilesExists, $migrationsFolder . DIRECTORY_SEPARATOR . $migration['name']);
+            array_push($migrationsFilesExists, $migrationsFolder . DIRECTORY_SEPARATOR . $migration->name);
         }
         return array_diff($allMigrationsFiles, $migrationsFilesExists);
     }
