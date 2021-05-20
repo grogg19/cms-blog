@@ -69,22 +69,23 @@ EXPOSE 3306 80
 RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
 
 # ROOT PASSWORD
-ENV MYSQL_ROOT_PASSWORD=root
+ENV MYSQL_ROOT_PASSWORD=password
 
-ENV MYSQL_DATABASE=cms
-ENV MYSQL_USER=dbuser
-ENV MYSQL_PASSWORD=password
+#ENV MYSQL_DATABASE=cms
+#ENV MYSQL_USER=root
+#ENV MYSQL_PASSWORD=password
 
 # Setup Mysql DB
 COPY db-init.sh /db-init.sh
 RUN chmod +x /db-init.sh
+
+RUN service mysql start
 
 COPY cs.sh /usr/sbin
 RUN chmod +x /usr/sbin/cs.sh
 
 RUN bash /usr/sbin/cs.sh
 
-CMD service mysql start
-
+RUN bash /db-init.sh
 
 CMD ["/usr/sbin/run-lamp.sh"]
