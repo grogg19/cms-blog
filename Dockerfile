@@ -29,6 +29,8 @@ RUN apt-get install php8.0-xdebug # Xdebug debugger
 
 RUN apt install apache2 -y
 
+RUN mkdir /var/run/mysqld
+
 RUN apt install libapache2-mod-php8.0 -y
 #RUN apt-get install mariadb-server -y
 RUN apt-get install mysql-server -y
@@ -58,10 +60,26 @@ RUN a2enmod rewrite
 
 RUN chmod +x /usr/sbin/run-lamp.sh
 
-#RUN chown -R www-data:www-data /home/www
+RUN mkdir /home/www
+RUN chown -R www-data:www-data /home/www
+RUN chmod 0777 -R /var/run/mysqld
 
 EXPOSE 3306 80
 
 RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
+
+# ROOT PASSWORD
+ENV MYSQL_ROOT_PASSWORD=root
+
+ENV MYSQL_DATABASE=cms
+ENV MYSQL_USER=dbuser
+ENV MYSQL_PASSWORD=password
+
+# Setup Mysql DB
+COPY db-init.sh /db-init.sh
+RUN chmod +x /db-init.sh
+#RUN /etc/init.d/mysql start
+
+CMD service mysql start
 
 CMD ["/usr/sbin/run-lamp.sh"]
