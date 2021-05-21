@@ -10,13 +10,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `blog_posts_images`
+-- Table structure for table `blog_post_images`
 --
 
 DROP TABLE IF EXISTS blog_post_images;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `blog_posts_images` (
+CREATE TABLE `blog_post_images` (
                                      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                                      `file_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
                                      `post_id` int(10) unsigned NOT NULL,
