@@ -10,5 +10,9 @@ create table blog_post_comments
     updated_at timestamp null,
     constraint blog_post_comments_blog_posts_id_fk
         foreign key (post_id) references blog_posts (id)
-            on delete cascade
+            on delete cascade,
+
+    constraint blog_post_comments_blog_users_id_fk
+    foreign key (user_id) references users (id)
+    on delete cascade
 );
