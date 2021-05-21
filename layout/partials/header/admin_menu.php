@@ -19,6 +19,11 @@
 	        <li>
 		        <a href="/admin/static-pages"><span class="icon pe-7s-copy-file"></span> Статические страницы</a>
 	        </li>
+	        <?php if(in_array($user->role->code, ['admin', 'content-manager'])) { ?>
+	        <li>
+		        <a href="/admin/blog/posts/comments"><span class="icon pe-7s-check"></span> Модерация комментариев</a>
+	        </li>
+	        <?php } ?>
 	        <?php if($user->is_superuser === 1) { ?>
             <li>
                 <a href="/admin/user-manager"><span class="icon pe-7s-users"></span> Управление пользователями</a>
