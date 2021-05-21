@@ -6,7 +6,7 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Model\User as User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserRole extends Model
 {
@@ -25,9 +25,9 @@ class UserRole extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

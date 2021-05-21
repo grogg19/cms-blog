@@ -6,7 +6,7 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Post as Post;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Image extends Model
 {
@@ -30,7 +30,10 @@ class Image extends Model
      */
     protected $fillable = ['file_name', 'post_id', 'sort'];
 
-    public function post()
+    /**
+     * @return BelongsTo
+     */
+    public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
     }

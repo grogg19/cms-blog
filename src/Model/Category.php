@@ -6,6 +6,7 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
@@ -18,9 +19,9 @@ class Category extends Model
     protected $primaryKey = 'id';
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function posts()
+    public function posts(): BelongsToMany
     {
         return $this->belongsToMany('App\Model\Post', 'blog_posts_categories');
     }
