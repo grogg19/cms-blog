@@ -12,6 +12,6 @@
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 
-INSERT INTO cms.user_roles (id, name, code, description, permissions, is_system, created_at, updated_at) VALUES (1, 'Администратор', 'admin', 'Имеет полный доступ к админке', '1', 1, '2020-08-18 13:36:23', null);
-INSERT INTO cms.user_roles (id, name, code, description, permissions, is_system, created_at, updated_at) VALUES (2, 'Контент-менеджер', 'content-manager', 'Может изменять/создавать статьи и модерирует комментарии к ним', '2', 0, '2020-10-16 09:23:42', null);
-INSERT INTO cms.user_roles (id, name, code, description, permissions, is_system, created_at, updated_at) VALUES (3, 'Зарегистрированный пользователь', 'auth-user', 'Может оставлять комментарии', '3', 0, '2020-10-16 09:26:41', null);
+INSERT INTO user_roles (id, name, code, description, permissions, is_system, created_at, updated_at) VALUES (1, 'Администратор', 'admin', 'Имеет полный доступ к админке', '1', 1, '2020-08-18 13:36:23', null);
+INSERT INTO user_roles (id, name, code, description, permissions, is_system, created_at, updated_at) VALUES (2, 'Контент-менеджер', 'content-manager', 'Может изменять/создавать статьи и модерирует комментарии к ним', '2', 0, '2020-10-16 09:23:42', null);
+INSERT INTO user_roles (id, name, code, description, permissions, is_system, created_at, updated_at) VALUES (3, 'Зарегистрированный пользователь', 'auth-user', 'Может оставлять комментарии', '3', 0, '2020-10-16 09:26:41', null);
