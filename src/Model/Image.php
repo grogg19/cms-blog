@@ -6,14 +6,14 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Post;
+use App\Model\Post as Post;
 
 class Image extends Model
 {
     /**
      * @var string The database table used by the model.
      */
-    protected $table = 'blog_posts_images';
+    protected $table = 'blog_post_images';
     protected $primaryKey = 'id';
 
     /**
