@@ -2,6 +2,11 @@
 /**
  * Список пользователей
  */
+
+$pathToAvatar = !empty($pathToAvatar) ? $pathToAvatar : '';
+$token = !empty($token) ? $token : '';
+$roles = !empty($roles) ? $roles : [];
+
 ?>
 <div class="dx-box-5 bg-grey-6 ">
     <div class="container">

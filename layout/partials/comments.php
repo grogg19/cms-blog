@@ -1,9 +1,11 @@
 <?php
 
 use App\Controllers\UserController;
+
 use function Helpers\getDateTime;
 
 $avatarPath = (new UserController())->getUserAvatarPath();
+$token = !empty($token) ? $token : '';
 ?>
 <div class="dx-box mt-55">
     <?php
@@ -27,9 +29,10 @@ $avatarPath = (new UserController())->getUserAvatarPath();
     </div>
 		<?php }?>
     <?php }	?>
-    <form action="#" class="dx-form mt-50">
+    <form action="/blog/comments/add" class="dx-form mt-50">
         <div class="row vertical-gap">
             <div class="col-md-6">
+	            <input type="hidden" name="_token" value="<?= $token ?>">
                 <input class="form-control form-control-style-3" type="text" placeholder="Имя">
             </div>
             <div class="col-md-6">

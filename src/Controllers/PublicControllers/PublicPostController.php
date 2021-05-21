@@ -10,6 +10,7 @@ use App\Controllers\PostController;
 use App\Config;
 use App\Redirect;
 
+use function Helpers\generateToken;
 use function Helpers\parseRequestUri;
 
 /**
@@ -84,7 +85,12 @@ class PublicPostController extends PublicController
                 'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
             ];
 
-            return new View('index', ['view' => 'post', 'data' => $data, 'title' => 'Блог | ' . $post->title ]);
+            return new View('index', [
+                'view' => 'post',
+                'data' => $data,
+                'title' => 'Блог | ' . $post->title,
+                'token' => generateToken()
+            ]);
         }
 
         Redirect::to('/404');
