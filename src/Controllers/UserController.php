@@ -154,9 +154,9 @@ class UserController extends Controller
     }
 
     /**
-     * @return \App\Model\UserRole[]|Collection
+     * @return Collection
      */
-    public function getUserRoles(): Collection|array
+    public function getUserRoles(): Collection
     {
         return (new UserRoleController())->getUserRolesList();
     }

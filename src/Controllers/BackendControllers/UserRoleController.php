@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 class UserRoleController extends AdminController
 {
     /**
-     * @return UserRole[]|\Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function getUserRolesList(): Collection
     {
