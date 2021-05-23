@@ -5,6 +5,7 @@
 
 namespace App\Controllers\PublicControllers;
 
+use App\Controllers\UserController;
 use App\View;
 use App\Controllers\PostController;
 use App\Config;
@@ -80,9 +81,16 @@ class PublicPostController extends PublicController
 
         $post = (new PostController())->getPostBySlug($slug);
         if(!empty($post)) {
+
+            $userRole = ($this->session->get('userId') !== null) ? (new UserController())->getCurrentUser()->role->code : 'none';
+
+            $comments = new PublicCommentController();
+
             $data = [
                 $module => $post,
                 'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+                'userRole' => $userRole,
+                'comments' => $comments->getAllowableCommentsByPostId($post->id)
             ];
 
             return new View('index', [
