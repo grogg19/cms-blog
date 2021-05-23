@@ -6,6 +6,7 @@ use function Helpers\getDateTime;
 
 $avatarPath = (new UserController())->getUserAvatarPath();
 $token = !empty($token) ? $token : '';
+$userRole = !empty($userRole) ? $userRole : 'none';
 ?>
 <div class="dx-box mt-55">
     <?php
@@ -29,6 +30,7 @@ $token = !empty($token) ? $token : '';
     </div>
 		<?php }?>
     <?php }	?>
+	<?php if($userRole !== 'none') { ?>
     <form action="/blog/comments/add" class="dx-form mt-50">
         <div class="row vertical-gap">
             <div class="col-md-6">
@@ -46,4 +48,7 @@ $token = !empty($token) ? $token : '';
             </div>
         </div>
     </form>
+	<?php } else { ?>
+	<div>Осталять комментарии могут только <a href="/signup">зарегистрированные</a> пользователи.</div>
+	<?php } ?>
 </div>
