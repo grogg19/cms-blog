@@ -3,10 +3,12 @@
  * Шаблон вывода одной статьи
  */
 use App\View;
+use function Helpers\getDateTime;
 
 $post = !empty($post) ? $post : null;
 $imgPath = !empty($imgPath) ? $imgPath : '';
-$comments = !empty($post->comments) ? $post->comments : [];
+$comments = !empty($comments) ? $comments : null;
+$userRole = !empty($userRole) ? $userRole : 'none';
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
@@ -26,7 +28,7 @@ $comments = !empty($post->comments) ? $post->comments : [];
                     <div class="dx-blog-post-box">
                         <h1 class="h3 dx-blog-post-title"><?= $post->title ?></h1>
                         <ul class="dx-blog-post-info">
-                            <li>Дата публикации: <?= \Helpers\getDateTime($post->published_at) ?></li>
+                            <li>Дата публикации: <?= getDateTime($post->published_at) ?></li>
                             <li>Автор: <a href="#"><?= $post->user->first_name?> <?=$post->user->last_name ?></a></li>
                         </ul>
                     </div>
@@ -67,7 +69,8 @@ $comments = !empty($post->comments) ? $post->comments : [];
 	            	/** Блок комментариев к посту*/
                     (new View('partials.comments', [
                     		'comments' => $comments,
-	                        'user' => $post->user
+	                        'user' => $post->user,
+	                        'userRole' => $userRole
                     ]))->render();
 	            ?>
             </div>
