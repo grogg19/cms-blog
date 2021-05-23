@@ -4,23 +4,11 @@
  */
 
 namespace App\Auth;
-
-use App\Auth\AuthInterface;
 use App\Model\User;
 use App\Controllers\UserController;
-use App\Parse\Yaml;
-use App\Validator\UserFormValidation;
 use App\Cookie\Cookie;
-use App\View;
-use App\Redirect;
-use App\Url;
 use App\Config;
 use Symfony\Component\HttpFoundation\Session\Session;
-
-use function Helpers\checkToken;
-use function Helpers\hashPassword;
-use function Helpers\generateRandomHash;
-use function Helpers\printArray;
 
 class Auth implements AuthInterface
 {
@@ -107,22 +95,23 @@ class Auth implements AuthInterface
     {
         $this->session->set('userName', $user->first_name . ' ' . $user->last_name);
         $this->session->set('userId', $user->id);
+        $this->session->set('userRole', $user->role->code);
         $this->session->set('config', Config::getInstance());
     }
 
-    /**
-     * Проверка авторизации
-     * @param object $instance
-     * @return object
-     */
-    public function checkRole(object $instance): object
-    {
-        if($this->session->get('authAuthorized') == true ) {
-            return $instance;
-        } else {
-            (new Url())->toLogin();
-        }
-    }
+//    /**
+//     * Проверка авторизации
+//     * @param object $instance
+//     * @return object
+//     */
+//    public function checkRole(object $instance): object
+//    {
+//        if($this->session->get('authAuthorized') == true ) {
+//            return $instance;
+//        } else {
+//            (new Url())->toLogin();
+//        }
+//    }
 
     /**
      * Метод проверяет соотвествие куки $_COOKIE['persistCode'] и persist_code объекта пользователя
