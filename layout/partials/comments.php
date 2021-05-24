@@ -7,18 +7,17 @@ use function Helpers\getDateTime;
 $avatarPath = (new UserController())->getUserAvatarPath();
 $token = !empty($token) ? $token : '';
 $userRole = !empty($userRole) ? $userRole : 'none';
+$comments = !empty($comments) ? $comments : [];
 ?>
 <div class="dx-box mt-55">
     <?php
-    if(!empty($comments)) {
+    if(count($comments) > 0) {
     ?>
     <h2 class="h4 mb-45">Комментарии:</h2>
 	<?php foreach ($comments as $comment) { ?>
     <div class="dx-comment">
-        <div>
-            <div class="dx-comment-img">
-                <?= (empty($comment->user->avatar)) ? '<img src="/layout/assets/images/avatar-1.png" alt="">' : '<img src="' . $avatarPath . $comment->user->avatar . '" alt="">' ?>
-            </div>
+	    <div>
+	        <div class="dx-comment-img"><?= (empty($comment->user->avatar)) ? '<img src="/layout/assets/images/avatar-1.png" alt="">' : '<img src="' . $avatarPath . $comment->user->avatar . '">' ?></div>
             <div class="dx-comment-cont">
                 <a href="#" class="dx-comment-name"><?= $comment->user->first_name ?> <?= $comment->user->last_name ?></a>
                 <div class="dx-comment-text">
@@ -28,7 +27,7 @@ $userRole = !empty($userRole) ? $userRole : 'none';
                     <div class="dx-comment-date col-6"><i class="far fa-clock"></i> <?= getDateTime($comment->created_at)?></div>
 	                <div class="dx-comment-date col-6 text-right">
 		                <?php if(!$comment->has_moderated) { ?>
-			            <i class="far fa-ban" title="Не проверено модератором"></i>
+			            <i class="fas fa-ban" title="Не проверено модератором"></i>
 		                <?php } ?>
 	                </div>
 	            </div>
@@ -36,7 +35,9 @@ $userRole = !empty($userRole) ? $userRole : 'none';
         </div>
     </div>
 		<?php }?>
-    <?php }	?>
+    <?php }	else { ?>
+	<div class="dx-comment text-center"><i>Нет ни одного комментария.</i></div>
+	<?php } ?>
 	<?php if($userRole !== 'none') { ?>
     <form action="/blog/comments/add" class="dx-form mt-50">
         <div class="row vertical-gap">
@@ -56,6 +57,6 @@ $userRole = !empty($userRole) ? $userRole : 'none';
         </div>
     </form>
 	<?php } else { ?>
-	<div>Осталять комментарии могут только <a href="/signup">зарегистрированные</a> пользователи.</div>
+	<div>Оставлять комментарии могут только <a href="/signup">зарегистрированные</a> пользователи.</div>
 	<?php } ?>
 </div>
