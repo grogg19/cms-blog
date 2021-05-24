@@ -49,7 +49,7 @@ class PublicCommentController extends PublicController
             $query->where('has_moderated', 1)
                   ->where('post_id', $postId);
         })
-            ->orWhere(function($query) use($postId, $userId) {
+            ->orWhere(function($query) use ($postId, $userId) {
                     $query->where('post_id', $postId)
                           ->where('user_id', $userId);
             })
