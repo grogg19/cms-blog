@@ -24,7 +24,14 @@ $userRole = !empty($userRole) ? $userRole : 'none';
                 <div class="dx-comment-text">
                     <p class="mb-0"><?= htmlspecialchars($comment->content) ?></p>
                 </div>
-                <div class="dx-comment-date"><i class="far fa-clock"></i> <?= getDateTime($comment->created_at)?></div>
+	            <div class="row">
+                    <div class="dx-comment-date col-6"><i class="far fa-clock"></i> <?= getDateTime($comment->created_at)?></div>
+	                <div class="dx-comment-date col-6 text-right">
+		                <?php if(!$comment->has_moderated) { ?>
+			            <i class="far fa-ban" title="Не проверено модератором"></i>
+		                <?php } ?>
+	                </div>
+	            </div>
             </div>
         </div>
     </div>
