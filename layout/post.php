@@ -75,7 +75,7 @@ $userRole = !empty($userRole) ? $userRole : 'none';
 	            ?>
             </div>
             <div class="col-lg-4">
-                <div class="dx-sticky dx-sidebar" data-sticky-offsetTop="120" data-sticky-offsetBot="40">
+                <div class="dx-sticky" data-sticky-offsetTop="120" data-sticky-offsetBot="40">
                     <?php
                     /**
                      * Правый блок сайта
