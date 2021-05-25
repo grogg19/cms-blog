@@ -48,6 +48,9 @@ $router->get('post','/admin/static-pages/edit', 'Controllers\BackendControllers\
 $router->get('post','/admin/static-pages/save', 'Controllers\BackendControllers\StaticPagesController@savePage');
 $router->get('post','/admin/static-pages/delete', 'Controllers\BackendControllers\StaticPagesController@deletePage');
 
+/** Добавление нового комментария */
+$router->get('post','/blog/comments/add', 'Controllers\BackendControllers\AdminCommentController@addComment');
+
 /** маршрут Тостов */
 $router->get('post', '/toasts/index', 'Controllers\ToastsController@index');
 
