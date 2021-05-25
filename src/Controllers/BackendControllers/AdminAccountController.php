@@ -153,8 +153,7 @@ class AdminAccountController extends AdminController
                 }
 
                 // записываем изменения в БД
-                if($userController->updateUser($this->session->get('userId'), $data)) {
-
+                if($userController->updateUser($user, $data)) {
                     return json_encode([
                         'url' => '/admin/account/'
                     ]);
