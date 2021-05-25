@@ -54,7 +54,8 @@ class PublicPostController extends PublicController
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
         ];
 
-        return new View('index', ['view' => 'posts', 'data' => $data, 'title' => 'Блог']);
+        $view = new View('index', ['view' => 'posts', 'data' => $data, 'title' => 'Блог']);
+        $view->render();
     }
 
     /**
@@ -90,14 +91,14 @@ class PublicPostController extends PublicController
                 $module => $post,
                 'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
                 'userRole' => $userRole,
-                'comments' => $comments->getAllowableCommentsByPostId($post->id)
+                'comments' => $comments->getAllowableCommentsByPostId($post->id),
+                'token' => generateToken()
             ];
 
             return new View('index', [
                 'view' => 'post',
                 'data' => $data,
-                'title' => 'Блог | ' . $post->title,
-                'token' => generateToken()
+                'title' => 'Блог | ' . $post->title
             ]);
         }
 
