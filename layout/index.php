@@ -3,6 +3,7 @@
 use App\View;
 use App\Controllers\UserController;
 
+
 (new View('header', [
     'title' => (!empty($title)) ? $title : "",
     'user' => (new UserController())->getCurrentUser()
@@ -12,7 +13,7 @@ use App\Controllers\UserController;
     <!-- START: MainContent -->
 <?php
 
-if(isset($view) && isset($data)) {
+if(!empty($view) && !empty($data)) {
     (new View($view, $data))->render();
 }
 
