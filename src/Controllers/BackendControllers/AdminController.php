@@ -6,16 +6,15 @@
 namespace App\Controllers\BackendControllers;
 
 use App\Controllers\Controller;
-use App\Controllers\BackendControllers\AdminImageController;
 use App\Cookie\Cookie;
-use App\DI\DI;
 use App\Auth\Auth;
 use App\Redirect;
 use App\Controllers\ListenerController;
 
-use function Helpers\printArray;
-
-
+/**
+ * Class AdminController
+ * @package App\Controllers\BackendControllers
+ */
 class AdminController extends Controller
 {
 
@@ -44,16 +43,20 @@ class AdminController extends Controller
 
     }
 
-    public function checkAuthorization()
+    /**
+     * @return bool
+     */
+    public function checkAuthorization(): bool
     {
-//        if($this->auth->getHashUser() !== null) {
-//            $this->auth->setAuthorized($this->auth->getHashUser());
-//        }
-//
-//        if(!$this->auth->isAuthorized()) {
-//            Redirect::to('/login');
-//            exit();
-//        }
+        if($this->auth->getHashUser() !== null) {
+            $this->auth->setAuthorized($this->auth->getHashUser());
+        }
+
+        if(!$this->auth->isAuthorized()) {
+            Redirect::to('/login');
+            exit();
+        }
+        return true;
     }
 
     public function index()
