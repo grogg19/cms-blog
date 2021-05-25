@@ -43,6 +43,7 @@ function listenButtonClick() {
                 if(result.url) {
                     location.href = result.url;
                 }
+
                 document.querySelectorAll('.form-element').forEach(item => {
                     item.removeAttribute('tooltip');
                 });
@@ -341,6 +342,13 @@ const jump = async (h) => {
         left: 0,
         behavior: "smooth"
     });
+};
+
+const addComment = async (comment) => {
+    let commentBlock = document.querySelector('.comments-block');
+    if(commentBlock) {
+        commentBlock.appendChild(comment);
+    }
 };
 
 
