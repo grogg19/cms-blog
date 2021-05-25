@@ -3,6 +3,7 @@
  * User footer
  */
 use App\View;
+use App\Controllers\PublicControllers\PublicPostController;
 ?>
     <!-- START: Footer -->
     <footer class="dx-footer">
@@ -31,7 +32,7 @@ use App\View;
                     </div>
                     <div class="col-sm-12 col-lg-6">
                         <?php
-                        (new View('partials.footer.latest_posts', (new \App\Controllers\PublicControllers\PublicPostController())->latestPosts()))->render();
+                        (new View('partials.footer.latest_posts', (new PublicPostController())->latestPosts()))->render();
                         ?>
                     </div>
                 </div>

@@ -2,6 +2,8 @@
 /**
  * Latests posts partial
  */
+
+use function Helpers\getDateTime;
 ?>
 <?php if(!empty($latestPosts)) { ?>
 <div class="dx-widget dx-box dx-box-decorated">
@@ -15,7 +17,7 @@
         <?php } ?>
         <span class="dx-widget-post-text">
             <span class="dx-widget-post-title"><?= $latestPost->title ?></span>
-            <span class="dx-widget-post-date"><i class="far fa-clock" title="Опубликовано"></i> <?= \Helpers\getDateTime($latestPost->published_at) ?></span>
+            <span class="dx-widget-post-date"><i class="far fa-clock" title="Опубликовано"></i> <?= getDateTime($latestPost->published_at) ?></span>
         </span>
     </a>
     <?php } ?>
