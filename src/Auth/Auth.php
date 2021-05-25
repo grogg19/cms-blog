@@ -64,15 +64,14 @@ class Auth implements AuthInterface
 
     /**
      * @param $id
-     * @return User|bool
+     * @return User|null
      */
-    protected function userById($id): User|bool
+    public function userById($id): User|null
     {
         if(!empty($id)) {
-            $user = (new UserController())->getUserById($id);
-            return $user;
+            return (new UserController())->getUserById($id);
         }
-        return true;
+        return null;
     }
 
     /**
