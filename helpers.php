@@ -55,7 +55,8 @@ function array_get(array $array, $key, $default = null )
  */
 function parseRequestUri()
 {
-    return explode("/", trim($_SERVER['REQUEST_URI'],'/'));
+    $url = parse_url($_SERVER['REQUEST_URI']);
+    return explode("/", trim($url['path'],'/'));
 }
 
 /**
@@ -119,9 +120,9 @@ function checkToken(): bool
 /**
  * Функция хеширует пароль
  * @param $password
- * @return bool|string
+ * @return string
  */
-function hashPassword($password) {
+function hashPassword($password): string {
     return password_hash($password, PASSWORD_DEFAULT);
 }
 
@@ -130,8 +131,8 @@ function hashPassword($password) {
  * @param $password
  * @return bool
  */
-function checkPassword($password) {
-    return password_verify($password);
+function checkPassword($password): bool {
+    return password_verify($password , hashPassword($password));
 }
 
 function generateRandomHash(int $length = 8) {
