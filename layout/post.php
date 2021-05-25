@@ -9,6 +9,7 @@ $post = !empty($post) ? $post : null;
 $imgPath = !empty($imgPath) ? $imgPath : '';
 $comments = !empty($comments) ? $comments : null;
 $userRole = !empty($userRole) ? $userRole : 'none';
+$token = !empty($token) ? $token : 'none';
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
@@ -67,10 +68,12 @@ $userRole = !empty($userRole) ? $userRole : 'none';
                 </div>
 	            <?php
 	            	/** Блок комментариев к посту*/
-                    (new View('partials.comments', [
+                    (new View('partials.comments_list', [
                     		'comments' => $comments,
 	                        'user' => $post->user,
-	                        'userRole' => $userRole
+	                        'userRole' => $userRole,
+	                        'token' => $token,
+	                        'postId' => $post->id
                     ]))->render();
 	            ?>
             </div>
@@ -85,5 +88,6 @@ $userRole = !empty($userRole) ? $userRole : 'none';
                 </div>
             </div>
         </div>
+	    <div id="messageToast"></div>
     </div>
 </div>
