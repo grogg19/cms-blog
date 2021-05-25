@@ -7,6 +7,7 @@ namespace App;
 
 use App\Renderable as Renderable;
 
+
 /**
  * Class View
  * @package App
@@ -44,6 +45,7 @@ class View implements Renderable
             return false;
         }
     }
+
     public function getParameters()
     {
         return $this->parameters;
