@@ -54,8 +54,7 @@ class PublicPostController extends PublicController
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
         ];
 
-        $view = new View('index', ['view' => 'posts', 'data' => $data, 'title' => 'Блог']);
-        $view->render();
+        return new View('index', ['view' => 'posts', 'data' => $data, 'title' => 'Блог']);
     }
 
     /**
