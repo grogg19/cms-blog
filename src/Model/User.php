@@ -38,6 +38,14 @@ class User extends Model
         'deleted_at',
     ];
 
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'password',
+        'avatar',
+        'self_description'
+    ];
+
     /**
      * @return BelongsTo
      */
