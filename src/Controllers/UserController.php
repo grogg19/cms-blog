@@ -5,6 +5,7 @@
 
 namespace App\Controllers;
 
+use App\Auth\Auth;
 use App\Controllers\BackendControllers\UserRoleController;
 use App\Controllers\Controller as Controller;
 use App\Model\User;
@@ -76,18 +77,23 @@ class UserController extends Controller
 
     /**
      * Метод обновляет данные профиля пользователя в БД
-     * @param int $id
+     * @param User $user
      * @param array $data
      * @return bool
      */
-    public function updateUser(int $id, array $data): bool
+    public function updateUser(User $user, array $data): bool
     {
-        if(checkToken()) {
-            unset($data['_token']);
-            return (bool) User::where('id', $id)->update($data);
-        } else {
+        if(!checkToken()) {
             return false;
         }
+
+        unset($data['_token']);
+        if($user->update($data)) {
+            (new Auth())->setUserAttributes($user);
+            return true;
+        }
+
+        return false;
     }
 
     /**
