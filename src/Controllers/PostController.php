@@ -70,7 +70,7 @@ class PostController extends Controller
      */
     public function getPostById(int $id)
     {
-        return ModelPost::where('id', $id)->first();
+        return ModelPost::find($id);
     }
 
     /**
