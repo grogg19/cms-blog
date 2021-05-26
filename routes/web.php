@@ -51,6 +51,10 @@ $router->get('post','/admin/static-pages/delete', 'Controllers\BackendController
 /** Добавление нового комментария */
 $router->get('post','/blog/comments/add', 'Controllers\BackendControllers\AdminCommentController@addComment');
 
+/** список комментариев в админке */
+$router->get('get','/admin/comments', 'Controllers\BackendControllers\AdminCommentController@listComments');
+
+
 /** маршрут Тостов */
 $router->get('post', '/toasts/index', 'Controllers\ToastsController@index');
 
