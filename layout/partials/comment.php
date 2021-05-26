@@ -1,7 +1,10 @@
 <?php
 use function Helpers\getDateTime;
-
-$avatarPath = !empty($avatarPath) ? $avatarPath : '';
+use App\Model\Comment;
+/**
+ * @var string $avatarPath;
+ * @var Comment $comment;
+ */
 ?>
 <div class="dx-comment">
     <div>
