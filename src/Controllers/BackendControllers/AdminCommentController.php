@@ -7,6 +7,7 @@ namespace App\Controllers\BackendControllers;
 use App\Controllers\PostController;
 use App\Controllers\UserController;
 use App\Model\Comment;
+use App\Redirect;
 use App\Validate\Validator;
 
 use function Helpers\checkToken;
@@ -23,6 +24,9 @@ class AdminCommentController extends AdminController
     public function __construct()
     {
         parent::__construct();
+        if(!in_array($this->session->get('userRole'), ['admin', 'content-manager'])) {
+            Redirect::to('/');
+        }
     }
 
     /**
@@ -92,5 +96,10 @@ class AdminCommentController extends AdminController
                 ]
             ]);
         }
+    }
+
+    public function listComments()
+    {
+        //$comments =
     }
 }
