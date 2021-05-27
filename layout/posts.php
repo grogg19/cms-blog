@@ -38,6 +38,7 @@ $imgPath = !empty($imgPath) ? $imgPath : '';
                 <div class="dx-blog-item pt-0">
                     <a href="#" class="dx-btn dx-btn-lg dx-btn-grey dx-btn-block dx-btn-load" data-btn-loaded="Shown all posts">Показать ещё</a>
                 </div>
+	            <div id="messageToast"></div>
             </div>
             <div class="col-lg-4">
                 <div class="dx-sticky dx-sidebar" data-sticky-offsetTop="120" data-sticky-offsetBot="40">
