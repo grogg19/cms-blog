@@ -50,6 +50,11 @@ class AdminPostController extends AdminController
         if(!empty($this->session->get('postId'))) {
             $this->onCloseCleanImage();
         }
+
+        if(!in_array($this->session->get('userRole'), ['admin', 'content-manager'])) {
+            (new ToastsController())->setToast('info', 'У вас недостаточно прав для этого действия');
+            Redirect::to('/');
+        }
     }
 
     /**
