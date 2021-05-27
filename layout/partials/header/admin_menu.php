@@ -2,12 +2,19 @@
 /**
  * Админское меню
  */
+
+use App\Model\User;
+use function \Helpers\session;
+/**
+ * @var User $user;
+ */
+
 ?>
 <li>
     <div class="dropdown dx-dropdown dx-dropdown-signin">
         <a class="dx-nav-signin" href="javascript:void();" role="button" id="dropdownSignin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="dx-nav-signin-img"><?=(!empty($user->avatar)) ? '<img src="/upload/avatars/' . $user->avatar . '" alt="">' : '<img src="/layout/assets/images/avatar-1.png" alt="">' ?></span>
-            <span class="dx-nav-signin-name"><?=(\Helpers\session()->get('userName')) ?? "No name"?></span>
+            <span class="dx-nav-signin-name"><?=(session()->get('userName')) ?? "No name"?></span>
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownSignin" >
             <li>
