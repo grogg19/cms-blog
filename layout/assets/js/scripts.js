@@ -1,6 +1,7 @@
 $.fancybox.defaults.parentEl = 'footer';
 
 
+
 $('#datetimepicker').datetimepicker({
     uiLibrary: 'bootstrap4',
     modal: true,
@@ -281,7 +282,7 @@ if (requestButtons) {
             formData.append("_token", document.querySelector('[name = _token]').value);
             formData.append(element.getAttribute('data-field'), element.getAttribute('data-value'));
 
-            let response = await fetch(element.getAttribute('data-action'), {
+            let response = await fetch(element.getAttribute('href'), {
                 method: 'POST',
                 body: formData
             });
@@ -290,6 +291,14 @@ if (requestButtons) {
 
             if(result.url) {
                 location.href = result.url;
+            }
+
+            if(result.comment) {
+                await commentApproved(result.comment);
+            }
+
+            if(result.toast) {
+                await getToast(result.toast.typeToast,  result.toast.dataToast);
             }
 
             if (result.error && Object.keys(result.error).length > 0) {
@@ -317,22 +326,29 @@ let getToast = async (type, data) => {
     });
 
     let result = await response.text();
+
     if(result !== '' && result !== 'undefined') {
-        document.querySelector('#messageToast').innerHTML = result;
 
-        let toastTimeout;
-        let toast = document.querySelector(".toast");
+        await executeToast(result);
 
-        toast.classList.add("toast--active");
-        toastTimeout = setTimeout(() => {
-            toast.classList.remove("toast--active");
-        }, 3500);
-
-        toast.addEventListener("click", () => {
-            toast.classList.remove("toast--active");
-            clearTimeout(toastTimeout);
-        });
     }
+}
+const executeToast = async (result) => {
+
+    document.querySelector('#messageToast').innerHTML = result;
+
+    let toastTimeout;
+    let toast = document.querySelector(".toast");
+
+    toast.classList.add("toast--active");
+    toastTimeout = setTimeout(() => {
+        toast.classList.remove("toast--active");
+    }, 3500);
+
+    toast.addEventListener("click", () => {
+        toast.classList.remove("toast--active");
+        clearTimeout(toastTimeout);
+    });
 }
 
 const jump = async (h) => {
@@ -351,4 +367,34 @@ const addComment = async (comment) => {
     }
 };
 
+const commentButtons = document.querySelectorAll('.btn-comment-content');
+//const commentsContent = document.querySelectorAll('.comment-content');
+
+if(commentButtons) {
+    commentButtons.forEach(element => {
+        $(element).click(async (e) => {
+            e.preventDefault();
+            let targetCommentId = element.getAttribute('data-id');
+            let targetComment = document.querySelector('div[data-content-id = "'+ targetCommentId + '"]');
+            targetComment.classList.toggle('comment-hidden');
+
+        });
+    });
+}
+
+const checkToast = async () => {
+
+    let response = await fetch('/checkToast', {
+        method: 'POST',
+
+    });
+
+    let result = await response.text();
+
+    if(result !== '' && result !== 'undefined' && result !== null) {
+        await executeToast(result);
+    }
+}
+
+checkToast().then();
 
