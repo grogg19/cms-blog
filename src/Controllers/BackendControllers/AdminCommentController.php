@@ -65,6 +65,9 @@ class AdminCommentController extends AdminController
                 if($post !== null) {
 
                     $post->comments()->save($comment);
+
+                    (new ToastsController())->setToast('success', 'Комментарий успешно сохранён.');
+
                     return json_encode([
                         'url' => '/post/' . $post->slug . '?#comments'
                     ]);
@@ -113,7 +116,7 @@ class AdminCommentController extends AdminController
         $commentRepository = new CommentRepository();
         $comment = $commentRepository->setHasModeratedApprove((int) $this->request->post('commentId'));
         if($comment == null) {
-            return ToastsController::getToast('warning', 'Комментарий не найден');;
+            return ToastsController::getToast('warning', 'Комментарий не найден');
         }
 
         (new ToastsController())->setToast('success', 'Комментарий успешно одобрен');
@@ -136,7 +139,7 @@ class AdminCommentController extends AdminController
         $commentRepository = new CommentRepository();
         $comment = $commentRepository->setHasModeratedReject((int) $this->request->post('commentId'));
         if($comment == null) {
-            return ToastsController::getToast('warning', 'Комментарий не найден');;
+            return ToastsController::getToast('warning', 'Комментарий не найден');
         }
 
         (new ToastsController())->setToast('success', 'Комментарий успешно отклонён');

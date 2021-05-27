@@ -19,6 +19,7 @@ use App\View;
 use App\Model\Image;
 use App\Controllers\BackendControllers\AdminController as AdminController;
 use App\Controllers\BackendControllers\AdminImageController as AdminImageController;
+use App\Controllers\ToastsController;
 use Exception;
 
 use Illuminate\Database\QueryException;
@@ -138,8 +139,8 @@ class AdminPostController extends AdminController
                 'title' => 'Редактирование статьи | ' . $post->title
             ]);
         } else {
-            // Пока редирект ведет на create, но должен на самом деле редиректиться на список статей пользователя
-            Redirect::to('/admin/blog/posts/create');
+            (new ToastsController())->setToast('info', 'Вам доступны для редкатирования только ваши статьи');
+            Redirect::to('/admin/blog/posts');
         }
         return false;
     }
@@ -219,12 +220,13 @@ class AdminPostController extends AdminController
                 try {
 
                     $this->saveToDb($this->request);
+                    (new ToastsController())->setToast('success', 'Статья успешно сохранена');
                     return json_encode([
                         'url' => '/admin/blog/posts'
                     ]);
 
                 } catch (QueryException $e) {
-                    return json_encode(['message' => 'Ошибка сохранения в БД', 'error' => $e]);
+                    return ToastsController::getToast('warning', 'Ошибка сохранения в БД: '. $e->getMessage());
                 }
             }
         }
@@ -254,14 +256,7 @@ class AdminPostController extends AdminController
             }
             $controller->deletePost($post);
         } catch (Exception $exception) {
-            return json_encode([
-                'toast' => [
-                    'typeToast' => 'warning',
-                    'dataToast' => [
-                        'message' => 'Ошибка удаления поста! Сообщение: ' . $exception->getMessage()
-                    ]
-                ]
-            ]);
+            return ToastsController::getToast('warning', 'Ошибка удаления поста! Сообщение: ' . $exception->getMessage());
         }
         return json_encode([
             'url' => '/admin/blog/posts'
@@ -283,7 +278,7 @@ class AdminPostController extends AdminController
             $imageUploader = new Upload($this->request->files());
             return $imageUploader->upload();
         }
-        return json_encode(['errorMsg' => 'Файлов не завезли']);
+        return ToastsController::getToast('warning', 'Отсутствуют файлы для загрузки');
 
     }
 

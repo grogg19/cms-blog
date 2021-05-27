@@ -112,14 +112,7 @@ class StaticPagesController extends AdminController
                 if($existPage !== null) {
                     $existPage->deletePage();
                 } else {
-                    return json_encode([
-                        'toast' => [
-                            'typeToast' => 'warning',
-                            'dataToast' => [
-                                'message' => 'Такой страницы не существует!'
-                            ]
-                        ]
-                    ]);
+                    return ToastsController::getToast('warning', 'Такой страницы не существует!');
                 }
 
             }
@@ -137,6 +130,9 @@ class StaticPagesController extends AdminController
                 ]);
                 $page->setHtmlContent(cleanJSTags((string) $this->request->post('content')));
                 $page->makePage(new File);
+
+                (new ToastsController())->setToast('success', 'Данные страницы успешно сохранены.');
+
                 return json_encode([
                     'url' => '/admin/static-pages'
                 ]);
@@ -144,14 +140,7 @@ class StaticPagesController extends AdminController
                 return json_encode($resultValidation);
             }
         } else {
-            return json_encode([
-                'toast' => [
-                    'typeToast' => 'warning',
-                    'dataToast' => [
-                        'message' => 'Сессия устарела, обновите страницу!'
-                    ]
-                ]
-            ]);
+            return ToastsController::getToast('warning', 'Сессия устарела, обновите страницу!');
         }
     }
 
@@ -173,18 +162,14 @@ class StaticPagesController extends AdminController
         if(checkToken() && !empty($this->request->post('pageName'))) {
             $page = (new PageList(new FilesList()))->getPageByFileName( (string) $this->request->post('pageName'));
             if($page->deletePage()) {
+
+                (new ToastsController())->setToast('success', 'Страница успешно удалена.');
+
                 return json_encode([
                     'url' => '/admin/static-pages'
                 ]);
             }
         }
-        return json_encode([
-            'toast' => [
-                'typeToast' => 'warning',
-                'dataToast' => [
-                    'message' => 'Невозможно удалить страницу!'
-                ]
-            ]
-        ]);
+        return ToastsController::getToast('warning', 'Невозможно удалить страницу!');
     }
 }
