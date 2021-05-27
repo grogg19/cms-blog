@@ -27,4 +27,70 @@ class ToastsController extends Controller
         }
         return '';
     }
+
+    /**
+     * @param string $type
+     * @param string $message
+     * @return string
+     */
+    public static function getToast(string $type = 'info', string $message = ''): string
+    {
+        return json_encode([
+            'toast' => [
+                'typeToast' => $type,
+                'dataToast' => [
+                    'message' => $message
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
+    private function issetToast(): bool
+    {
+        return $this->session->has('toast');
+    }
+
+    /**
+     * @param string $type
+     * @param string $message
+     */
+    public function setToast(string $type = 'info', string $message = ''): void
+    {
+        $this->session->set('toast', [
+            'typeToast' => $type,
+            'dataToast' => [
+                'message' => $message
+            ]
+        ]);
+    }
+
+    /**
+     * Удаление Тоста
+     */
+    private function destroyToast(): void
+    {
+        $this->session->remove('toast');
+    }
+
+
+    public function checkToast(): void
+    {
+        if($this->issetToast()) {
+
+            $type = $this->session->get('toast')['typeToast'];
+            $message = $this->session->get('toast')['dataToast']['message'];
+
+            $this->destroyToast();
+
+            $content = new View('partials.toast_main', [
+                'typeToast' => $type,
+                'dataToast' => $message
+            ]);
+
+            $content->render();
+        }
+    }
 }
