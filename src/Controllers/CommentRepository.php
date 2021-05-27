@@ -6,26 +6,45 @@
 namespace App\Controllers;
 
 use App\Model\Comment;
+use App\Redirect;
 
 class CommentRepository
 {
-    private $comment;
-
-    public function __construct(Comment $comment)
+    /**
+     * @param string $orderByDirection
+     * @return array
+     */
+    public function getAllComments($orderByDirection = 'asc'): array
     {
-        $this->comment = $comment;
+        $comments = Comment::all();
+        $sorted = ($orderByDirection = 'asc') ? $comments->sortBy('has_moderated') : $comments->sortByDesc('has_moderated');
+
+        return $sorted->values()->all();
     }
 
     /**
-     * @return Comment
+     * @param int $id
+     * @return mixed
      */
-    public function getComment(): Comment
+    public function setHasModeratedApprove(int $id)
     {
-        return $this->comment;
+        $comment = Comment::find($id);
+        $comment->has_moderated = 1;
+        $comment->save();
+
+        return $comment;
     }
 
-    public function getAllComments()
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function setHasModeratedReject(int $id)
     {
-       // return $this->comment->
+        $comment = Comment::find($id);
+        $comment->has_moderated = 0;
+        $comment->save();
+
+        return $comment;
     }
 }
