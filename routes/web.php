@@ -52,12 +52,14 @@ $router->get('post','/admin/static-pages/delete', 'Controllers\BackendController
 $router->get('post','/blog/comments/add', 'Controllers\BackendControllers\AdminCommentController@addComment');
 
 /** список комментариев в админке */
-$router->get('get','/admin/comments', 'Controllers\BackendControllers\AdminCommentController@listComments');
+$router->get('get','/admin/posts/comments', 'Controllers\BackendControllers\AdminCommentController@listComments');
 
+$router->get('post','/admin/posts/comments/approve', 'Controllers\BackendControllers\AdminCommentController@toApproveComment');
+$router->get('post','/admin/posts/comments/reject', 'Controllers\BackendControllers\AdminCommentController@toRejectComment');
 
 /** маршрут Тостов */
 $router->get('post', '/toasts/index', 'Controllers\ToastsController@index');
-
+$router->get('post','/checkToast', 'Controllers\ToastsController@checkToast');
 /** статических страниц */
 
 foreach ((new StaticPagesController())->getStaticPages() as $url => $page) {
