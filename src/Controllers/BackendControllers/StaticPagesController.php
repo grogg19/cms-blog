@@ -3,6 +3,7 @@
 
 namespace App\Controllers\BackendControllers;
 
+use App\Controllers\ToastsController;
 use App\Parse\Yaml;
 use App\Redirect;
 use App\StaticPages\FilesList;
@@ -26,6 +27,16 @@ class StaticPagesController extends AdminController
         'title' => 'required',
         'url'   => ['required', 'regex:/^\/[a-z0-9\/_\-\.]*$/i', 'uniquePage']
     ];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        if(!in_array($this->session->get('userRole'), ['admin', 'content-manager'])) {
+            (new ToastsController())->setToast('info', 'У вас недостаточно прав для этого действия');
+            Redirect::to('/');
+        }
+    }
 
     /**
      * Метод выводит список статических страниц
