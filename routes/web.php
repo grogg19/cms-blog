@@ -57,6 +57,9 @@ $router->get('get','/admin/posts/comments', 'Controllers\BackendControllers\Admi
 $router->get('post','/admin/posts/comments/approve', 'Controllers\BackendControllers\AdminCommentController@toApproveComment');
 $router->get('post','/admin/posts/comments/reject', 'Controllers\BackendControllers\AdminCommentController@toRejectComment');
 
+/** маршруты Настроек бэкенда */
+$router->get('get','/admin/settings', 'Controllers\BackendControllers\AdminSettingsController@index');
+
 /** маршрут Тостов */
 $router->get('post', '/toasts/index', 'Controllers\ToastsController@index');
 $router->get('post','/checkToast', 'Controllers\ToastsController@checkToast');
