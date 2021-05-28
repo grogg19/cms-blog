@@ -88,12 +88,13 @@ class UserController extends Controller
         }
 
         unset($data['_token']);
-        if($user->update($data)) {
+        $user->update($data);
+
+        if($this->session->get('userId') === $user->id) {
             (new Auth())->setUserAttributes($user);
-            return true;
         }
 
-        return false;
+        return true;
     }
 
     /**
