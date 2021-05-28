@@ -6,10 +6,13 @@
 
 namespace App\Controllers\BackendControllers;
 
+use App\Controllers\ToastsController;
 use App\Controllers\UserController;
 use App\Redirect;
 use App\View;
+
 use function Helpers\checkToken;
+use function Helpers\generateToken;
 
 class AdminUserManagerController extends AdminController
 {
@@ -28,6 +31,7 @@ class AdminUserManagerController extends AdminController
 
         if($user->role->code !== 'admin' &&  $user->is_superuser !== 1) {
 
+            (new ToastsController())->setToast('info', 'У вас недостаточно прав для этого действия');
             Redirect::to('/admin/account');
         }
     }
@@ -41,8 +45,8 @@ class AdminUserManagerController extends AdminController
             'view' => 'admin.users_manager.list',
             'data' => [
                 'title' => 'Список пользователей',
-                'users' => $this->userController->getAllUsers(),
-                'token' => \Helpers\generateToken(),
+                'users' => $this->userController->getAllUsers()->except(['is_superuser' => 1]),
+                'token' => generateToken(),
                 'pathToAvatar' => $this->userController->getUserAvatarPath(),
                 'roles' => $this->userController->getUserRoles()
             ],
@@ -67,19 +71,15 @@ class AdminUserManagerController extends AdminController
                 $data['role_id'] = $this->request->post('role');
             }
 
-            if($this->userController->updateUser( (int) $this->request->post('user'), $data)) {
-                return json_encode([
-                    'message' => 'success'
-                ]);
+            $user = (new UserController())->getUserById((int) $this->request->post('user'));
+
+            if($this->userController->updateUser($user, $data)) {
+                return ToastsController::getToast('success', 'Данные пользователя изменены');
             } else {
-                return json_encode([
-                    'message' => 'Ошибка изменений в БД'
-                ]);
+                return ToastsController::getToast('warning', 'Ошибка изменений в БД');
             }
         } else {
-            return json_encode([
-                'message' => 'Ошибка токена'
-            ]);
+            return ToastsController::getToast('warning', 'Ошибка токена, обновите страницу.');
         }
     }
 }
