@@ -8,7 +8,6 @@ use function \Helpers\session;
 /**
  * @var User $user;
  */
-
 ?>
 <li>
     <div class="dropdown dx-dropdown dx-dropdown-signin">
@@ -36,9 +35,11 @@ use function \Helpers\session;
                 <a href="/admin/user-manager"><span class="icon pe-7s-users"></span> Управление пользователями</a>
             </li>
 	        <?php } ?>
+            <?php if(in_array($user->role->code, ['admin', 'content-manager'])) { ?>
             <li>
-                <a href="account-settings.html"><span class="icon pe-7s-config"></span> Настройки</a>
+                <a href="/admin/settings"><span class="icon pe-7s-config"></span> Настройки</a>
             </li>
+            <?php } ?>
             <li>
                 <a href="/logout"><span class="icon pe-7s-back"></span> Выход</a>
             </li>
