@@ -32,10 +32,8 @@ class StaticPagesController extends AdminController
     {
         parent::__construct();
 
-        if(!in_array($this->session->get('userRole'), ['admin', 'content-manager'])) {
-            (new ToastsController())->setToast('info', 'У вас недостаточно прав для этого действия');
-            Redirect::to('/');
-        }
+        $this->auth->checkPermissons(['admin', 'content-manager']);
+
     }
 
     /**

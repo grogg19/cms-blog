@@ -5,10 +5,12 @@
 
 namespace App\Auth;
 
+use App\Controllers\ToastsController;
 use App\Model\User;
 use App\Controllers\UserController;
 use App\Cookie\Cookie;
 use App\Config;
+use App\Redirect;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class Auth
@@ -104,6 +106,23 @@ class Auth
             return $user->persist_code === $_COOKIE['persistCode'];
         }
         return false;
+    }
+
+    /**
+     * Проверка доступа прав в раздел
+     * @param array $roles
+     */
+    public function checkPermissons(array $roles): void
+    {
+        if(!in_array($this->session->get('userRole'), $roles)) {
+            (new ToastsController())->setToast('info', 'У вас недостаточно прав для этого действия');
+            Redirect::to('/');
+        }
+    }
+
+    public function checkSuperUser()
+    {
+
     }
 
 }
