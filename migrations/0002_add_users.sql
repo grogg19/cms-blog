@@ -1,40 +1,42 @@
-create table if not exists users
-(
-    id                  int unsigned auto_increment
-        primary key,
-    first_name          varchar(191)         null,
-    last_name           varchar(191)         null,
-    email               varchar(191)         not null,
-    password            varchar(191)         not null,
-    activation_code     varchar(191)         null,
-    persist_code        varchar(191)         null,
-    avatar              varchar(255)         null,
-    self_description    varchar(255)         null,
-    reset_password_code varchar(191)         null,
-    permissions         text                 null,
-    is_activated        tinyint(1) default 0 not null,
-    role_id             int unsigned         null,
-    activated_at        timestamp            null,
-    last_login          timestamp            null,
-    created_at          timestamp            null,
-    updated_at          timestamp            null,
-    deleted_at          timestamp            null,
-    is_superuser        tinyint(1) default 0 not null,
-    constraint email_unique
-        unique (email),
-    constraint users_avatar_uindex
-        unique (avatar)
-)
-    engine = innodb
-    auto_increment = 1
-    character set utf8
-    collate utf8_unicode_ci;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-create index act_code_index
-    on users (activation_code);
+--
+-- Table structure for table `users`
+--
 
-create index admin_role_index
-    on users (role_id);
-
-create index reset_code_index
-    on users (reset_password_code);
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+                         `id` int unsigned NOT NULL AUTO_INCREMENT,
+                         `first_name` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
+                         `last_name` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
+                         `email` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+                         `password` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+                         `persist_code` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
+                         `avatar` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+                         `self_description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+                         `reset_password_code` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
+                         `permissions` text COLLATE utf8_unicode_ci,
+                         `is_activated` tinyint(1) NOT NULL DEFAULT '0',
+                         `role_id` int unsigned DEFAULT NULL,
+                         `last_login` timestamp NULL DEFAULT NULL,
+                         `created_at` timestamp NULL DEFAULT NULL,
+                         `updated_at` timestamp NULL DEFAULT NULL,
+                         `deleted_at` timestamp NULL DEFAULT NULL,
+                         `is_superuser` tinyint(1) NOT NULL DEFAULT '0',
+                         `is_subscribed` tinyint(1) DEFAULT '0',
+                         PRIMARY KEY (`id`),
+                         UNIQUE KEY `email_unique` (`email`),
+                         UNIQUE KEY `users_avatar_uindex` (`avatar`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
