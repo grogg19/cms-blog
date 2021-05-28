@@ -2,7 +2,10 @@
 /**
  * User header
  */
+
 use App\View;
+use function Helpers\session;
+use function Helpers\request;
 
 (new View('base.header', ['title' => (!empty($title)) ? $title : '']))->render();
 ?>
@@ -16,16 +19,16 @@ use App\View;
             <span></span><span></span><span></span>
         </button>
         <div class="dx-navbar-content">
-            <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
+            <?php if( session_status() == PHP_SESSION_ACTIVE && session()->get('authAuthorized') == 1) {
                 (new View('partials.header.main_admin_menu'))->render();
             } else {
                 (new View('partials.header.main_public_menu'))->render();
             } ?>
             <ul class="dx-nav dx-nav-align-right">
-            <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
+            <?php if( session_status() == PHP_SESSION_ACTIVE && session()->get('authAuthorized') == 1) {
                 (new View('partials.header.admin_menu',['user' => !empty($user) ? $user : '']))->render();
             } else { ?>
-	            <?php if(!in_array(\Helpers\request()->server('REQUEST_URI'), ['/login', '/signup'])) { ?>
+	            <?php if(!in_array(request()->server('REQUEST_URI'), ['/login', '/signup'])) { ?>
 	            <li>
 	                <a data-fancybox data-type="ajax"  data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>
 	            </li>
@@ -44,16 +47,16 @@ use App\View;
             <span></span><span></span><span></span>
         </button>
         <div class="dx-navbar-content" >
-            <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
+            <?php if( session_status() == PHP_SESSION_ACTIVE && session()->get('authAuthorized') == 1) {
                 (new View('partials.header.main_admin_menu'))->render();
             } else {
 	            (new View('partials.header.main_public_menu'))->render();
 	        } ?>
 	        <ul class="dx-nav dx-nav-align-right">
-                <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
+                <?php if( session_status() == PHP_SESSION_ACTIVE && session()->get('authAuthorized') == 1) {
                     (new View('partials.header.admin_menu',['user' => $user]))->render();
                 } else { ?>
-                    <?php if(!in_array(\Helpers\request()->server('REQUEST_URI'), ['/login', '/signup'])) { ?>
+                    <?php if(!in_array(request()->server('REQUEST_URI'), ['/login', '/signup'])) { ?>
 				        <li>
 					        <a data-fancybox data-type="ajax"  data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>
 				        </li>
