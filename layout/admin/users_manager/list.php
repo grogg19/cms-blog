@@ -3,9 +3,13 @@
  * Список пользователей
  */
 
-$pathToAvatar = !empty($pathToAvatar) ? $pathToAvatar : '';
-$token = !empty($token) ? $token : '';
-$roles = !empty($roles) ? $roles : [];
+/**
+ * @var $pathToAvatar;
+ * @var $token;
+ * @var $roles;
+ */
+
+use function Helpers\getDateTime;
 
 ?>
 <div class="dx-box-5 bg-grey-6 ">
@@ -33,9 +37,9 @@ $roles = !empty($roles) ? $roles : [];
                     <?= htmlspecialchars($user->first_name) . ' ' . htmlspecialchars($user->last_name)?>
                 </span>
                 <ul class="dx-ticket-info">
-                    <li>Заходил в последний раз: <br><?=\Helpers\getDateTime($user->last_login)?></li>
+                    <li>Заходил в последний раз: <br><?= getDateTime($user->last_login) ?></li>
                     <?=(!empty($user->posts)) ? '<li>Статей опубликовано: ' . count($user->posts) . '</li>' : ''?>
-                    <li>Comments: 2</li>
+                    <li>Комментарии: <?= count($user->comments) ?></li>
                     <li>
                         <span class="dx-form-group-inputs">
                             <select class="custom-select form-control-sm form-control-style-2" data-field="role" data-for-send="<?=$user->id?>" data-method="userChangeRole">
@@ -60,5 +64,6 @@ $roles = !empty($roles) ? $roles : [];
         </div>
     <?php }?>
 <?php } ?>
+	    <div id="messageToast"></div>
     </div>
 </div>
