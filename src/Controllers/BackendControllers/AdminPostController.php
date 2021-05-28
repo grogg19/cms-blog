@@ -258,6 +258,9 @@ class AdminPostController extends AdminController
         } catch (Exception $exception) {
             return ToastsController::getToast('warning', 'Ошибка удаления поста! Сообщение: ' . $exception->getMessage());
         }
+
+        (new ToastsController())->setToast('success', 'Пост успешно удалён.');
+
         return json_encode([
             'url' => '/admin/blog/posts'
         ]);
