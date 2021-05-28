@@ -8,7 +8,8 @@
 namespace App\Controllers\BackendControllers;
 
 use App\Config;
-use App\Controllers\BackendControllers\AdminController as AdminController;
+use App\Controllers\BackendControllers\AdminController;
+use App\Controllers\ToastsController;
 use App\Model\User;
 use App\Uploader\Upload;
 use App\Validate\Validator;
@@ -21,7 +22,7 @@ use function Helpers\generateToken;
 
 class AdminAccountController extends AdminController
 {
-    private $userController;
+    private UserController $userController;
 
     public function __construct()
     {
@@ -139,14 +140,7 @@ class AdminAccountController extends AdminController
                 $uploadAvatar = $this->uploadAvatar($user); // Пробуем загрузить автарку
 
                 if(isset($uploadAvatar->error)) { // если получили сообщение об ошибке, то выведем его в блок аватара
-                    return json_encode([
-                        'toast' => [
-                            'typeToast' => 'warning',
-                            'dataToast' => [
-                                'message' => $uploadAvatar->error
-                            ]
-                        ]
-                    ]);
+                    return ToastsController::getToast('warning', $uploadAvatar->error);
                 } else {
                     // Если ошибок нет, то добавляем к пользователю атрибут $data['avatar']
                     $data['avatar'] = ($uploadAvatar === null) ? $user->avatar : $uploadAvatar->uploadFilesData[0]->fileName;
@@ -154,20 +148,16 @@ class AdminAccountController extends AdminController
 
                 // записываем изменения в БД
                 if($userController->updateUser($user, $data)) {
+
+                    (new ToastsController())->setToast('success', 'Изменения успешно сохранены.');
+
                     return json_encode([
                         'url' => '/admin/account/'
                     ]);
 
                     // Если не удалось сохранить изменения, выводим сообщение об этом
                 } else {
-                    return json_encode([
-                        'toast' => [
-                            'typeToast' => 'warning',
-                            'dataToast' => [
-                                'message' => 'Невозможно обновить данные пользователя'
-                            ]
-                        ]
-                    ]);
+                    return ToastsController::getToast('warning', 'Невозможно обновить данные пользователя');
                 }
 
             } else {
@@ -176,14 +166,7 @@ class AdminAccountController extends AdminController
 
         } else {
             // Если нет, то возвращаем сообщение об ошибке записи в БД.
-            return json_encode([
-                'toast' => [
-                    'typeToast' => 'warning',
-                    'dataToast' => [
-                        'message' => 'Невозможно обновить данные пользователя'
-                    ]
-                ]
-            ]);
+            return ToastsController::getToast('warning', 'Невозможно обновить данные пользователя');
         }
     }
 
