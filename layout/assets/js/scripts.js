@@ -1,7 +1,5 @@
 $.fancybox.defaults.parentEl = 'footer';
 
-
-
 $('#datetimepicker').datetimepicker({
     uiLibrary: 'bootstrap4',
     modal: true,
@@ -250,6 +248,10 @@ if(elementsForSend) {
             });
 
             let result = await response.json();
+
+            if(result.toast) {
+                await getToast(result.toast.typeToast,  result.toast.dataToast);
+            }
         });
     });
 }
