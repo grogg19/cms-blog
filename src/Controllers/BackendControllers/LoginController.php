@@ -6,6 +6,7 @@
 namespace App\Controllers\BackendControllers;
 
 
+use App\Controllers\ToastsController;
 use App\Parse\Yaml;
 use App\Validate\Validator;
 use App\View;
@@ -85,6 +86,9 @@ class LoginController extends Controller
                 $user = $this->findUser($this->request->post('email'), $this->request->post('password'));
                 if($user !== false) {
 
+                    if(!$this->auth->isActivated($user)) {
+                        return ToastsController::getToast('warning', 'Ваша учетная запись деактивирована');
+                    }
                     // Если есть такой юзер, то авторизуем его и возвращаем на страницу, с которой он логинился
                     $persistCode = $this->makeUserHash($user);
 
@@ -95,34 +99,20 @@ class LoginController extends Controller
                     $this->auth->setAuthorized($persistCode);
                     $this->auth->setUserAttributes($user);
 
+                    (new ToastsController())->setToast('success', 'Вы успешно вошли в систему управления.');
                     return json_encode([
                         'url' => (!empty(Cookie::get('targetUrl'))) ? Cookie::get('targetUrl') : $this->request->server('HTTP_REFERER')
                     ]);
                 } else {
                     // Если пользователя нет, возвращаем сообщение, что такого пользователя нет.
-                    return json_encode([
-                        'toast' => [
-                            'typeToast' => 'warning',
-                            'dataToast' => [
-                                'message' => 'Пользователь с такими данными не найден!'
-                            ]
-                        ]
-                    ]);
+                    return ToastsController::getToast('warning', 'Пользователь с такими данными не найден!');
                 }
 
             } else {
                 return json_encode($resultValidateForms);
             }
         }
-        return json_encode([
-            'toast' => [
-                'typeToast' => 'warning',
-                'dataToast' => [
-                    'message' => 'Нет хватает данных для входа, обновите страницу!'
-                ]
-            ]
-        ]);
-
+        return ToastsController::getToast('warning', 'Нет хватает данных для входа, обновите страницу!');
     }
 
     /**
@@ -185,7 +175,6 @@ class LoginController extends Controller
                 $user->persist_code = $hash;
                 $user->save();
                 $this->auth->setAuthorized($hash);
-
                 $this->auth->setUserAttributes($user);
                 Redirect::to('/');
             } else {
