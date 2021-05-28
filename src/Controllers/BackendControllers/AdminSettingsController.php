@@ -5,8 +5,9 @@
 
 namespace App\Controllers\BackendControllers;
 
-
 use App\View;
+
+use function Helpers\generateToken;
 
 class AdminSettingsController extends AdminController
 {
@@ -22,7 +23,10 @@ class AdminSettingsController extends AdminController
         $title = 'Настройки бэкенда';
         (new View('admin', [
             'view' => 'admin.settings.settings_admin',
-            'data' => [ 'title' => $title ],
+            'data' => [
+                'title' => $title,
+                'token' => generateToken()
+            ],
             'title' => 'Администрирование | ' . $title
         ]))->render();
     }
