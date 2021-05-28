@@ -4,13 +4,14 @@
  */
 
 namespace App\Auth;
+
 use App\Model\User;
 use App\Controllers\UserController;
 use App\Cookie\Cookie;
 use App\Config;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-class Auth implements AuthInterface
+class Auth
 {
 //    /**
 //     * @var
@@ -25,15 +26,26 @@ class Auth implements AuthInterface
     }
 
     /**
-     * @return false|mixed
+     * @return bool
      */
-    public function isAuthorized()
+    public function isAuthorized(): bool
     {
-        if ($this->session->get('authAuthorized')) {
-            return $this->session->get('authAuthorized');
-        } else {
+        if (!$this->session->get('authAuthorized')) {
             return false;
         }
+        return true;
+    }
+
+    /**
+     * @param User|null $user
+     * @return bool
+     */
+    public function isActivated(User $user = null): bool
+    {
+        if($user == null) {
+            $user = (new UserController())->getUserById($this->session->get('userId'));
+        }
+        return ($user->is_activated === 0) ? false : true;
     }
 
     /**
@@ -61,30 +73,13 @@ class Auth implements AuthInterface
         session_destroy();
     }
 
-
-    /**
-     * @param $id
-     * @return User|null
-     */
-    public function userById($id): User|null
-    {
-        if(!empty($id)) {
-            return (new UserController())->getUserById($id);
-        }
-        return null;
-    }
-
     /**
      * @param $hash
-     * @return bool|User
+     * @return User|null
      */
-    public function userByHash($hash): bool|User
+    public function userByHash($hash): ?User
     {
-        if(!empty($hash)) {
-            $user = User::where('persist_code', $hash)->first();
-            return $user;
-        }
-        return false;
+        return (new UserController())->getUserByHash($hash);
     }
 
     /**
@@ -97,20 +92,6 @@ class Auth implements AuthInterface
         $this->session->set('userRole', $user->role->code);
         $this->session->set('config', Config::getInstance());
     }
-
-//    /**
-//     * Проверка авторизации
-//     * @param object $instance
-//     * @return object
-//     */
-//    public function checkRole(object $instance): object
-//    {
-//        if($this->session->get('authAuthorized') == true ) {
-//            return $instance;
-//        } else {
-//            (new Url())->toLogin();
-//        }
-//    }
 
     /**
      * Метод проверяет соотвествие куки $_COOKIE['persistCode'] и persist_code объекта пользователя
