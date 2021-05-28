@@ -8,7 +8,6 @@ namespace App\Controllers\BackendControllers;
 
 use App\Controllers\ToastsController;
 use App\Controllers\UserController;
-use App\Redirect;
 use App\View;
 
 use function Helpers\checkToken;
@@ -29,11 +28,8 @@ class AdminUserManagerController extends AdminController
 
         $user = $this->userController->getCurrentUser();
 
-        if($user->role->code !== 'admin' &&  $user->is_superuser !== 1) {
+        $this->auth->checkSuperUser($user);
 
-            (new ToastsController())->setToast('info', 'У вас недостаточно прав для этого действия');
-            Redirect::to('/admin/account');
-        }
     }
 
     /**
