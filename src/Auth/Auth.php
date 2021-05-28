@@ -120,9 +120,17 @@ class Auth
         }
     }
 
-    public function checkSuperUser()
+    /**
+     * Проверка на роль суперпользователя
+     * @param User $user
+     */
+    public function checkSuperUser(User $user)
     {
+        if($user->role->code !== 'admin' &&  $user->is_superuser !== 1) {
 
+            (new ToastsController())->setToast('info', 'У вас недостаточно прав для этого действия');
+            Redirect::to('/admin/account');
+        }
     }
 
 }
