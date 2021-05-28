@@ -43,7 +43,9 @@ class User extends Model
         'last_name',
         'password',
         'avatar',
-        'self_description'
+        'self_description',
+        'is_activated',
+        'role_id'
     ];
 
     /**
