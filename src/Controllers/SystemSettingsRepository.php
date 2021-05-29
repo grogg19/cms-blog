@@ -14,6 +14,7 @@ use App\Model\SystemSetting;
 class SystemSettingsRepository {
 
     /**
+     * @param string $item
      * @return SystemSetting
      */
     public function getSystemSettings(string $item): SystemSetting

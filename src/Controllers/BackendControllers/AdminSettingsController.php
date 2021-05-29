@@ -68,6 +68,7 @@ class AdminSettingsController extends AdminController
             return json_encode([
                 'url' => '/admin/settings'
             ]);
+
         } else {
             return ToastsController::getToast('warning', 'Ошибка сохранения в БД.');
         }
