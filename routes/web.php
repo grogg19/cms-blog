@@ -65,7 +65,8 @@ $router->get('post','/admin/settings/save', 'Controllers\BackendControllers\Admi
 /** маршрут Тостов */
 $router->get('post', '/toasts/index', 'Controllers\ToastsController@index');
 $router->get('post','/checkToast', 'Controllers\ToastsController@checkToast');
-/** статических страниц */
+
+/** маршруты статических страниц */
 
 foreach ((new StaticPagesController())->getStaticPages() as $url => $page) {
     $router->get('get', $url, 'Controllers\PublicControllers\StaticPagesController@index');
