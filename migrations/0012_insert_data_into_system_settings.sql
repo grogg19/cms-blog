@@ -16,5 +16,5 @@
 -- Dumping data for table `system_settings`
 --
 
-INSERT INTO system_settings (item, item_name, value) VALUES ('public-number-posts', 'Количество постов на страницу', '20');
+INSERT INTO system_settings (item, name, value, created_at, updated_at) VALUES ('preferences', 'Системные настройки', '{"per_page":"10"}', '2021-05-29 19:07:08', '2021-05-29 20:13:11');
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

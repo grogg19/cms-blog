@@ -21,14 +21,14 @@ create table system_settings
     id int unsigned auto_increment
         primary key,
     item varchar(191) null,
-    item_name varchar(191) not null,
-    value mediumtext null
-
+    name varchar(191) not null,
+    value text null,
+    created_at timestamp null,
+    updated_at timestamp null,
+    constraint system_settings_item_uindex
+        unique (item)
 )
     collate=utf8mb4_unicode_ci;
-
-create index system_settings_item_index
-    on system_settings (item);
 
 
 
