@@ -3,6 +3,8 @@
  * Шаблон
  * Создание поста
  */
+
+use App\FormRenderer;
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -30,7 +32,7 @@
 
                         <div class="dx-box-content">
                             <?php
-                            (new \App\FormRenderer($form['fields']))->render();
+                            (new FormRenderer($form['fields']))->render();
                             ?>
 
                         </div>
@@ -57,7 +59,7 @@
                         </form>
                         <div class="row justify-content-between vertical-gap dx-dropzone-attachment">
                             <div class="col-auto dx-dropzone-attachment-add">
-                                <label class="mb-0" class="mnt-7"><span class="icon fas fa-paperclip mr-10"></span><span>Добавить изображение</span></label>
+                                <label class="mb-0 mnt-7"><span class="icon fas fa-paperclip mr-10"></span><span>Добавить изображение</span></label>
                             </div>
                             <div class="col-auto dx-dropzone-attachment-btn">
                                 <button class="dx-btn dx-btn-lg" type="submit" name="button" id="save_button" data-form="form_create_post">Сохранить</button>
