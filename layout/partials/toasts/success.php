@@ -5,7 +5,7 @@
         </svg>
     </div>
     <div class="toast__content">
-	    <h2>Ok:</h2>
+	    <h2>Успех! <i class="far fa-thumbs-up"></i></h2>
 	    <p><?= !empty($data) ? $data : '' ?></p>
     </div>
 </div>
