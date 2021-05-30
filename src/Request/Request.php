@@ -76,7 +76,7 @@ class Request
     public function get($key = "")
     {
         if(!empty($key) && is_string($key)) {
-            return $this->post[$key];
+            return (isset($this->get[$key])) ? $this->get[$key] : null;
         }
         return $this->get;
     }
