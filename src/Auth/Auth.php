@@ -44,10 +44,16 @@ class Auth
      */
     public function isActivated(User $user = null): bool
     {
-        if($user == null) {
+        if(!$user == null) {
+            return $user->is_activated === 0 ? false : true;
+        }
+
+        if($this->session->get('userId') == null) {
+            $user = (new UserController())->getUserByHash($this->getHashUser());
+        } else {
             $user = (new UserController())->getUserById($this->session->get('userId'));
         }
-        return ($user->is_activated === 0) ? false : true;
+        return ($user === null || $user->is_activated === 0 ) ? false : true;
     }
 
     /**

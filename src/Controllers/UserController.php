@@ -150,9 +150,9 @@ class UserController extends Controller
     /**
      * метод возвращает пользователя найденного по хэшу
      * @param $hash
-     * @return User
+     * @return User|null
      */
-    public function getUserByHash($hash): User
+    public function getUserByHash($hash): ?User
     {
         // Ищем пользователя с логином $login
         $userData = User::where('persist_code', $hash)
