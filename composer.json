@@ -22,7 +22,8 @@
         "symfony/yaml": "^5.1",
         "illuminate/session": "^8.13",
         "ext-fileinfo": "*",
-        "twig/twig": "^3.0"
+        "twig/twig": "^3.0",
+        "illuminate/pagination": "^8.44"
     },
     "require-dev": {
         "symfony/profiler-pack": "^1.0"

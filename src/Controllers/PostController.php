@@ -8,6 +8,8 @@ namespace App\Controllers;
 use App\Model\Post as ModelPost;
 
 use App\Controllers\Controller as Controller;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 /**
  * Class PostController
@@ -35,20 +37,32 @@ class PostController extends Controller
 
     /**
      * @param string $sortDirection
-     * @return mixed
+     * @param string $quantity
+     * @return LengthAwarePaginator|Collection
      */
-    public function getAllPosts(string $sortDirection = 'desc')
+    public function getAllPosts(string $sortDirection = 'desc', string $quantity = '20'): LengthAwarePaginator|Collection
     {
+        if($quantity !== 'all') {
+            $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
+
+            return ModelPost::orderBy('published_at',$sortDirection)
+                ->paginate($quantity, '*', 'page', $page);
+        }
+
         return ModelPost::orderBy('published_at',$sortDirection)
-                            ->get();
+            ->get();
+
     }
 
     /**
      * @param string $sortDirection
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
-    public function getAllPublishedPosts(string $sortDirection = 'desc')
+    public function getAllPublishedPosts(string $sortDirection = 'desc'): Collection
     {
+        //$page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
+
+        //return ModelPost::all()->forPage(2,3);
         return ModelPost::with('images')
             ->where('published', 1)
             ->orderBy('published_at',$sortDirection)
@@ -75,11 +89,14 @@ class PostController extends Controller
 
     /**
      * @param int $userId
-     * @return mixed
+     * @param string $quantity
+     * @return LengthAwarePaginator
      */
-    public function getPostsByUserId(int $userId)
+    public function getPostsByUserId(int $userId, string $quantity): LengthAwarePaginator
     {
-        return ModelPost::where('user_id', $userId)->get();
+        $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
+
+        return ModelPost::where('user_id', $userId)->paginate($quantity, '*', 'page', $page);
     }
 
     /**
@@ -110,5 +127,12 @@ class PostController extends Controller
     public function deletePost(ModelPost $post)
     {
         $post->delete();
+    }
+
+    public function paginatePosts(ModelPost $post)
+    {
+//        $post->setPerPage(2);
+//        //$result = $post
+//        dd($post->);
     }
 }

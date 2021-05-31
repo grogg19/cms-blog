@@ -6,7 +6,10 @@
 use App\View;
 use function Helpers\getDateTime;
 
-$posts = !empty($posts) ? $posts : [];
+/**
+ * @var \Illuminate\Pagination\Paginator $posts
+ */
+
 $imgPath = !empty($imgPath) ? $imgPath : '';
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
