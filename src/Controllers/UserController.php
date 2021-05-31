@@ -11,12 +11,20 @@ use App\Controllers\Controller as Controller;
 use App\Model\User;
 use App\Config;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use function Helpers\checkToken;
 use function Helpers\hashPassword;
-use Illuminate\Database\Eloquent\Collection;
 
+/**
+ * Class UserController
+ * @package App\Controllers
+ */
 class UserController extends Controller
 {
+    /**
+     * UserController constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -47,12 +55,25 @@ class UserController extends Controller
     }
 
     /**
-     * возвращает коллекцию всех пользователей
-     * @return Collection
+     * возвращает всех пользователей кроме супер-пользователя
+     * @param string $sortDirection
+     * @param string $quantity
+     * @return LengthAwarePaginator|Collection
      */
-    public function getAllUsers(): Collection
+    public function getAllUsers(string $sortDirection = 'asc', string $quantity = '20'): LengthAwarePaginator|Collection
     {
-        return User::all();
+        if($quantity !== 'all') {
+
+            $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
+
+            return User::where('is_superuser', 0)
+                ->orderBy('is_activated', $sortDirection)
+                ->paginate($quantity, '*', 'page', $page);
+        }
+
+        return User::where('is_superuser', 0)
+            ->orderBy('is_activated', $sortDirection)
+            ->get();
     }
 
     /**
@@ -161,6 +182,7 @@ class UserController extends Controller
     }
 
     /**
+     * Возвращает коллекцию ролей пользователя
      * @return Collection
      */
     public function getUserRoles(): Collection

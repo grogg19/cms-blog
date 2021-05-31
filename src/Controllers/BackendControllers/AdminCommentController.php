@@ -8,11 +8,11 @@ use App\Controllers\CommentRepository;
 use App\Controllers\PostController;
 use App\Controllers\UserController;
 use App\Model\Comment;
-use App\Redirect;
 use App\Validate\Validator;
 use App\View;
 use App\Controllers\ToastsController;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use function Helpers\checkToken;
 use function Helpers\generateToken;
 
@@ -88,14 +88,24 @@ class AdminCommentController extends AdminController
 
         $title = 'Модерация комментариев пользователей';
         $avatarPath = $this->session->get('config')->getConfig('avatars')['pathToUpload'];
+        $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
+        $page = (!empty($this->request->get('page'))) ? filter_var($_GET['page'], FILTER_SANITIZE_NUMBER_INT): 1;
+
+        $comments = (new CommentRepository())->getAllComments('asc', $quantity, $page);
+
+        if($comments instanceof LengthAwarePaginator) {
+            $query = (!empty($quantity)) ? '?quantity=' . $quantity : '';
+            $comments->setPath('comments' . $query);
+        }
 
         return new View('admin', [
             'view' => 'admin.comments.list',
             'data' => [
                 'title' => $title,
-                'comments' => (new CommentRepository())->getAllComments(),
+                'comments' => $comments,
                 'token' => generateToken(),
-                'avatarPath' => $avatarPath
+                'avatarPath' => $avatarPath,
+                'quantity' => $quantity
             ],
             'title' => 'Администрирование | ' . $title
         ]);

@@ -73,4 +73,5 @@ class AdminSettingsController extends AdminController
             return ToastsController::getToast('warning', 'Ошибка сохранения в БД.');
         }
     }
+
 }

@@ -3,18 +3,38 @@
  * Список постов в админке
  */
 
+use App\View;
+use Illuminate\Pagination\LengthAwarePaginator;
 use function Helpers\getDateTime;
 
-$posts = !empty($posts) ? $posts : [];
-$token = !empty($token) ? $token : '';
+/**
+ * @var LengthAwarePaginator $posts
+ * @var string $token
+ * @var $quantity
+ */
+
 ?>
+
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
         <div class="row vertical-gap md-gap">
             <div class="col-12">
-	            <h2 class="m-0"><i class="far fa-list-alt"></i> Список статей блога</h2>
-	            <div class="dx-separator mb-10 mt-0"></div>
-	            <input type="hidden" name="_token" value="<?= $token ?>">
+	            <div class="row align-items-center justify-content-between vertical-gap mnt-20 sm-gap mb-30">
+		            <div class="col-auto">
+			            <h2 class="h2 mb-0 mt-0"><?= !empty($title) ? $title : ''?></h2>
+		            </div>
+		            <div class="col pl-10 pr-10 d-none d-sm-block">
+			            <div class="dx-separator ml-0 mr-0" id="comments-block"></div>
+			            <input type="hidden" name="_token" value="<?= $token ?>">
+		            </div>
+	            </div>
+                <?php
+                (new View('partials.quantity_items', [
+                    'quantity' => $quantity,
+	                'items' => [10, 20, 50, 200, 'all']
+                ]))->render();
+                ?>
+	            <?php if($posts->count() > 0 ) { ?>
                 <?php
                 foreach ($posts as $post) {
                     ?>
@@ -42,9 +62,16 @@ $token = !empty($token) ? $token : '';
                         </div>
                     </div>
                 <?php } ?>
-                <div class="dx-blog-item pt-0">
-                    <a href="#" class="dx-btn dx-btn-lg dx-btn-grey dx-btn-block dx-btn-load" data-btn-loaded="Shown all posts">Load More Post</a>
-                </div>
+                <?php
+		            if($posts instanceof LengthAwarePaginator) {
+                        (new View('partials.pagination', [
+                            'paginator' => $posts
+                        ]))->render();
+		            }
+                ?>
+	            <?php } else { ?>
+	            	<h5 class="mt-30">Список доступных статей пуст</h5>
+	            <?php } ?>
 	            <div id="messageToast"></div>
             </div>
         </div>

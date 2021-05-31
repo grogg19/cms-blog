@@ -21,7 +21,7 @@ use App\Controllers\BackendControllers\AdminController as AdminController;
 use App\Controllers\BackendControllers\AdminImageController as AdminImageController;
 use App\Controllers\ToastsController;
 use Exception;
-
+use \Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\QueryException;
 use App\Uploader\Upload;
 
@@ -61,25 +61,33 @@ class AdminPostController extends AdminController
      */
     public function listPosts()
     {
-        $permissions = explode(',', $this->user->role->permissions);
-        if(in_array('1', $permissions))
-        {
-            $posts = (new PostController())->getAllPosts();
+        /**
+         * Количество записей на страницу
+         * @var  $quantity
+         */
+        $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
 
+        if($this->user->role->code = 'admin') {
+            $posts = (new PostController())->getAllPosts('desc', $quantity);
         } else {
-
             $posts = (new PostController())
-                ->getPostsByUserId($this->user->id);
-
+                ->getPostsByUserId($this->user->id, $quantity);
         }
+        if($posts instanceof LengthAwarePaginator) {
+            $query = (!empty($quantity)) ? '?quantity=' . $quantity : '';
+            $posts->setPath('posts' . $query);
+        }
+        $title = 'Список статей блога';
 
         return new View('admin', [
             'view' => 'admin.list_posts',
             'data' => [
+                'title' => $title,
                 'posts' => $posts,
-                'token' => generateToken()
+                'token' => generateToken(),
+                'quantity' => $quantity
             ],
-            'title' => 'Список постов блога'
+            'title' => $title
         ]);
     }
 

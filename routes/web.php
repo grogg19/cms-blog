@@ -32,7 +32,7 @@ $router->get('get','/admin/account/edit', 'Controllers\BackendControllers\AdminA
 $router->get('get','/admin/account', 'Controllers\BackendControllers\AdminAccountController@getUserProfile');
 $router->get('post','/admin/account/save', 'Controllers\BackendControllers\AdminAccountController@updateUserProfile');
 
-$router->get('get','/admin/user-manager', 'Controllers\BackendControllers\AdminUserManagerController@index');
+$router->get('get','/admin/user-manager', 'Controllers\BackendControllers\AdminUserManagerController@listUsers');
 $router->get('post','/update/userdata/userChangeActivate', 'Controllers\BackendControllers\AdminUserManagerController@userChangeData');
 $router->get('post','/update/userdata/userChangeRole', 'Controllers\BackendControllers\AdminUserManagerController@userChangeData');
 

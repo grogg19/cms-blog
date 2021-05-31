@@ -3,6 +3,7 @@
 
 namespace App\Controllers\BackendControllers;
 
+use App\Controllers\PaginateController;
 use App\Controllers\ToastsController;
 use App\Parse\Yaml;
 use App\Redirect;
@@ -14,6 +15,8 @@ use App\Controllers\BackendControllers\AdminController as AdminController;
 use App\Validate\Validator;
 use App\View;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use function Helpers\checkToken;
 use function Helpers\cleanJSTags;
 use function Helpers\generateToken;
@@ -42,14 +45,30 @@ class StaticPagesController extends AdminController
      */
     public function index(): View
     {
-        $title = 'Контроллер статических страниц';
+        $items = (new PageList(new FilesList()))->listPages();
+
+        $title = 'Cтатические страницы';
+        $page = (!empty($this->request->get('page'))) ? filter_var($_GET['page'], FILTER_SANITIZE_NUMBER_INT): 1;
+        $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
+
+        if($quantity !== 'all') {
+            $pages = (new PaginateController())->paginate($items, $quantity, $page);
+        } else {
+            $pages = Collection::make($items);
+        }
+
+        if($pages instanceof LengthAwarePaginator) {
+            $query = (!empty($quantity)) ? '?quantity=' . $quantity : '';
+            $pages->setPath('static-pages' . $query);
+        }
 
         return new View('admin', [
             'view' => 'admin.static_pages.list_pages_template',
                 'data' => [
                     'token' => generateToken(),
                     'title' => $title,
-                    'pages' => (new PageList(new FilesList()))->listPages()
+                    'pages' => $pages,
+                    'quantity' => $quantity
                 ],
             'title' => $title
         ]);
@@ -60,13 +79,16 @@ class StaticPagesController extends AdminController
      */
     public function createPage(): View
     {
+        $title = 'Создание новой страницы';
+
         return new View('admin', [
             'view' => 'admin.static_pages.create_page',
             'data' => [
                 'form' => $this->getFields(),
-                'token' => generateToken()
+                'token' => generateToken(),
+                'title' => $title
             ],
-            'title' => 'Создание новой страницы'
+            'title' => $title
         ]);
     }
 
@@ -83,14 +105,17 @@ class StaticPagesController extends AdminController
 
         $page = (new PageList(new FilesList()))->getPageByFileName( (string) $this->request->post('pageName'));
 
+        $title = 'Редактирование страницы';
+
         return new View('admin', [
             'view' => 'admin.static_pages.edit_page',
             'data' => [
                 'form' => $this->getFields(),
                 'page' => (object) $page->getParameters(),
-                'token' => generateToken()
+                'token' => generateToken(),
+                'title' => $title
             ],
-            'title' => 'Редактирование страницы'
+            'title' => $title
         ]);
     }
 

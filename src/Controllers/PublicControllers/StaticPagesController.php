@@ -5,12 +5,15 @@ namespace App\Controllers\PublicControllers;
 
 use App\Config;
 use App\Exception\NotFoundException;
+use App\Redirect;
 use App\Request\Request;
 use App\StaticPages\FilesList;
 use App\StaticPages\Page;
 use App\StaticPages\PageList;
 use App\StaticPages\PageListCompatible;
 use App\View;
+use Illuminate\Support\Collection;
+use function Helpers\cleanJSTags;
 
 class StaticPagesController extends PublicController
 {
@@ -27,24 +30,23 @@ class StaticPagesController extends PublicController
     }
 
     /**
-     * @return View
+     * @return View|null
      */
-    public function index()
+    public function index(): ?View
     {
 
         $url = (new Request())->server('REQUEST_URI');
         $page = (new PageList($this->staticPages))->getPageByUrl($url);
 
-//        dd($page);
-//        dump((new Request())->server('REQUEST_URI'));
         if($page->getParameter('isHidden') !== 0 && $page instanceof Page) {
-            $content = strip_tags($page->getHtmlContent(), '<script>');
+            $content = cleanJSTags($page->getHtmlContent());
             $pageParameters = $page->getParameters();
 
             return new View('index', ['view' => 'static_pages', 'data' => ['content' => $content, 'pageParameters' => $pageParameters]]);
         } else {
-            return Redirect::to('/404');
+            Redirect::to('/404');
         }
+        return null;
     }
 
     /**
@@ -67,10 +69,11 @@ class StaticPagesController extends PublicController
     }
 
     /**
-     * @return array
+     * @return Collection
      */
-    public function getStaticPages(): array
+    public function getStaticPages(): Collection
     {
-        return (new PageList($this->staticPages))->listPages();
+        $pages = (new PageList($this->staticPages))->listPages();
+        return new Collection($pages);
     }
 }

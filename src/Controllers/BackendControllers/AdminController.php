@@ -27,7 +27,6 @@ class AdminController extends Controller
 
     public function __construct()
     {
-
         parent::__construct();
 
         $this->auth = new Auth();
@@ -36,12 +35,14 @@ class AdminController extends Controller
 
         // Проверяем факт авторизации пользователя
         if(!$this->checkAuthorization()) {
+
             // если не авторизован, пользователь направляется на страницу авторизации
             Cookie::set('targetUrl', $this->request->server('REQUEST_URI'));
+
             $this->session->clear();
+
             Redirect::to('/login');
         }
-
     }
 
     /**
@@ -67,16 +68,6 @@ class AdminController extends Controller
             (new Auth())->setUserAttributes($user);
         }
         return true;
-    }
-
-    public function index()
-    {
-        // TODO: Implement index() method.
-    }
-
-    public function checkUser()
-    {
-
     }
 
     private function initListener()

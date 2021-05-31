@@ -6,27 +6,31 @@
 namespace App\Controllers;
 
 use App\Model\Comment;
-use App\Redirect;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class CommentRepository
 {
     /**
      * @param string $orderByDirection
-     * @return array
+     * @param string $quantity
+     * @return LengthAwarePaginator|Collection
      */
-    public function getAllComments($orderByDirection = 'asc'): array
+    public function getAllComments(string $orderByDirection = 'asc', string $quantity = '20', int $page = 1): LengthAwarePaginator|Collection
     {
-        $comments = Comment::all();
-        $sorted = ($orderByDirection = 'asc') ? $comments->sortBy('has_moderated') : $comments->sortByDesc('has_moderated');
+        if($quantity == 'all') {
+            return Comment::orderBy('has_moderated',$orderByDirection)->get();
+        }
 
-        return $sorted->values()->all();
+        return Comment::orderBy('has_moderated',$orderByDirection)
+            ->paginate($quantity, '*', 'page', $page);
     }
 
     /**
      * @param int $id
-     * @return mixed
+     * @return bool
      */
-    public function setHasModeratedApprove(int $id)
+    public function setHasModeratedApprove(int $id): bool
     {
         $comment = Comment::find($id);
         $comment->has_moderated = 1;
@@ -37,9 +41,9 @@ class CommentRepository
 
     /**
      * @param int $id
-     * @return mixed
+     * @return bool
      */
-    public function setHasModeratedReject(int $id)
+    public function setHasModeratedReject(int $id): bool
     {
         $comment = Comment::find($id);
         $comment->has_moderated = 0;

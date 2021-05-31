@@ -10,6 +10,7 @@ use App\Controllers\ToastsController;
 use App\Controllers\UserController;
 use App\View;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use function Helpers\checkToken;
 use function Helpers\generateToken;
 
@@ -35,16 +36,26 @@ class AdminUserManagerController extends AdminController
     /**
      * @return View
      */
-    public function index(): View
+    public function listUsers(): View
     {
+        $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
+
+        $users = $this->userController->getAllUsers('asc', $quantity);
+
+        if($users instanceof LengthAwarePaginator) {
+            $query = (!empty($quantity)) ? '?quantity=' . $quantity : '';
+            $users->setPath('user-manager' . $query);
+        }
+
         return new View('admin', [
             'view' => 'admin.users_manager.list',
             'data' => [
                 'title' => 'Список пользователей',
-                'users' => $this->userController->getAllUsers()->except(['is_superuser' => 1]),
+                'users' => $users,
                 'token' => generateToken(),
                 'pathToAvatar' => $this->userController->getUserAvatarPath(),
-                'roles' => $this->userController->getUserRoles()
+                'roles' => $this->userController->getUserRoles(),
+                'quantity' => $quantity
             ],
             'title' => 'Редактирование профиля пользователя'
         ]);

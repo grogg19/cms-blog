@@ -1,16 +1,28 @@
 <?php
 /**
- * Шаблон
- * Редактирование страницы
+ * Шаблон редактирования статической страницы
  */
+/**
+ * @var $title
+ */
+
+use App\FormRenderer;
+
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-xl-10">
+            <div class="col-xl-12">
                 <div class="dx-box dx-box-decorated">
                     <div class="dx-box-content">
-                        <h2 class="h6 mb-6">Редактирование страницы</h2>
+	                    <div class="row align-items-center justify-content-between vertical-gap mnt-30 sm-gap mb-10">
+	                    <div class="col-auto">
+		                    <h2 class="h2 mb-0 mt-0"><?= $title ?></h2>
+	                    </div>
+	                    <div class="col pl-0 pr-0 d-none d-sm-block">
+		                    <div class="dx-separator ml-10 mr-10"></div>
+	                    </div>
+                    </div>
                         <!-- START: Breadcrumbs -->
                         <ul class="dx-breadcrumbs text-left dx-breadcrumbs-dark mnb-6 fs-14">
                             <li><a href="/admin/static-pages">Статические страницы</a></li>
@@ -25,7 +37,7 @@
                         <div class="dx-box-content">
                             <?php
                             if(!empty($page)) {
-                                (new \App\FormRenderer($form['fields']))->render($page);
+                                (new FormRenderer($form['fields']))->render($page);
                             }
                             ?>
                         </div>
