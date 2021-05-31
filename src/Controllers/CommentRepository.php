@@ -34,9 +34,8 @@ class CommentRepository
     {
         $comment = Comment::find($id);
         $comment->has_moderated = 1;
-        $comment->save();
 
-        return $comment;
+        return $comment->save();
     }
 
     /**
@@ -47,8 +46,7 @@ class CommentRepository
     {
         $comment = Comment::find($id);
         $comment->has_moderated = 0;
-        $comment->save();
 
-        return $comment;
+        return $comment->save();
     }
 }
