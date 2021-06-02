@@ -5,6 +5,7 @@
 
 namespace App\Controllers\PublicControllers;
 
+use App\Controllers\PaginateController;
 use App\Controllers\UserController;
 use App\View;
 use App\Controllers\PostController;
@@ -49,11 +50,20 @@ class PublicPostController extends PublicController
      */
     public function allPosts(): View
     {
+        $page = !empty($this->request->post('page')) ? $this->request->post('page') : 1;
+
         $data = [
-            'posts' => (new PostController())->getAllPublishedPosts(),
+            'posts' => (new PostController())->getAllPublishedPosts('desc', $page),
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
         ];
 
+        if(!empty($this->request->post('page'))) {
+
+            return new View('partials.posts_items', [
+                'posts' => $data['posts'],
+                'imgPath' => $data['imgPath']
+            ]);
+        }
         return new View('index', ['view' => 'posts', 'data' => $data, 'title' => 'Блог']);
     }
 

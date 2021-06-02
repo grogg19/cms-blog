@@ -940,10 +940,11 @@
 
                     if ($btnAttr) {
                         $this.text($btnAttr);
-                    } else {
-                        $this.text(self.options.templates.btnLoaded);
                     }
-                    $this.addClass('dx-btn-loaded');
+                    //$this.addClass('dx-btn-loaded');
+                    if(!$this.hasClass('dx-btn-loaded')){
+                        tests();
+                    }
                 }, 2000);
             });
         }

@@ -28,14 +28,10 @@
 				                            <input type="hidden" name="_token" value="<?= $token ?>">
 			                            </div>
 		                            </div>
-	                                <label for="per_page" class="mnt-7">Количество постов на страницу</label>
-	                                <div class="dx-form-group-inputs">
-		                                <select class="custom-select form-control form-control-style-2" name="per_page" id="per_page">
-		                                <?php foreach ([10, 20, 50, 200, 'Все'] as $quantity) { ?>
-			                                <option value="<?= $quantity ?>"<?= $quantity == $parameters->per_page ? ' selected' : '' ?>><?= $quantity ?></option>
-		                                <?php } ?>
-		                                </select>
-	                                </div>
+		                            <div class="dx-form-group-md div-per_page form-element">
+			                            <label for="per_page" >Количество постов на главное странице:</label>
+			                            <input name="per_page" type="text" id="per_page" class="form-control form-control-style-2" value="<?= $parameters->per_page ?>"/>
+		                            </div>
 		                            <div class="row justify-content-between mt-30">
 			                            <div class="col-auto dx-dropzone-attachment-btn">
 				                            <button class="dx-btn dx-btn-lg" type="submit" name="button" id="save_button" data-form="form_edit_settings">Сохранить</button>

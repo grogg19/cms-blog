@@ -384,6 +384,31 @@ if(commentButtons) {
     });
 }
 
+const tests = async () => {
+
+    let postButton = document.querySelector('.btn-more-posts');
+    let page = postButton.getAttribute('data-value');
+    page++;
+    postButton.setAttribute('data-value', page);
+
+    let formData = new FormData();
+    formData.append('page', page);
+
+    let response = await fetch('/morePosts', {
+        method: 'POST',
+        body: formData
+    });
+
+    let result = await response.text();
+
+    if(result.length > 1) {
+        document.querySelector('#list-posts').insertAdjacentHTML('beforeend', result);
+    } else {
+        postButton.textContent = "Постов больше нет";
+        postButton.classList.add('dx-btn-loaded');
+    }
+}
+
 const checkToast = async () => {
 
     let response = await fetch('/checkToast', {

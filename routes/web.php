@@ -7,6 +7,7 @@ $router = new Router(); // создаем маршрутизатор
 
 $router->get('get','/', 'Controllers\PublicControllers\PublicPostController@index');
 
+$router->get('post','/morePosts', 'Controllers\PublicControllers\PublicPostController@allPosts');
 $router->get('get','/test', 'Controllers\PublicControllers\TestController@test');
 $router->get( 'get', '/test/*/test2/*' , 'Controller@test');
 

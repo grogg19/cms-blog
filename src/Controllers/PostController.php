@@ -5,6 +5,7 @@
 
 namespace App\Controllers;
 
+use App\Controllers\PublicControllers\PublicSettingsController;
 use App\Model\Post as ModelPost;
 
 use App\Controllers\Controller as Controller;
@@ -56,17 +57,17 @@ class PostController extends Controller
 
     /**
      * @param string $sortDirection
-     * @return Collection
+     * @param int $page
+     * @return LengthAwarePaginator
      */
-    public function getAllPublishedPosts(string $sortDirection = 'desc'): Collection
+    public function getAllPublishedPosts(string $sortDirection = 'desc', int $page = 1): LengthAwarePaginator
     {
-        //$page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
+        $perPage = (new PublicSettingsController())->getPreferencesByName('preferences');
 
-        //return ModelPost::all()->forPage(2,3);
         return ModelPost::with('images')
             ->where('published', 1)
             ->orderBy('published_at',$sortDirection)
-            ->get();
+            ->paginate($perPage->per_page, '*', 'page', $page);
     }
 
     /**
