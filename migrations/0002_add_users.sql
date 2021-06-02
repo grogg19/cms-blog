@@ -34,7 +34,6 @@ CREATE TABLE `users` (
                          `updated_at` timestamp NULL DEFAULT NULL,
                          `deleted_at` timestamp NULL DEFAULT NULL,
                          `is_superuser` tinyint(1) NOT NULL DEFAULT '0',
-                         `is_subscribed` tinyint(1) DEFAULT '0',
                          PRIMARY KEY (`id`),
                          UNIQUE KEY `email_unique` (`email`),
                          UNIQUE KEY `users_avatar_uindex` (`avatar`)
