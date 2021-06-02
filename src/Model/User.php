@@ -8,6 +8,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Model
 {
@@ -70,6 +71,14 @@ class User extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function subscribeEmail(): HasOne
+    {
+        return $this->hasOne(Subscriber::class);
     }
 
 }

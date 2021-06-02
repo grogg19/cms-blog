@@ -6,7 +6,7 @@
 use function Helpers\getDateTime;
 ?>
 <?php if(!empty($latestPosts)) { ?>
-<div class="dx-widget dx-box dx-box-decorated">
+<div class="dx-widget dx-box dx-box-decorated mnt-0">
     <div class="dx-widget-title">Свежие публикации</div>
     <?php foreach ($latestPosts['posts'] as $latestPost) { ?>
     <a href="/post/<?= $latestPost->slug ?>" class="dx-widget-post">

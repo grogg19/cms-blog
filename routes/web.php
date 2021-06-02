@@ -17,6 +17,8 @@ $router->get( 'get', '/post/*' , 'Controllers\PublicControllers\PublicPostContro
 $router->get( 'get', '/posts' , 'Controllers\PublicControllers\PublicPostController@index');
 $router->get('get','/404', 'Exception\NotFoundException@render');
 
+/** подписка| отписка */
+$router->get('post','/subscribe', 'Controllers\PublicControllers\PublicSubscribeController@subscribe');
 /**
  * Админские маршруты
  */

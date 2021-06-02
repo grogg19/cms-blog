@@ -4,10 +4,10 @@
  */
 
 use App\View;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @var array $posts
+ * @var $token
  * @var string $imgPath
  */
 
@@ -35,7 +35,7 @@ use Illuminate\Database\Eloquent\Collection;
                     /**
                      * Правый блок сайта
                      */
-                    (new View('section_right'))->render();
+                    (new View('section_right', ['token' => $token]))->render();
                     ?>
                 </div>
             </div>

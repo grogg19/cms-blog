@@ -130,10 +130,4 @@ class PostController extends Controller
         $post->delete();
     }
 
-    public function paginatePosts(ModelPost $post)
-    {
-//        $post->setPerPage(2);
-//        //$result = $post
-//        dd($post->);
-    }
 }

@@ -409,6 +409,8 @@ const tests = async () => {
     }
 }
 
+//const subscribeButton = document.querySelector()
+
 const checkToast = async () => {
 
     let response = await fetch('/checkToast', {

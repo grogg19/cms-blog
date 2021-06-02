@@ -2,14 +2,18 @@
 /**
  * Шаблон вывода одной статьи
  */
+
 use App\View;
+use App\Model\Post;
 use function Helpers\getDateTime;
 
-$post = !empty($post) ? $post : null;
-$imgPath = !empty($imgPath) ? $imgPath : '';
-$comments = !empty($comments) ? $comments : null;
-$userRole = !empty($userRole) ? $userRole : 'none';
-$token = !empty($token) ? $token : 'none';
+/**
+ * @var Post $post
+ * @var $imgPath
+ * @var $comments
+ * @var $userRole
+ * @var $token
+ */
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
@@ -83,7 +87,7 @@ $token = !empty($token) ? $token : 'none';
                     /**
                      * Правый блок сайта
                      */
-                    (new View('section_right'))->render();
+                    (new View('section_right', ['token' => $token]))->render();
                     ?>
                 </div>
             </div>

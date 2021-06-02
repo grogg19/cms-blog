@@ -5,6 +5,7 @@
 
 namespace App\Controllers\BackendControllers;
 
+use App\Controllers\ToastsController;
 use App\Controllers\UserController;
 use App\Model\User;
 use App\Validate\Validator;
@@ -75,14 +76,7 @@ class RegisterController extends Controller
         if(!empty($parameters) && checkToken()) {
 
             if(empty($parameters['agreement']) || $parameters['agreement'] !== 'on') {
-                return json_encode([
-                    'toast' => [
-                        'typeToast' => 'warning',
-                        'dataToast' => [
-                            'message' => 'Необходимо согласие с пользовательским соглашением!'
-                        ]
-                    ]
-                ]);
+                return ToastsController::getToast('warning', 'Необходимо согласие с пользовательским соглашением');
             }
             // то валидируем введеные данные с формы
             // Создаем экземпляр валидации
@@ -110,19 +104,13 @@ class RegisterController extends Controller
                     $this->auth->setAuthorized($persistCode);
                     $this->auth->setUserAttributes($user);
 
+                    (new ToastsController())->setToast('success', 'Пользователь успешно создан!');
                     return json_encode([
                         'url' => $_SERVER['HTTP_REFERER']
                     ]);
                 } else {
                     // Если нет, то возвращаем сообщение об ошибке записи в БД.
-                    return json_encode([
-                        'toast' => [
-                            'typeToast' => 'warning',
-                            'dataToast' => [
-                                'message' => 'Ошибка записи в БД!'
-                            ]
-                        ]
-                    ]);
+                    return ToastsController::getToast('warning', 'Ошибка записи в БД!');
                 }
 
             } else {
@@ -130,15 +118,8 @@ class RegisterController extends Controller
             }
 
         } else {
-            // Если нет, то возвращаем сообщение об ошибке записи в БД.
-            return json_encode([
-                'toast' => [
-                    'typeToast' => 'warning',
-                    'dataToast' => [
-                        'message' => 'Невозможно создать пользователя!'
-                    ]
-                ]
-            ]);
+            // Если нет, то возвращаем сообщение об ошибке создания пользователя.
+            return ToastsController::getToast('warning', 'Невозможно создать пользователя');
         }
     }
 }

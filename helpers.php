@@ -135,7 +135,7 @@ function checkPassword($password): bool {
     return password_verify($password , hashPassword($password));
 }
 
-function generateRandomHash(int $length = 8) {
+function generateRandomHash(int $length = 64) {
     $arraySymbols = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     $pass = []; // Объявляем массив $pass
     $alphaLength = strlen($arraySymbols) - 1;

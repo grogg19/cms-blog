@@ -5,7 +5,6 @@
 
 namespace App\Controllers\PublicControllers;
 
-use App\Controllers\PaginateController;
 use App\Controllers\UserController;
 use App\View;
 use App\Controllers\PostController;
@@ -55,6 +54,7 @@ class PublicPostController extends PublicController
         $data = [
             'posts' => (new PostController())->getAllPublishedPosts('desc', $page),
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+            'token' => generateToken()
         ];
 
         if(!empty($this->request->post('page'))) {
@@ -64,7 +64,11 @@ class PublicPostController extends PublicController
                 'imgPath' => $data['imgPath']
             ]);
         }
-        return new View('index', ['view' => 'posts', 'data' => $data, 'title' => 'Блог']);
+        return new View('index', [
+            'view' => 'posts',
+            'data' => $data,
+            'title' => 'Блог'
+        ]);
     }
 
     /**
