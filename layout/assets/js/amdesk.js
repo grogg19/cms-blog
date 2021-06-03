@@ -943,7 +943,7 @@
                     }
                     //$this.addClass('dx-btn-loaded');
                     if(!$this.hasClass('dx-btn-loaded')){
-                        tests();
+                        loadMorePostsButton();
                     }
                 }, 2000);
             });

@@ -384,7 +384,7 @@ if(commentButtons) {
     });
 }
 
-const tests = async () => {
+const loadMorePostsButton = async () => {
 
     let postButton = document.querySelector('.btn-more-posts');
     let page = postButton.getAttribute('data-value');
