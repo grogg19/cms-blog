@@ -409,7 +409,63 @@ const loadMorePostsButton = async () => {
     }
 }
 
-//const subscribeButton = document.querySelector()
+const subscribeElement = document.querySelectorAll('#subscribe_form button, #subscribe_switch');
+const subscribeBlock = document.querySelector('.subscribe-block');
+
+if(subscribeElement) {
+    subscribeElement.forEach(element => {
+        if(element.getAttribute('type') === 'checkbox') {
+            $(element).change( async (e) => {
+                await getSubscribeResponse(element);
+            });
+        }
+        if(element.getAttribute('type') === 'button') {
+            $(element).click( async (e) => {
+                await getSubscribeResponse(element);
+            });
+        }
+    })
+}
+
+const getSubscribeResponse = async (element) => {
+
+        const form = document.querySelector('#subscribe_form');
+        const formData = new FormData(form);
+
+        if(element.getAttribute('type') === 'checkbox') {
+            formData.append('emailSubscribe', element.getAttribute('data-email'));
+            formData.append('switch', element.checked);
+        }
+
+        let response = await fetch(form.action, {
+            method: 'POST',
+            body: formData
+        });
+
+        let result = await response.json();
+
+        if(result.url) {
+            location.href = result.url;
+        }
+
+        if(result.toast) {
+            await getToast(result.toast.typeToast,  result.toast.dataToast);
+        }
+
+        if(result.toast.typeToast === 'success') {
+
+            if(subscribeBlock) {
+                setTimeout(function () {
+                    subscribeBlock.remove();
+                }, 1000)
+            }
+
+        }
+
+        if (result.error && Object.keys(result.error).length > 0) {
+            await getToast('warning',  result.error);
+        }
+}
 
 const checkToast = async () => {
 
@@ -425,5 +481,5 @@ const checkToast = async () => {
     }
 }
 
+// Чекаем тосты
 checkToast().then();
-

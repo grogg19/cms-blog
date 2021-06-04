@@ -18,7 +18,10 @@ $router->get( 'get', '/posts' , 'Controllers\PublicControllers\PublicPostControl
 $router->get('get','/404', 'Exception\NotFoundException@render');
 
 /** подписка| отписка */
-$router->get('post','/subscribe', 'Controllers\PublicControllers\PublicSubscribeController@subscribe');
+$router->get('post','/manage-subscribes/admin/subscribe', 'Controllers\BackendControllers\AdminSubscribeController@subscribe');
+$router->get('post','/manage-subscribes/public/subscribe', 'Controllers\PublicControllers\PublicSubscribeController@subscribe');
+$router->get('post','/manage-subscribes/unsubscribe', 'Controllers\BackendControllers\AdminSubscribeController@unsubscribe');
+$router->get('get','/manage-subscribes/unsubscribe-by-link', 'Controllers\PublicControllers\PublicSubscribeController@unsubscribeByLink');
 /**
  * Админские маршруты
  */

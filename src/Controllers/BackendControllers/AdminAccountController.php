@@ -8,7 +8,6 @@
 namespace App\Controllers\BackendControllers;
 
 use App\Config;
-use App\Controllers\BackendControllers\AdminController;
 use App\Controllers\ToastsController;
 use App\Model\User;
 use App\Uploader\Upload;
@@ -69,7 +68,8 @@ class AdminAccountController extends AdminController
             'data' => [
                 'user' => $user,
                 'pathAvatar' => $this->userController->getUserAvatarPath(),
-                'title' => 'Профиль пользователя'
+                'title' => 'Профиль пользователя',
+                'token' => generateToken()
 
             ],
             'title' => 'Профиль пользователя'

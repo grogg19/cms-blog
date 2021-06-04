@@ -5,6 +5,7 @@
 fields:
     title:
         form: input
+        label: Заголовок
         options:
             type: text
             placeholder: Заголовок страницы
@@ -13,6 +14,7 @@ fields:
 
     url:
         form: input
+        label: URL
         options:
             type: text
             placeholder: URL /

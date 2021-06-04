@@ -78,7 +78,7 @@ class User extends Model
      */
     public function subscribeEmail(): HasOne
     {
-        return $this->hasOne(Subscriber::class);
+        return $this->hasOne(Subscriber::class, 'email', 'email');
     }
 
 }

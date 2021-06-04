@@ -25,7 +25,6 @@ CREATE TABLE `emails_subscribers` (
                                       `deleted_at` timestamp NULL DEFAULT NULL,
                                       PRIMARY KEY (`id`),
                                       UNIQUE KEY `email_subscribers_email_uindex` (`email`),
-                                      UNIQUE KEY `emails_subscribers_hash_uindex` (`hash`),
-                                      CONSTRAINT `emails_subscribers_users_email_fk` FOREIGN KEY (`email`) REFERENCES `users` (`email`) ON DELETE CASCADE
+                                      UNIQUE KEY `emails_subscribers_hash_uindex` (`hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

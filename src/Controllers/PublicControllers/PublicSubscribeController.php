@@ -19,7 +19,6 @@ use function Helpers\checkToken;
 class PublicSubscribeController extends Controller
 {
     /**
-     * @param string $email
      * @return string
      * @throws \App\Exception\ValidationException
      */
@@ -47,7 +46,20 @@ class PublicSubscribeController extends Controller
 
     public function unsubscribe(string $email, string $hash)
     {
-
+        return (new SubscribeRepository())->deleteSubscriber($email, $hash);
     }
 
+    /**
+     * Проверка подписки
+     * @param string $email
+     * @return bool
+     */
+    public function isSubscribed(string $email): bool
+    {
+        $subscriber = (new SubscribeRepository())->getSubscriber($email);
+        if ($subscriber instanceof Subscriber) {
+            return true;
+        }
+        return false;
+    }
 }

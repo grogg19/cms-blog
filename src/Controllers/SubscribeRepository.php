@@ -17,7 +17,6 @@ class SubscribeRepository
      * создание подписчика
      * @param string $email
      * @return string
-     * @throws \App\Exception\ValidationException
      */
     public function createSubscriber(string $email): string
     {
@@ -43,18 +42,36 @@ class SubscribeRepository
         return Subscriber::where('email', $email)->first();
     }
 
-    public function getSubscriberByHashAndEmail(string $hash, string $email)
+    /**
+     * @param string $hash
+     * @param string $email
+     * @return mixed
+     */
+    public function getSubscribeByHashAndEmail(string $hash, string $email)
     {
         return Subscriber::where('email', $email)
             ->andWhere('hash', $hash)->first();
     }
 
     /**
+     * @param string $email
      * @param string $hash
      * @return bool|null
      */
-    public function deleteSubscriberByHash(string $hash): ?bool
+    public function deleteSubscriber(string $email, string $hash): ?bool
     {
-        return Subscriber::where('hash', $hash)->delete();
+        return Subscriber::where('email', $email)
+            ->andWhere('hash', $hash)
+            ->delete();
+    }
+
+    /**
+     * @param string $email
+     * @return bool|null
+     */
+    public function deleteSubscriberByEmail(string $email): ?bool
+    {
+        return Subscriber::where('email', $email)
+            ->delete();
     }
 }

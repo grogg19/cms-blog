@@ -50,7 +50,12 @@ class ToastsController extends Controller
      */
     private function issetToast(): bool
     {
-        return $this->session->has('toast');
+        if(!$this->session->isStarted()){
+            return false;
+        } else {
+            return $this->session->has('toast');
+        }
+
     }
 
     /**

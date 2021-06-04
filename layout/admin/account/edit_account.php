@@ -4,6 +4,11 @@
  */
 
 use App\FormRenderer;
+use App\Model\User;
+/**
+ * @var User $user
+ * @var array $form
+ */
 $user = !empty($user) ? $user : null;
 $pathToAvatar = !empty($pathToAvatar) ? $pathToAvatar : '';
 
@@ -23,7 +28,7 @@ $pathToAvatar = !empty($pathToAvatar) ? $pathToAvatar : '';
                             <?php
                             (new FormRenderer($form['fields']))->render($user);
                             ?>
-                            <div class="dx-form-group-md div-avatar form-element">
+                            <div class="dx-form-group-md div-avatar form-element mt-20">
                                 <label for="avatar">Аватар:</label>
 
                                 <div class="avatar-wrapper">

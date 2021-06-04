@@ -48,15 +48,6 @@ fields:
               id: password_confirm
               class: form-control form-control-style-2 password_confirm width300
 
-    email:
-          form: input
-          label: Электронная почта
-          options:
-              type: email
-              placeholder: Ваша электронная почта
-              id: email
-              class: form-control form-control-style-2 email width300
-
 action: /admin/account/save
 
 title: Редактирование профиля пользователя

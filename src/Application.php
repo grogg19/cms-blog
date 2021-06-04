@@ -6,6 +6,7 @@
 namespace App;
 
 
+use App\Auth\Auth;
 use App\Controllers\System\MigrationController;
 use App\Cookie\Cookie;
 use App\Router as Router;
@@ -110,6 +111,9 @@ class Application
 
         if(!empty(Cookie::get('authUser'))) {
             $this->session->start();
+            if($this->session->get('userId') === null) {
+                (new Auth())->unAuthorize();
+            }
         }
     }
 

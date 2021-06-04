@@ -32,17 +32,18 @@ class View implements Renderable
     /**
      * Метод проверяет существование шаблона $this->view и делает require при его наличии
      * Параметры для вывода находятся в массиве $parameters
-     * @return bool|mixed
+     * @return mixed|void
      */
     public function render()
     {
         extract($this->parameters);
+
         if(file_exists($this->view)) {
             require $this->view;
-            return true;
+            //return true;
         } else {
             echo "Данного шаблона не существует";
-            return false;
+            //return false;
         }
     }
 
