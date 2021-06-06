@@ -1,6 +1,8 @@
 <?php
-use App\View;
 
+/**
+ * @var string $token
+ */
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
@@ -10,13 +12,6 @@ use App\View;
             </div>
             <div class="col-lg-4">
                 <div class="dx-sticky dx-sidebar" data-sticky-offsetTop="120" data-sticky-offsetBot="40">
-
-                    <?php
-                    /**
-                     * Правый блок сайта
-                     */
-                    (new View('section_right'))->render();
-                    ?>
 
                 </div>
             </div>
