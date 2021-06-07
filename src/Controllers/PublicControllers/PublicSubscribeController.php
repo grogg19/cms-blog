@@ -35,8 +35,7 @@ class PublicSubscribeController extends Controller
             'email' => $this->request->post('emailSubscribe')
         ];
 
-        $validator = new Validator($data, Subscriber::class);
-        $resultValidation = $validator->makeValidation();
+        $resultValidation = $this->getValidate($data);
 
         if(empty($resultValidation['error'])) {
             return (new SubscribeRepository())->createSubscriber($email);
@@ -45,6 +44,18 @@ class PublicSubscribeController extends Controller
 
     }
 
+    private function getValidate(array $data)
+    {
+        $validator = new Validator($data, Subscriber::class);
+        return $validator->makeValidation();
+    }
+
+    /**
+     *
+     * @param string $email
+     * @param string $hash
+     * @return bool|null
+     */
     public function unsubscribe(string $email, string $hash)
     {
         return (new SubscribeRepository())->deleteSubscriber($email, $hash);
@@ -64,14 +75,23 @@ class PublicSubscribeController extends Controller
         return false;
     }
 
+    /**
+     *  метод отписывает email от рассылки
+     */
     public function unsubscribeByLink()
     {
         if(empty($this->request->get('email')) || empty($this->request->get('code'))) {
-            (new ToastsController())->setToast('warning', 'Невозможно отписаться');
-            Redirect::to('/');
-        } else {
-            (new ToastsController())->setToast('success', 'Вы успешно отписались');
+            (new ToastsController())->setToast('warning', 'Не хватает данных, чтобы отписаться');
             Redirect::to('/');
         }
+        $email = (string) $this->request->get('email');
+        $code = (string) $this->request->get('code');
+
+        if($this->unsubscribe($email, $code)) {
+            (new ToastsController())->setToast('success', 'Вы успешно отписались');
+        } else {
+            (new ToastsController())->setToast('warning', 'В данный момент невозможно отписаться');
+        }
+        Redirect::to('/');
     }
 }

@@ -18,7 +18,7 @@ class TestController extends Controller
 
     public function test()
     {
-        $subscriber = (new SubscribeRepository())->getSubscriber('rrrrlll@mail.ru');
+        $subscriber = (new SubscribeRepository())->getSubscriber('tests@nnn.ru');
 
         dump($subscriber);
         echo '<a href="' . SITE_ROOT . '/manage-subscribes/unsubscribe-by-link?email=' . $subscriber->email .'&code=' .

@@ -60,9 +60,10 @@ class Request
     }
 
     /**
-     * @return array
+     * @param string $key
+     * @return string|array
      */
-    public function cookie($key = "")
+    public function cookie(string $key = ""): string|array
     {
         if(!empty($key) && is_string($key)) {
             return $this->cookie[$key];
@@ -71,9 +72,10 @@ class Request
     }
 
     /**
-     * @return array
+     * @param string $key
+     * @return array|string|null
      */
-    public function get($key = "")
+    public function get(string $key = ""): array|string|null
     {
         if(!empty($key) && is_string($key)) {
             return (isset($this->get[$key])) ? $this->get[$key] : null;
@@ -82,9 +84,10 @@ class Request
     }
 
     /**
-     * @return array
+     * @param string $key
+     * @return array|string|null
      */
-    public function post($key = "")
+    public function post(string $key = ""): array|string|null
     {
         if(!empty($key) && is_string($key)) {
             return (isset($this->post[$key])) ? $this->post[$key] : null;
@@ -104,10 +107,10 @@ class Request
     }
 
     /**
-     * @param string $data
-     * @return array|mixed
+     * @param string $key
+     * @return array|string
      */
-    public function server($key = "")
+    public function server(string $key = ""): array|string
     {
         if(!empty($key) && is_string($key)) {
             return $this->server[$key];

@@ -50,7 +50,7 @@ class SubscribeRepository
     public function getSubscribeByHashAndEmail(string $hash, string $email)
     {
         return Subscriber::where('email', $email)
-            ->andWhere('hash', $hash)->first();
+            ->where('hash', $hash)->first();
     }
 
     /**
@@ -60,9 +60,19 @@ class SubscribeRepository
      */
     public function deleteSubscriber(string $email, string $hash): ?bool
     {
-        return Subscriber::where('email', $email)
-            ->andWhere('hash', $hash)
-            ->delete();
+//        $subscriber = $this->getSubscribeByHashAndEmail($hash, $email);
+//
+//        if(!empty($subscriber)) {
+//            return $subscriber->delete();
+//        }
+
+        if(Subscriber::where('email', $email)
+            ->where('hash', $hash)
+            ->delete()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
