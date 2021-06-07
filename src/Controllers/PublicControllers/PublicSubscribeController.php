@@ -9,6 +9,7 @@ use App\Controllers\Controller;
 use App\Controllers\SubscribeRepository;
 use App\Controllers\ToastsController;
 use App\Model\Subscriber;
+use App\Redirect;
 use App\Validate\Validator;
 use function Helpers\checkToken;
 
@@ -61,5 +62,16 @@ class PublicSubscribeController extends Controller
             return true;
         }
         return false;
+    }
+
+    public function unsubscribeByLink()
+    {
+        if(empty($this->request->get('email')) || empty($this->request->get('code'))) {
+            (new ToastsController())->setToast('warning', 'Невозможно отписаться');
+            Redirect::to('/');
+        } else {
+            (new ToastsController())->setToast('success', 'Вы успешно отписались');
+            Redirect::to('/');
+        }
     }
 }

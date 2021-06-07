@@ -13,6 +13,7 @@ $router->get( 'get', '/test/*/test2/*' , 'Controller@test');
 
 //Маршрут на страницу /about
 $router->get('get','/about', 'Controller::about');
+
 $router->get( 'get', '/post/*' , 'Controllers\PublicControllers\PublicPostController@getPost');
 $router->get( 'get', '/posts' , 'Controllers\PublicControllers\PublicPostController@index');
 $router->get('get','/404', 'Exception\NotFoundException@render');

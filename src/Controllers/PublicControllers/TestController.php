@@ -9,6 +9,7 @@
 namespace App\Controllers\PublicControllers;
 
 use App\Controllers\Controller;
+use App\Controllers\SubscribeRepository;
 
 
 class TestController extends Controller
@@ -17,6 +18,11 @@ class TestController extends Controller
 
     public function test()
     {
-        phpinfo();
+        $subscriber = (new SubscribeRepository())->getSubscriber('rrrrlll@mail.ru');
+
+        dump($subscriber);
+        echo '<a href="' . SITE_ROOT . '/manage-subscribes/unsubscribe-by-link?email=' . $subscriber->email .'&code=' .
+            $subscriber->hash . '" >' . SITE_ROOT . '/manage-subscribes/unsubscribe-by-link?email=' . $subscriber->email .'&code=' .
+            $subscriber->hash . '</a>';
     }
 }

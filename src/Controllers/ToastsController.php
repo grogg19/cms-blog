@@ -4,9 +4,14 @@
  */
 namespace App\Controllers;
 
+use App\Cookie\Cookie;
 use App\View;
 use function Helpers\checkToken;
 
+/**
+ * Class ToastsController
+ * @package App\Controllers
+ */
 class ToastsController extends Controller
 {
     /**
@@ -46,14 +51,15 @@ class ToastsController extends Controller
     }
 
     /**
+     * проверка наличия тоста в куках
      * @return bool
      */
     private function issetToast(): bool
     {
-        if(!$this->session->isStarted()){
-            return false;
+        if(!empty(Cookie::get('toast'))) {
+            return true;
         } else {
-            return $this->session->has('toast');
+            return false;
         }
 
     }
@@ -64,12 +70,14 @@ class ToastsController extends Controller
      */
     public function setToast(string $type = 'info', string $message = ''): void
     {
-        $this->session->set('toast', [
+        $data = [
             'typeToast' => $type,
             'dataToast' => [
                 'message' => $message
             ]
-        ]);
+        ];
+
+        Cookie::set('toast', serialize($data));
     }
 
     /**
@@ -77,7 +85,7 @@ class ToastsController extends Controller
      */
     private function destroyToast(): void
     {
-        $this->session->remove('toast');
+        Cookie::delete('toast');
     }
 
 
@@ -85,10 +93,8 @@ class ToastsController extends Controller
     {
         if($this->issetToast()) {
 
-            $type = $this->session->get('toast')['typeToast'];
-            $message = $this->session->get('toast')['dataToast']['message'];
-
-            $this->destroyToast();
+            $type = unserialize(Cookie::get('toast'))['typeToast'];
+            $message = unserialize(Cookie::get('toast'))['dataToast']['message'];
 
             $content = new View('partials.toast_main', [
                 'typeToast' => $type,
@@ -96,6 +102,8 @@ class ToastsController extends Controller
             ]);
 
             $content->render();
+
+            $this->destroyToast();
         }
     }
 }
