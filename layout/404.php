@@ -1,7 +1,6 @@
 <?php
-
 /**
- * @var string $token
+ * шаблон 404 page
  */
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
