@@ -131,6 +131,7 @@ class AdminPostController extends AdminController
         }
 
         $post = $this->postController->getPostById($id);
+
         if($post == null) {
             throw new NotFoundException('Такого поста не существует');
         }
@@ -172,7 +173,7 @@ class AdminPostController extends AdminController
         }
 
         $post->title = filter_var($request->post('title'), FILTER_SANITIZE_STRING);
-        $post->slug = filter_var($request->post('slug'), FILTER_SANITIZE_STRING);
+        $post->slug = filter_var(trim($request->post('slug'), '/'), FILTER_SANITIZE_STRING);
         $post->excerpt = filter_var($request->post('excerpt'), FILTER_SANITIZE_STRING);
         $post->content = cleanJSTags( (string) $request->post('content'));
         $post->published = (!empty($request->post('published')) && $request->post('published') == 'on') ? 1 : 0;
