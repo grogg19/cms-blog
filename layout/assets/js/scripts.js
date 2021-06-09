@@ -65,7 +65,7 @@ function listenButtonClick() {
 
     inputs.forEach(item => {
         item.addEventListener('focus', async (e) => {
-            document.querySelector('.div-' + item.id).setAttribute('tooltip', '');
+            document.querySelector('.div-' + item.name).setAttribute('tooltip', '');
         });
     });
 }

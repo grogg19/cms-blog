@@ -11,6 +11,8 @@ use App\Controllers\UserController;
 use App\Cookie\Cookie;
 use App\Exception\NotFoundException;
 use App\Model\Post;
+use App\Notification\Notification;
+use App\Notification\Type\NotificationToLog;
 use App\Parse\Yaml;
 use App\Redirect;
 use App\Request\Request;
@@ -36,7 +38,7 @@ class AdminPostController extends AdminController
     /**
      * @var PostController
      */
-    protected $post;
+    protected $postController;
     protected $user;
 
     /**
@@ -45,7 +47,8 @@ class AdminPostController extends AdminController
     public function __construct()
     {
         parent::__construct();
-        $this->post = new PostController();
+
+        $this->postController = new PostController();
         $this->user = (new UserController())->getUserById($this->session->get('userId'));
 
         if(!empty($this->session->get('postId'))) {
@@ -59,7 +62,7 @@ class AdminPostController extends AdminController
      * Вывод страницы со списком статей
      * @return View
      */
-    public function listPosts()
+    public function listPosts(): View
     {
         /**
          * Количество записей на страницу
@@ -68,9 +71,9 @@ class AdminPostController extends AdminController
         $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
 
         if($this->user->role->code = 'admin') {
-            $posts = (new PostController())->getAllPosts('desc', $quantity);
+            $posts = $this->postController->getAllPosts('desc', $quantity);
         } else {
-            $posts = (new PostController())
+            $posts = $this->postController
                 ->getPostsByUserId($this->user->id, $quantity);
         }
         if($posts instanceof LengthAwarePaginator) {
@@ -127,7 +130,7 @@ class AdminPostController extends AdminController
             Redirect::to('/admin/blog/posts/create');
         }
 
-        $post = (new PostController())->getPostById($id);
+        $post = $this->postController->getPostById($id);
         if($post == null) {
             throw new NotFoundException('Такого поста не существует');
         }
@@ -156,14 +159,16 @@ class AdminPostController extends AdminController
      */
     public function saveToDb(Request $request)
     {
+
         if(!empty($request->post('idPost'))) {
 
-            $post = (new PostController())->getPostById((int) $request->post('idPost'));
+            $post = $this->postController->getPostById((int) $request->post('idPost'));
 
         } else {
 
-            $post = (new PostController())->createNewPost();
+            $post = $this->postController->createNewPost();
             $post->user_id = $this->user->id;
+
         }
 
         $post->title = filter_var($request->post('title'), FILTER_SANITIZE_STRING);
@@ -174,6 +179,10 @@ class AdminPostController extends AdminController
         $post->published_at = (!empty($request->post('published_at'))) ? getDateTimeForDb($request->post('published_at')) : "";
 
         $post->save();
+
+        if(empty($request->post('idPost'))) {
+            $this->mailNotification($post);
+        }
 
         if(!empty(Cookie::getArray('uploadImages')) && $this->session->get('postBusy') == true) {
 
@@ -253,13 +262,12 @@ class AdminPostController extends AdminController
      */
     public function deletePost(): string
     {
-        $controller = new PostController();
-        $post = $controller->getPostById((int) $this->request->post('postId'));
+        $post = $this->postController->getPostById((int) $this->request->post('postId'));
         try {
             foreach ($post->images as $image) {
                 $this->imgDelete($image->file_name);
             }
-            $controller->deletePost($post);
+            $this->postController->deletePost($post);
         } catch (Exception $exception) {
             return ToastsController::getToast('warning', 'Ошибка удаления поста! Сообщение: ' . $exception->getMessage());
         }
@@ -323,6 +331,17 @@ class AdminPostController extends AdminController
             (new AdminImageController())->cacheImageClean();
             $this->session->remove('postBusy');
         }
+    }
+
+    /**
+     * @param Post $post
+     */
+    public function mailNotification(Post $post)
+    {
+        $typeNotification = new NotificationToLog();
+        $notification = new Notification($typeNotification, $post);
+
+        $notification->sendNotification();
     }
 
 }

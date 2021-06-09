@@ -17,7 +17,7 @@ fields:
         label: Slug
         options:
             type: text
-            placeholder: - slug -
+            placeholder: --slug--
             id: slug
             class: form-control form-control-style-2 slug data-target-slugify
 
@@ -43,7 +43,7 @@ fields:
         label: Дата публикации
         options:
             type: text
-            class: form-control form-control-style-2 col-md-6
+            class: form-control form-control-style-2 col-md-6 datetimepicker
             id: datetimepicker
 
     published:

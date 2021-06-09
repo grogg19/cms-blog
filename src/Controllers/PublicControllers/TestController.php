@@ -9,7 +9,6 @@
 namespace App\Controllers\PublicControllers;
 
 use App\Controllers\Controller;
-use App\Controllers\SubscribeRepository;
 
 
 class TestController extends Controller
@@ -18,11 +17,17 @@ class TestController extends Controller
 
     public function test()
     {
-        $subscriber = (new SubscribeRepository())->getSubscriber('tests@nnn.ru');
-
-        dump($subscriber);
-        echo '<a href="' . SITE_ROOT . '/manage-subscribes/unsubscribe-by-link?email=' . $subscriber->email .'&code=' .
-            $subscriber->hash . '" >' . SITE_ROOT . '/manage-subscribes/unsubscribe-by-link?email=' . $subscriber->email .'&code=' .
-            $subscriber->hash . '</a>';
+//        $notify = new NotificationToLog();
+//        $notify->make();
     }
+
+//    public function test()
+//    {
+//        $subscriber = (new SubscribeRepository())->getSubscriber('tests@nnn.ru');
+//
+//        dump($subscriber);
+//        echo '<a href="' . SITE_ROOT . '/manage-subscribes/unsubscribe-by-link?email=' . $subscriber->email .'&code=' .
+//            $subscriber->hash . '" >' . SITE_ROOT . '/manage-subscribes/unsubscribe-by-link?email=' . $subscriber->email .'&code=' .
+//            $subscriber->hash . '</a>';
+//    }
 }

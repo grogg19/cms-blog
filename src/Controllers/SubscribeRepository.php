@@ -6,6 +6,7 @@
 namespace App\Controllers;
 
 use App\Model\Subscriber;
+use Illuminate\Support\Collection;
 use function Helpers\generateRandomHash;
 /**
  * Class SubscribeRepository
@@ -83,5 +84,13 @@ class SubscribeRepository
     {
         return Subscriber::where('email', $email)
             ->delete();
+    }
+
+    /**
+     * @return Subscriber[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllSubscribers(): Collection
+    {
+        return Subscriber::all();
     }
 }
