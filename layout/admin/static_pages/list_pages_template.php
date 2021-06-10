@@ -31,6 +31,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 		                    <a href="/admin/static-pages/add" ><i class="fas fa-plus"></i> Добавить страницу</a>
 	                    </div>
                         <?php
+                        // количество элементов на странице
                         (new View('partials.quantity_items', [
                             'quantity' => $quantity,
                             'items' => [10, 20, 50, 200, 'all']
@@ -58,6 +59,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 			                    </div>
 		                    </form>
                             <?php
+	                        // Пагинация
                             if($pages instanceof LengthAwarePaginator) {
                                 (new View('partials.pagination', [
                                     'paginator' => $pages
