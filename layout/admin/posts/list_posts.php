@@ -14,7 +14,6 @@ use function Helpers\getDateTime;
  */
 
 ?>
-
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
         <div class="row vertical-gap md-gap">
@@ -29,6 +28,7 @@ use function Helpers\getDateTime;
 		            </div>
 	            </div>
                 <?php
+                // Форма количества элементов на странице
                 (new View('partials.quantity_items', [
                     'quantity' => $quantity,
 	                'items' => [10, 20, 50, 200, 'all']
@@ -43,13 +43,7 @@ use function Helpers\getDateTime;
                             <h2 class="h3 dx-blog-item-title"><a href="/admin/blog/posts/<?= $post->id ?>/edit"><?= $post->title ?></a></h2>
                             <ul class="dx-blog-item-info">
                                 <li class="d-block"><i class="far fa-clock" title="Опубликовано"></i> <?= getDateTime($post->published_at) ?></li>
-                                <?php
-                                // Условие при котором показывается автор статьи
-                                ?>
                                 <li class="d-block"><i class="fas fa-user" title="Автор"></i> <a href="#"><?=$post->user->first_name?> <?=$post->user->last_name?></a></li>
-                                <?php
-                                // --------
-                                ?>
                             </ul>
 	                        <div class="row">
 		                        <div class="col-6">
@@ -63,6 +57,7 @@ use function Helpers\getDateTime;
                     </div>
                 <?php } ?>
                 <?php
+		            // Пагинация
 		            if($posts instanceof LengthAwarePaginator) {
                         (new View('partials.pagination', [
                             'paginator' => $posts

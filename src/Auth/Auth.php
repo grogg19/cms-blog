@@ -15,11 +15,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class Auth
 {
-//    /**
-//     * @var
-//     */
-//    protected $hashUser;
-
     protected Session $session;
 
     public function __construct()

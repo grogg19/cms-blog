@@ -5,9 +5,13 @@
  */
 
 use App\FormRenderer;
-
-$post = !empty($post) ? $post : [];
-$form = !empty($form) ? $form : [];
+use App\Model\Post;
+/**
+ * @var string $token
+ * @var array $form
+ * @var Post $post
+ * @var array $imgConfig
+ */
 
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
@@ -19,7 +23,7 @@ $form = !empty($form) ? $form : [];
                         <h2 class="h6 mb-6">Редактирование поста</h2>
                         <!-- START: Breadcrumbs -->
                         <ul class="dx-breadcrumbs text-left dx-breadcrumbs-dark mnb-6 fs-14">
-                            <li><a href="/admin">Раздел администрирования</a></li>
+                            <li><a href="/admin/blog/posts">Список постов</a></li>
                             <li>Редактирование поста</li>
                         </ul>
                         <!-- END: Breadcrumbs -->
@@ -41,14 +45,14 @@ $form = !empty($form) ? $form : [];
                             data-dropzone-maxMB
                             data-dropzone-maxFiles
                         -->
-                        <form class="dx-dropzone dz-started" enctype="multipart/form-data" action="/admin/blog/posts/img/upload" data-dropzone-maxMB="6" data-dropzone-maxFiles="6" multiple="">
+                        <form class="dx-dropzone dz-started" enctype="multipart/form-data" action="/admin/blog/posts/img/upload" data-dropzone-maxMB="<?= $imgConfig['maxImageSize'] ?>" data-dropzone-maxFiles="<?= $imgConfig['maxFilesAtOnce'] ?>" multiple="">
                             <div class="dz-message">
                                 <div class="dx-dropzone-icon">
                                     <span class="icon pe-7s-cloud-upload"></span>
                                 </div>
-                                <div class="h6 dx-dropzone-title">Drop files here or click to upload</div>
+                                <div class="h6 dx-dropzone-title">Перетащите картинки сюда или нажмите "Добавить изображение"</div>
                                 <div class="dx-dropzone-text">
-                                    <p class="mnb-5 mnt-1">You can upload up to 5 files (maximum 5 MB each) of the following types: .jpg, .jpeg, .png, .zip.</p>
+                                    <p class="mnb-5 mnt-1">Вы можете загрузить до <?= $imgConfig['maxFilesAtOnce'] ?> файлов (максимальный вес <?= $imgConfig['maxImageSize'] ?> MB каждый) следующих типов: .jpg, .jpeg, .png</p>
                                 </div>
                             </div>
                         </form>

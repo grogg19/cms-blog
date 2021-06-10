@@ -5,7 +5,6 @@
 
 namespace App\Controllers\BackendControllers;
 
-use App\Config;
 use App\Controllers\PostController;
 use App\Controllers\UserController;
 use App\Cookie\Cookie;
@@ -33,6 +32,10 @@ use function Helpers\cleanJSTags;
 use function Helpers\parseRequestUri;
 use function Helpers\getDateTimeForDb;
 
+/**
+ * Class AdminPostController
+ * @package App\Controllers\BackendControllers
+ */
 class AdminPostController extends AdminController
 {
     /**
@@ -55,7 +58,7 @@ class AdminPostController extends AdminController
             $this->onCloseCleanImage();
         }
 
-        $this->auth->checkPermissons(['admin', 'content-manager']);
+        $this->auth->checkPermissons(['admin', 'content-manager']); // проверка роли
     }
 
     /**
@@ -98,7 +101,7 @@ class AdminPostController extends AdminController
      * Вывод страницы создания нового поста
      * @return View
      */
-    public function createPost()
+    public function createPost(): View
     {
         if(!empty(Cookie::getArray('uploadImages'))) {
             (new AdminImageController())->imageDestructor(Cookie::getArray('uploadImages'));
@@ -109,7 +112,8 @@ class AdminPostController extends AdminController
             'view' => 'admin.posts.create_post',
             'data' => [
                 'form' => $this->getFields(),
-                'token' => generateToken()
+                'token' => generateToken(),
+                'imgConfig' => $this->session->get('config')->getConfig('images')
             ],
             'title' => 'Создание новой статьи'
         ]);
@@ -124,17 +128,21 @@ class AdminPostController extends AdminController
     {
         $uriData = parseRequestUri();
 
-        $id = ((int) $uriData[3] && $uriData[4] == 'edit') ? $uriData[3] : 0;
+        $postId = ((int) $uriData[3] && $uriData[4] == 'edit') ? $uriData[3] : 0;
 
-        if($id == 0) {
+        // если postId == 0, редирект на страницу создания поста
+        if($postId == 0) {
             Redirect::to('/admin/blog/posts/create');
         }
 
-        $post = $this->postController->getPostById($id);
+        // получаем экземпляр поста с postId
+        $post = $this->postController->getPostById($postId);
 
+        // если такого поста нет, выбрасываем исключение 404
         if($post == null) {
             throw new NotFoundException('Такого поста не существует');
         }
+
         if($post->user_id == $this->session->get('userId') || $this->user->role->permissions == 1)
         {
             return new View('admin', [
@@ -143,7 +151,7 @@ class AdminPostController extends AdminController
                     'form' => $this->getFields(),
                     'post' => $post,
                     'token' => generateToken(),
-                    'imgUploadConfig' => Config::getInstance()->getConfig('images')
+                    'imgConfig' => $this->session->get('config')->getConfig('images')
                 ],
                 'title' => 'Редактирование статьи | ' . $post->title
             ]);
@@ -188,7 +196,7 @@ class AdminPostController extends AdminController
         if(!empty(Cookie::getArray('uploadImages')) && $this->session->get('postBusy') == true) {
 
             $sort = 0;
-            $configImages = Config::getInstance()->getConfig('images');
+            $configImages = $this->session->get('config')->getConfig('images');
 
             foreach (Cookie::getArray('uploadImages') as $imageFileName) {
                 $pathToFile = $_SERVER['DOCUMENT_ROOT'] . $configImages['pathToUpload'] . DIRECTORY_SEPARATOR . $imageFileName;
@@ -203,10 +211,10 @@ class AdminPostController extends AdminController
 
             }
 
-            Image::insert($data);
+            Image::insert($data); // Добавляем изображения в БД
 
-            $this->session->set('postBusy', false);
-            Cookie::delete('uploadImages');
+            $this->session->set('postBusy', false); // снимаем метку блокировки поста
+            Cookie::delete('uploadImages'); // Чистим список загруженных изображений в куках
         }
     }
 

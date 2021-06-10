@@ -13,7 +13,7 @@ return [
         "image/x-png"
     ],
 
-    'maxImageSize' => 6,
+    'maxImageSize' => 2,
 
-    'maxFilesAtOnce' => 6
+    'maxFilesAtOnce' => 5
 ];

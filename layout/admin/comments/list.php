@@ -32,6 +32,7 @@ use function Helpers\getDateTime;
 				                    </div>
 			                    </div>
                                 <?php
+                                // Форма "Количество элементов на странице"
                                 (new View('partials.quantity_items', [
                                     'quantity' => $quantity,
                                     'items' => [10, 20, 50, 200, 'all']
@@ -74,6 +75,7 @@ use function Helpers\getDateTime;
 				                    </div>
 			                        <?php } ?>
                                     <?php
+	                                //  Пагинация
                                     if($comments instanceof LengthAwarePaginator) {
                                         (new View('partials.pagination', [
                                             'paginator' => $comments

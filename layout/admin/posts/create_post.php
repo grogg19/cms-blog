@@ -1,10 +1,16 @@
 <?php
 /**
- * Шаблон
- * Создание поста
+ * Шаблон "Создание поста"
  */
 
 use App\FormRenderer;
+
+/**
+ * @var string $token
+ * @var array $form
+ * @var array $imgConfig
+ */
+
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -13,18 +19,12 @@ use App\FormRenderer;
                 <div class="dx-box dx-box-decorated">
                     <div class="dx-box-content">
                         <h2 class="h6 mb-6">Создание нового поста</h2>
-
-
                         <!-- START: Breadcrumbs -->
                         <ul class="dx-breadcrumbs text-left dx-breadcrumbs-dark mnb-6 fs-14">
-
-                            <li><a href="help-center.html">Раздел администрирования</a></li>
-
+                            <li><a href="/admin/blog/posts">Список постов</a></li>
                             <li>Создание нового поста</li>
-
                         </ul>
                         <!-- END: Breadcrumbs -->
-
                     </div>
                     <div class="dx-separator"></div>
                     <form class="dx-form" name="form_create_post" id="form_create_post" action="<?= (isset($form['action'])) ? $form['action'] : ""?>">
@@ -34,7 +34,6 @@ use App\FormRenderer;
                             <?php
                             (new FormRenderer($form['fields']))->render();
                             ?>
-
                         </div>
                     </form>
                     <div class="dx-box-content pt-0">
@@ -45,15 +44,15 @@ use App\FormRenderer;
                             data-dropzone-maxMB
                             data-dropzone-maxFiles
                         -->
-                        <form class="dx-dropzone dz-started" enctype="multipart/form-data" action="/admin/blog/posts/img/upload" data-dropzone-maxMB="6" data-dropzone-maxFiles="6" multiple="">
+                        <form class="dx-dropzone dz-started" enctype="multipart/form-data" action="/admin/blog/posts/img/upload" data-dropzone-maxMB="<?= $imgConfig['maxImageSize'] ?>" data-dropzone-maxFiles="<?= $imgConfig['maxFilesAtOnce'] ?>" multiple="">
                             <div class="dz-message">
                                 <div class="dx-dropzone-icon">
                                     <span class="icon pe-7s-cloud-upload"></span>
-                                    <input type="hidden" name="_token" value="<?=$token?>">
+                                    <input type="hidden" name="_token" value="<?= $token ?>">
                                 </div>
-                                <div class="h6 dx-dropzone-title">Drop files here or click to upload</div>
+                                <div class="h6 dx-dropzone-title">Перетащите картинки сюда или нажмите "Добавить изображение"</div>
                                 <div class="dx-dropzone-text">
-                                    <p class="mnb-5 mnt-1">You can upload up to 5 files (maximum 5 MB each) of the following types: .jpg, .jpeg, .png, .zip.</p>
+                                    <p class="mnb-5 mnt-1">Вы можете загрузить до <?= $imgConfig['maxFilesAtOnce'] ?> файлов (максимальный вес <?= $imgConfig['maxImageSize'] ?> MB каждый) следующих типов: .jpg, .jpeg, .png</p>
                                 </div>
                             </div>
                         </form>
