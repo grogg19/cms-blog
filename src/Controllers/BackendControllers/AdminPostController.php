@@ -83,7 +83,7 @@ class AdminPostController extends AdminController
         $title = 'Список статей блога';
 
         return new View('admin', [
-            'view' => 'admin.list_posts',
+            'view' => 'admin.posts.list_posts',
             'data' => [
                 'title' => $title,
                 'posts' => $posts,
@@ -106,7 +106,7 @@ class AdminPostController extends AdminController
         }
 
         return new View('admin', [
-            'view' => 'admin.create_post',
+            'view' => 'admin.posts.create_post',
             'data' => [
                 'form' => $this->getFields(),
                 'token' => generateToken()
@@ -138,7 +138,7 @@ class AdminPostController extends AdminController
         if($post->user_id == $this->session->get('userId') || $this->user->role->permissions == 1)
         {
             return new View('admin', [
-                'view' => 'admin/edit_post',
+                'view' => 'admin.posts.edit_post',
                 'data' => [
                     'form' => $this->getFields(),
                     'post' => $post,
@@ -316,6 +316,7 @@ class AdminPostController extends AdminController
     }
 
     /**
+     * Возвращает картинки из хранилища
      * @return false|string
      */
     public function getImages(): false|string
@@ -335,6 +336,7 @@ class AdminPostController extends AdminController
     }
 
     /**
+     * метод отправляет уведомления подписчикам
      * @param Post $post
      */
     public function mailNotification(Post $post)
