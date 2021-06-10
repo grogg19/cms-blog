@@ -109,23 +109,21 @@ class AdminAccountController extends AdminController
             $userController = new UserController();
             $user = $userController->getUserById($this->session->get('userId'));
 
-            // Подготовка данных к апдейту
-            $data = $this->prepareDataToUpdate($user);
+            $data = $this->request->post();
+
 
             // Подготовка правил для валидации
             if(!empty($data['password'])) {
                 $ownRules = [
                     'first_name' => 'required',
                     'last_name' => 'required',
-                    'email' => ['required', 'between:6,255', 'email', 'unique:users'],
-                    'password' => ['between:6,255', 'confirmed'],
-                    'password_confirmation' => ['required_with:password', 'between:6,255']
+                    'password' => ['between:6,255'],
+                    'password_confirm' => ['required','identityWith:password', 'between:6,255']
                 ];
             } else {
                 $ownRules = [
                     'first_name' => 'required',
-                    'last_name' => 'required',
-                    'email' => ['between:6,255', 'email', 'unique:users'],
+                    'last_name' => 'required'
                 ];
             }
 
@@ -136,6 +134,9 @@ class AdminAccountController extends AdminController
 
             // если ошибок в валидации не было,
             if(!isset($resultValidateForms['error']))  {
+
+                // Подготовка данных к апдейту
+                $data = $this->prepareDataToUpdate();
 
                 $uploadAvatar = $this->uploadAvatar($user); // Пробуем загрузить автарку
 
@@ -172,20 +173,13 @@ class AdminAccountController extends AdminController
 
     /**
      * Метод подготавливает данные формы профиля для перезаписи профиля
-     * @param User $user
      * @return array
      */
-    protected function prepareDataToUpdate(User $user): array
+    protected function prepareDataToUpdate(): array
     {
         // Очищаем post - массив от пустых элементов
         $data = array_diff(($this->request->post()), array(''));
 
-        // Если значения из формы совпадают с данными пользователя, то исключаем их из массива
-        foreach ($data as $key => $value) {
-            if($data[$key] === $user->$key ) {
-                unset($data[$key]);
-            }
-        }
         return $data;
     }
 

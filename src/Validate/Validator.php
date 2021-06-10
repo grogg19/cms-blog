@@ -44,9 +44,11 @@ class Validator extends AbstractValidator
     public function makeValidation(): array
     {
         $messagesValidations = []; // массив сообщений всех валидаций
+
         if(empty($this->rules)) {
             throw new ValidationException('Отсутствуют правила валидации', 503);
         }
+
         foreach ($this->rules as $key => $rule) {
             if (is_array($rule)) {
                 foreach ($rule as $r) {
@@ -76,7 +78,6 @@ class Validator extends AbstractValidator
                 }
             }
         }
-
         return $messagesValidations;
     }
 
@@ -87,9 +88,12 @@ class Validator extends AbstractValidator
      */
     protected function createValidation(string $type, string $key): Validation
     {
+        $parameters = '';
+
         if(str_contains($type, ':')) {
             list($type, $parameters) = explode(':', $type, 2);
         }
+
         return match ($type) {
             'required' => new IsEmpty($this->data[$key]),
             'regex' => new ByRegex($this->data[$key], $parameters),

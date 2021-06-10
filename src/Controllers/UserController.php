@@ -108,6 +108,10 @@ class UserController extends Controller
             return false;
         }
 
+        if(!empty($data['password'])) {
+            $data['password'] = hashPassword($data['password']);
+        }
+
         unset($data['_token']);
         $user->update($data);
 
