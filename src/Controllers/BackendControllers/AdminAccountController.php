@@ -7,7 +7,6 @@
 
 namespace App\Controllers\BackendControllers;
 
-use App\Config;
 use App\Controllers\ToastsController;
 use App\Model\User;
 use App\Uploader\Upload;
@@ -80,20 +79,9 @@ class AdminAccountController extends AdminController
      * Метод возвращает массив полей для формы пользователя в личном кабинете
      * @return array
      */
-    private function getUserAccountFields()
+    private function getUserAccountFields(): array
     {
         return (new Yaml())->parseFile(__DIR__ . '/../../Model/User/user_profile_fields.yaml');
-    }
-
-    /**
-     * Метод возвращает локальный путь к файлу с аватаром
-     * @return string
-     */
-    private function getLocalAvatarPath()
-    {
-        $path = Config::getInstance()->getConfig('avatars')['pathToUpload'];
-
-        return APP_DIR . $path . DIRECTORY_SEPARATOR ;
     }
 
     /**
@@ -110,7 +98,6 @@ class AdminAccountController extends AdminController
             $user = $userController->getUserById($this->session->get('userId'));
 
             $data = $this->request->post();
-
 
             // Подготовка правил для валидации
             if(!empty($data['password'])) {
@@ -129,6 +116,7 @@ class AdminAccountController extends AdminController
 
             // Создаем экземпляр валидации
             $validator = new Validator($data, User::class, $ownRules);
+
             // проверяем данные валидатором
             $resultValidateForms = $validator->makeValidation();
 
@@ -138,10 +126,13 @@ class AdminAccountController extends AdminController
                 // Подготовка данных к апдейту
                 $data = $this->prepareDataToUpdate();
 
-                $uploadAvatar = $this->uploadAvatar($user); // Пробуем загрузить автарку
+                $uploadAvatar = $this->uploadAvatar($user); // Пробуем загрузить аватарку
 
-                if(isset($uploadAvatar->error)) { // если получили сообщение об ошибке, то выведем его в блок аватара
+                // если получили сообщение об ошибке, то выведем его в блок аватара
+                if(isset($uploadAvatar->error)) {
+
                     return ToastsController::getToast('warning', $uploadAvatar->error);
+
                 } else {
                     // Если ошибок нет, то добавляем к пользователю атрибут $data['avatar']
                     $data['avatar'] = ($uploadAvatar === null) ? $user->avatar : $uploadAvatar->uploadFilesData[0]->fileName;
@@ -152,6 +143,7 @@ class AdminAccountController extends AdminController
 
                     (new ToastsController())->setToast('success', 'Изменения успешно сохранены.');
 
+                    // Перенаправляем обратно в профиль
                     return json_encode([
                         'url' => '/admin/account/'
                     ]);
@@ -162,6 +154,7 @@ class AdminAccountController extends AdminController
                 }
 
             } else {
+                // возвращаем результат валидации в json
                 return json_encode($resultValidateForms);
             }
 
@@ -200,12 +193,13 @@ class AdminAccountController extends AdminController
             $resultUpload = json_decode($uploader->upload('avatars'));
 
             // Удаляем старый аватар если он был
-            if(!empty($user->avatar) && file_exists($this->getLocalAvatarPath() . $user->avatar) && !isset($resultUpload->error)) {
-                unlink($this->getLocalAvatarPath() . $user->avatar);
+            if(!empty($user->avatar) && file_exists($this->userController->getUserAvatarPath() . $user->avatar) && !isset($resultUpload->error)) {
+                unlink($this->userController->getUserAvatarPath() . $user->avatar);
             }
 
             return $resultUpload;
         }
+
         return null;
     }
 }

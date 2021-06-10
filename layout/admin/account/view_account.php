@@ -12,7 +12,6 @@ use function Helpers\session;
  * @var string $token
  */
 ?>
-
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
         <div class="row justify-content-center">
@@ -46,7 +45,6 @@ use function Helpers\session;
 			                               data-form="subscribe_form"
 			                               data-email="<?= $user->email ?>" />
 		                        </form>
-
 	                        </li>
                         </ul>
                     <?php if(!empty(session()->get('userId')) && session()->get('userId') == $user->id) { ?>

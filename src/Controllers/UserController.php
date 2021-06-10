@@ -178,7 +178,7 @@ class UserController extends Controller
      * Метод возвращает web - адрес изображения с аватаром
      * @return string
      */
-    public function getUserAvatarPath()
+    public function getUserAvatarPath(): string
     {
         $path = Config::getInstance()->getConfig('avatars')['pathToUpload'];
 

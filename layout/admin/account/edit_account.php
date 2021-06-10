@@ -8,6 +8,7 @@ use App\Model\User;
 /**
  * @var User $user
  * @var array $form
+ * @var string $pathToAvatar
  */
 $user = !empty($user) ? $user : null;
 $pathToAvatar = !empty($pathToAvatar) ? $pathToAvatar : '';
