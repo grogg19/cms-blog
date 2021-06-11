@@ -8,6 +8,10 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Class UserRole
+ * @package App\Model
+ */
 class UserRole extends Model
 {
 

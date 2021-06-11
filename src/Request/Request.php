@@ -5,7 +5,10 @@
 
 namespace App\Request;
 
-
+/**
+ * Class Request
+ * @package App\Request
+ */
 class Request
 {
     /**

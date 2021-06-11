@@ -5,6 +5,10 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Class Subscriber
+ * @package App\Model
+ */
 class Subscriber extends Model
 {
     /**

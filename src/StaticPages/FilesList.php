@@ -7,6 +7,10 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use App\StaticPages\File as File;
 
+/**
+ * Class FilesList
+ * @package App\StaticPages
+ */
 class FilesList implements PageListCompatible
 {
     private string $filesDirectory =  DIRECTORY_SEPARATOR . 'static-pages';
@@ -39,6 +43,7 @@ class FilesList implements PageListCompatible
     }
 
     /**
+     * проверка владельца директории
      * @return bool
      */
     private function checkOwnerDir(): bool

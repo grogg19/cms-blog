@@ -10,9 +10,9 @@ use App\Controllers\BackendControllers\UserRoleController;
 use App\Controllers\Controller as Controller;
 use App\Model\User;
 use App\Config;
-
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+
 use function Helpers\checkToken;
 use function Helpers\hashPassword;
 
@@ -44,18 +44,19 @@ class UserController extends Controller
      * Возвращаем модель данных текущего пользователя
      * @return User|null
      */
-    public function getCurrentUser(): User|null
+    public function getCurrentUser(): ?User
     {
-        if(session_status() != PHP_SESSION_NONE) {
-            if(!empty($this->session->get('userId'))) {
-                return $this->getUserById($this->session->get('userId'));
-            }
+        if(session_status() == PHP_SESSION_NONE) {
+            return null;
+        }
+        if(!empty($this->session->get('userId'))) {
+            return $this->getUserById($this->session->get('userId'));
         }
         return null;
     }
 
     /**
-     * возвращает всех пользователей кроме супер-пользователя
+     * возвращает коллекцию всех пользователей кроме супер-пользователя
      * @param string $sortDirection
      * @param string $quantity
      * @return LengthAwarePaginator|Collection

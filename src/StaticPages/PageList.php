@@ -45,7 +45,7 @@ class PageList
      * @param string $url
      * @return \App\StaticPages\Page|null
      */
-    public function getPageByUrl(string $url): Page|null
+    public function getPageByUrl(string $url): ?Page
     {
         foreach ($this->pageList->list() as $item) {
 
@@ -58,18 +58,19 @@ class PageList
     }
 
     /**
+     * Возвращает экземпляр страницы по имени файла
      * @param string $fileName
      * @return \App\StaticPages\Page|null
      */
-    public function getPageByFileName(string $fileName): Page|null
+    public function getPageByFileName(string $fileName): ?Page
     {
         foreach ($this->pageList->list() as $item) {
 
             if($item->file->getFilename() === $fileName . '.htm') {
                 return new Page($item);
             }
-
         }
+
         return null;
     }
 }

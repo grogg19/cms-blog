@@ -16,6 +16,7 @@ use Illuminate\Pagination\Paginator;
 class PaginateController extends Controller
 {
     /**
+     * Создает и возвращает пагинацию из коллекции
      * @param $items
      * @param int $perPage
      * @param null $page

@@ -2,8 +2,6 @@
 
 namespace App\Migrations;
 
-use Illuminate\Database\Capsule\Manager as DB;
-
 /**
  * Interface migratable
  * @package App\Migrations

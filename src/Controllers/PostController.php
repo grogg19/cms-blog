@@ -6,11 +6,13 @@
 namespace App\Controllers;
 
 use App\Controllers\PublicControllers\PublicSettingsController;
+use App\Model\Post;
 use App\Model\Post as ModelPost;
 
 use App\Controllers\Controller as Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use function Helpers\getCurrentDate;
 
 /**
  * Class PostController
@@ -28,15 +30,20 @@ class PostController extends Controller
     }
 
     /**
-     * Метод выводит строку с параметрами из $_SERVER['REQUEST_URI']
-     * @return string
+     * выводит последние 2 поста
+     * @return Collection
      */
-    public function getLatestPosts()
+    public function getLatestPosts(): Collection
     {
-        return ModelPost::where('published', 1)->orderBy('published_at', 'desc')->take(2)->get();
+        return ModelPost::where('published', 1)
+            ->where('published_at', '<=', getCurrentDate())
+            ->orderBy('published_at', 'desc')
+            ->take(2)
+            ->get();
     }
 
     /**
+     * Возвращает коллекцию всех постов
      * @param string $sortDirection
      * @param string $quantity
      * @return LengthAwarePaginator|Collection
@@ -56,6 +63,7 @@ class PostController extends Controller
     }
 
     /**
+     * Возвращает все опубликованные посты
      * @param string $sortDirection
      * @param int $page
      * @return LengthAwarePaginator
@@ -66,29 +74,33 @@ class PostController extends Controller
 
         return ModelPost::with('images')
             ->where('published', 1)
+            ->where('published_at', '<=', getCurrentDate())
             ->orderBy('published_at',$sortDirection)
             ->paginate($perPage->per_page, '*', 'page', $page);
     }
 
     /**
+     * Возвращает пост по идентификатору slug
      * @param string $slug
-     * @return mixed
+     * @return ModelPost
      */
-    public function getPostBySlug(string $slug)
+    public function getPostBySlug(string $slug): Post
     {
         return ModelPost::where('slug', $slug)->first();
     }
 
     /**
+     * Возвращает пост по id
      * @param int $id
-     * @return mixed
+     * @return ModelPost
      */
-    public function getPostById(int $id)
+    public function getPostById(int $id): Post
     {
         return ModelPost::find($id);
     }
 
     /**
+     * Возвращает посты пользователя с userId с пагинацией
      * @param int $userId
      * @param string $quantity
      * @return LengthAwarePaginator
@@ -101,6 +113,7 @@ class PostController extends Controller
     }
 
     /**
+     * Возвращает экземпляр Post
      * @return ModelPost
      */
     public function createNewPost(): ModelPost
@@ -108,24 +121,20 @@ class PostController extends Controller
         return new ModelPost();
     }
 
-
-    public function listPostsRender() {
-        //return Auth::checkRole($this->getPosts())->render();
-    }
-
     /**
+     * сохраняет объект в БД
      * @param ModelPost $post
      */
-    public function savePost(ModelPost $post)
+    public function savePost(ModelPost $post): void
     {
         $post->save();
     }
 
     /**
-     * Удаление записи
+     * Удаление объекта из бд
      * @param ModelPost $post
      */
-    public function deletePost(ModelPost $post)
+    public function deletePost(ModelPost $post): void
     {
         $post->delete();
     }

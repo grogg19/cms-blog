@@ -11,17 +11,31 @@ use App\Controllers\SubscribeRepository;
  */
 class Notification
 {
+    /**
+     * @var NotificationType
+     */
     private $notificationType;
 
+    /**
+     * @var Post
+     */
     private $post;
 
+    /**
+     * Notification constructor.
+     * @param NotificationType $notificationType
+     * @param Post $post
+     */
     public function __construct(NotificationType $notificationType, Post $post)
     {
         $this->notificationType = $notificationType;
         $this->post = $post;
     }
 
-    public function sendNotification()
+    /**
+     * отправка уведомления подписчикам
+     */
+    public function sendNotification(): void
     {
         foreach ((new SubscribeRepository())->getAllSubscribers() as $subscriber) {
             $this->notificationType->make($this->post, $subscriber);

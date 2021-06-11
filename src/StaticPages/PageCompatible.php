@@ -30,6 +30,7 @@ interface PageCompatible
     public function delete(): bool;
 
     /**
+     * @param string $url
      * @return bool
      */
     public function checkExistUrl(string $url): bool;

@@ -63,6 +63,7 @@ class File implements PageCompatible
     }
 
     /**
+     * возвращает массив из объекта файла и записанные в нем параметры страницы
      * @return array
      * @throws Exception
      */
@@ -108,7 +109,6 @@ class File implements PageCompatible
         return false;
     }
 
-
     /**
      * Получаем параметры и контент страницы из файла
      */
@@ -125,24 +125,19 @@ class File implements PageCompatible
      * @param array $parentArray
      * @return string
      */
-    private function arrayToIni(array $dataArray, array $parentArray = array())
+    private function arrayToIni(array $dataArray, array $parentArray = array()): string
     {
         $out = '';
         foreach ($dataArray as $key => $value)
         {
             if (is_array($value))
             {
-                //subsection case
-                //merge all the sections into one array...
                 $section = array_merge((array) $parentArray, (array) $key);
-                //add section information to the output
                 $out .= '[' . join('.', $section) . ']' . PHP_EOL;
-                //recursively traverse deeper
                 $out .= $this->arrayToIni($value, $section);
             }
             else
             {
-                //plain key->value case
                 $out .= "$key = $value" . PHP_EOL;
             }
         }
@@ -150,6 +145,7 @@ class File implements PageCompatible
     }
 
     /**
+     * проверка существует ли уже подобный url
      * @param string $url
      * @return bool
      */

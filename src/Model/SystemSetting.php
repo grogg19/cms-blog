@@ -7,6 +7,10 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class SystemSetting
+ * @package App\Model
+ */
 class SystemSetting extends Model
 {
     /**

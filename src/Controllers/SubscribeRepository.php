@@ -21,13 +21,13 @@ class SubscribeRepository
      */
     public function createSubscriber(string $email): string
     {
-
         $data = [
             'email' => $email,
-            'hash' => generateRandomHash()
+            'hash' => generateRandomHash() // генерируем рандомный хэш
         ];
 
         $subscriber = new Subscriber($data);
+
         if($subscriber->save()) {
             return ToastsController::getToast('success', 'Вы успешно подписались на рассылку');
         }
@@ -35,6 +35,7 @@ class SubscribeRepository
     }
 
     /**
+     * Возвращает подписку из бд по email
      * @param string $email
      * @return Subscriber|null
      */
@@ -44,29 +45,25 @@ class SubscribeRepository
     }
 
     /**
+     * Возвращает подписку из бд по email и hash
      * @param string $hash
      * @param string $email
-     * @return mixed
+     * @return Subscriber|null
      */
-    public function getSubscribeByHashAndEmail(string $hash, string $email)
+    public function getSubscribeByHashAndEmail(string $hash, string $email): ?Subscriber
     {
         return Subscriber::where('email', $email)
             ->where('hash', $hash)->first();
     }
 
     /**
+     * удаляет подписку из бд по email и hash
      * @param string $email
      * @param string $hash
-     * @return bool|null
+     * @return bool
      */
-    public function deleteSubscriber(string $email, string $hash): ?bool
+    public function deleteSubscriber(string $email, string $hash): bool
     {
-//        $subscriber = $this->getSubscribeByHashAndEmail($hash, $email);
-//
-//        if(!empty($subscriber)) {
-//            return $subscriber->delete();
-//        }
-
         if(Subscriber::where('email', $email)
             ->where('hash', $hash)
             ->delete()) {
@@ -77,6 +74,7 @@ class SubscribeRepository
     }
 
     /**
+     * Возвращает подписку по email
      * @param string $email
      * @return bool|null
      */
@@ -87,7 +85,8 @@ class SubscribeRepository
     }
 
     /**
-     * @return Subscriber[]|\Illuminate\Database\Eloquent\Collection
+     * Возвращает коллекцию подписок из бд
+     * @return Collection
      */
     public function getAllSubscribers(): Collection
     {

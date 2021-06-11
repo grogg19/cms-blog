@@ -4,16 +4,28 @@ namespace App\Migrations;
 
 use Illuminate\Database\Capsule\Manager as DB;
 
+/**
+ * Class Migration
+ * @package App\Migrations
+ */
 class Migration
 {
+    /**
+     * @var Migratable
+     */
     private Migratable $migration;
 
+    /**
+     * Migration constructor.
+     * @param Migratable $migration
+     */
     public function __construct(Migratable $migration)
     {
         $this->migration = $migration;
     }
 
     /**
+     * Возвращает массив файлов миграций
      * @param string $nameMigrationsFolder
      * @return array
      */
@@ -40,12 +52,16 @@ class Migration
         return array_diff($allMigrationsFiles, $migrationsFilesExists);
     }
 
-    public function makeMigration()
+    /**
+     *  запускает миграцию
+     */
+    public function makeMigration(): void
     {
         $this->migration->migrate($this->getMigrationFiles());
     }
 
     /**
+     * возвращает миграцию
      * @return Migratable
      */
     public function getMigration(): Migratable

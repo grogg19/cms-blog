@@ -61,6 +61,7 @@ class Page
     }
 
     /**
+     * Устанавливает параметры страницы
      * @param array $parameters
      */
     public function setParameters(array $parameters): void
@@ -106,6 +107,7 @@ class Page
     }
 
     /**
+     * Возвращает массив из имени файла + его расширение
      * @return array
      */
     public function getFileName(): array
@@ -119,6 +121,7 @@ class Page
 
 
     /**
+     * Удаление страницы
      * @return string
      */
     public function deletePage(): string
@@ -126,6 +129,11 @@ class Page
         return $this->compatibleDataObject->delete() ? 'Страница успешно удалена' : 'При удалении страницы произошла ошибка';
     }
 
+    /**
+     * Проверка существующего url
+     * @param string $url
+     * @return bool
+     */
     public function checkExistUrl(string $url): bool
     {
         return $this->compatibleDataObject->checkExistUrl($url);

@@ -2,6 +2,7 @@
 /**
  * Класс ToastsController
  */
+
 namespace App\Controllers;
 
 use App\Cookie\Cookie;
@@ -15,6 +16,7 @@ use function Helpers\checkToken;
 class ToastsController extends Controller
 {
     /**
+     * отрисовывает шаблон Тостов
      * @return string
      */
     public function index(): string
@@ -34,6 +36,7 @@ class ToastsController extends Controller
     }
 
     /**
+     * выводит JSON данные тоста для ajax
      * @param string $type
      * @param string $message
      * @return string
@@ -65,6 +68,7 @@ class ToastsController extends Controller
     }
 
     /**
+     * Устанавливает тост в куки для последующего его вывода
      * @param string $type
      * @param string $message
      */
@@ -89,6 +93,9 @@ class ToastsController extends Controller
     }
 
 
+    /**
+     * Метод проверяет наличие тоста в куках и при наличии выводит его и удаляет его из куки
+     */
     public function checkToast(): void
     {
         if($this->issetToast()) {

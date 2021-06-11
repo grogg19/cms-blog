@@ -7,6 +7,10 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Class Comment
+ * @package App\Model
+ */
 class Comment extends Model
 {
     /**

@@ -5,7 +5,10 @@
 
 namespace App\Cookie;
 
-
+/**
+ * Class Cookie
+ * @package App\Cookie
+ */
 class Cookie
 {
     /**
@@ -33,9 +36,9 @@ class Cookie
     /**
      * Получаем куки по ключу
      * @param $key
-     * @return null
+     * @return string|null
      */
-    public static function get($key)
+    public static function get($key): string|null
     {
         if ( isset($_COOKIE[$key]) ) {
             return $_COOKIE[$key];
@@ -61,7 +64,7 @@ class Cookie
      * Удаляем куку подключу
      * @param $key
      */
-    public static function delete($key)
+    public static function delete($key): void
     {
         if ( isset($_COOKIE[$key]) ) {
             self::set($key, '', -3600);

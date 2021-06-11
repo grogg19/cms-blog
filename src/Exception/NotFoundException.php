@@ -37,7 +37,7 @@ class NotFoundException extends HttpException implements Renderable
     /**
      * Метод выводит шаблон 404.php
      */
-    public function render()
+    public function render(): void
     {
         $data['message'] = $this->message;
         $title = 'Объект не найден';

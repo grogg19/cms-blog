@@ -13,10 +13,20 @@ use App\Config;
 use App\Redirect;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+/**
+ * Class Auth
+ * @package App\Auth
+ */
 class Auth
 {
+    /**
+     * @var Session
+     */
     protected Session $session;
 
+    /**
+     * Auth constructor.
+     */
     public function __construct()
     {
         $this->session = new Session();
@@ -34,33 +44,35 @@ class Auth
     }
 
     /**
+     * проверяет забанен ли пользователь
      * @param User|null $user
      * @return bool
      */
     public function isActivated(User $user = null): bool
     {
-        if(!$user == null) {
-            return $user->is_activated === 0 ? false : true;
+        if($user !== null) {
+            return !($user->is_activated === 0);
         }
 
-        if($this->session->get('userId') == null) {
+        if($this->session->get('userId') === null) {
             $user = (new UserController())->getUserByHash($this->getHashUser());
         } else {
             $user = (new UserController())->getUserById($this->session->get('userId'));
         }
-        return ($user === null || $user->is_activated === 0 ) ? false : true;
+        return !($user === null || $user->is_activated === 0 );
     }
 
     /**
-     * @return null
+     * Возвращает хэш пользователя из куки
+     * @return string
      */
-    public function getHashUser()
+    public function getHashUser(): string
     {
         return Cookie::get('authUser');
     }
 
     /**
-     * Set authorization
+     * устанавливает хэш в куки и статус авторизации пользователя в TRUE
      * @param $hashUser
      */
     public function setAuthorized($hashUser): void
@@ -69,6 +81,9 @@ class Auth
         Cookie::set('authUser', $hashUser);
     }
 
+    /**
+     * деавторизация пользователя, удаляет куки и сессию
+     */
     public function unAuthorize()
     {
         Cookie::delete('authUser');
@@ -77,6 +92,7 @@ class Auth
     }
 
     /**
+     * Возвращает пользователя по хэшу
      * @param $hash
      * @return User|null
      */
@@ -86,6 +102,7 @@ class Auth
     }
 
     /**
+     * устанавливает аттрибуты пользователя в сессию
      * @param User $user
      */
     public function setUserAttributes(User $user): void

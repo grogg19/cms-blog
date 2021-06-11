@@ -18,7 +18,7 @@ class ListenerController
     /**
      * Метод очищает куки со списком изображений
      */
-    public function ImageListener()
+    public function ImageListener(): void
     {
         if(!empty(Cookie::getArray('uploadImages')) && ((new Session())->get('postBusy') !== true || session_status() !== PHP_SESSION_ACTIVE) ) {
 

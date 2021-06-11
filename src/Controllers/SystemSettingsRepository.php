@@ -14,6 +14,7 @@ use App\Model\SystemSetting;
 class SystemSettingsRepository {
 
     /**
+     * возвращает настройку по идентификатору $item
      * @param string $item
      * @return SystemSetting
      */
@@ -23,6 +24,7 @@ class SystemSettingsRepository {
     }
 
     /**
+     * Обновляет настройки SystemSetting в бд
      * @param string $item
      * @param array $data
      * @return bool
