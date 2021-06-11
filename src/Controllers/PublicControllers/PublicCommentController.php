@@ -2,7 +2,6 @@
 
 namespace App\Controllers\PublicControllers;
 
-use App\Auth\Auth;
 use App\Controllers\BackendControllers\AdminController;
 use App\Controllers\PostController;
 use App\Controllers\ToastsController;
@@ -28,6 +27,7 @@ class PublicCommentController extends PublicController
     }
 
     /**
+     * Возвращает комментарий по его id
      * @param int $id
      * @return Comment
      */
@@ -37,6 +37,7 @@ class PublicCommentController extends PublicController
     }
 
     /**
+     * Возвращает все комментарии поста
      * @param int $postId
      * @return Collection
      */
@@ -46,6 +47,7 @@ class PublicCommentController extends PublicController
     }
 
     /**
+     * возвращает все проверенные комментарии поста
      * @param int $postId
      * @return Collection
      */
@@ -65,6 +67,7 @@ class PublicCommentController extends PublicController
     }
 
     /**
+     * Возвращает коллекцию доступных комментариев для поста с postId
      * @param $postId
      * @return Collection
      */
@@ -118,7 +121,8 @@ class PublicCommentController extends PublicController
             (new ToastsController())->setToast('success', 'Комментарий успешно сохранён.');
 
             return json_encode([
-                'url' => '/post/' . $post->slug . '?#comments'
+                'url' => '/post/' . $post->slug
+                //'url' => '/post/' . $post->slug . '?#comments'
             ]);
 
         }
