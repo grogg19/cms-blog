@@ -43,6 +43,6 @@ fields:
             id: email
             class: form-control form-control-style-4 email width300
 
-action: /signup
+action: /register
 
 title: Регистрация пользователя

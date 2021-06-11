@@ -21,16 +21,23 @@ use function Helpers\checkToken;
 use function Helpers\cleanJSTags;
 use function Helpers\generateToken;
 
+/**
+ * Class StaticPagesController
+ * @package App\Controllers\BackendControllers
+ */
 class StaticPagesController extends AdminController
 {
     /**
-     * @var array The rules to be applied to the data.
+     * @var array Правила валидации по дефолту
      */
     public array $rules = [
         'title' => 'required',
         'url'   => ['required', 'regex:/^\/[a-z0-9\/_\-\.]*$/i', 'uniquePage']
     ];
 
+    /**
+     * StaticPagesController constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -75,6 +82,7 @@ class StaticPagesController extends AdminController
     }
 
     /**
+     * Вывод формы создания страницы
      * @return View
      */
     public function createPage(): View
@@ -120,51 +128,51 @@ class StaticPagesController extends AdminController
     }
 
     /**
-     * @return array|string
+     * Сохранение данных страницы
+     * @return string
      * @throws \App\Exception\ValidationException
      */
-    public function savePage(): array|string
+    public function savePage(): string
     {
-        if(checkToken()) {
-
-            if(!empty($this->request->post('edit_form'))) {
-
-                $pages = new PageList(new FilesList());
-                $existPage = $pages->getPageByUrl(filter_var($this->request->post('url'), FILTER_SANITIZE_STRING));
-
-                if($existPage !== null) {
-                    $existPage->deletePage();
-                } else {
-                    return ToastsController::getToast('warning', 'Такой страницы не существует!');
-                }
-
-            }
-
-            $validation = new Validator($this->request->post(), '', $this->rules);
-            $resultValidation = $validation->makeValidation();
-            if(empty($resultValidation)) {
-
-                $page = new Page;
-                $page->setParameters([
-                    'title' => filter_var($this->request->post('title'), FILTER_SANITIZE_STRING),
-                    'url' => filter_var($this->request->post('url'), FILTER_SANITIZE_STRING),
-                    'isHidden' => !empty($this->request->post('isHidden')) && $this->request->post('isHidden') == 'on' ? 1 : 0,
-                    'navigationHidden' => !empty($this->request->post('navigationHidden')) && $this->request->post('navigationHidden') == 'on' ? 1 : 0,
-                ]);
-                $page->setHtmlContent(cleanJSTags((string) $this->request->post('content')));
-                $page->makePage(new File);
-
-                (new ToastsController())->setToast('success', 'Данные страницы успешно сохранены.');
-
-                return json_encode([
-                    'url' => '/admin/static-pages'
-                ]);
-            } else {
-                return json_encode($resultValidation);
-            }
-        } else {
+        if(!checkToken()) {
             return ToastsController::getToast('warning', 'Сессия устарела, обновите страницу!');
         }
+
+        if(!empty($this->request->post('edit_form'))) {
+
+            $pages = new PageList(new FilesList());
+            $existPage = $pages->getPageByUrl(filter_var($this->request->post('url'), FILTER_SANITIZE_STRING));
+
+            if($existPage !== null) {
+                $existPage->deletePage();
+            } else {
+                return ToastsController::getToast('warning', 'Такой страницы не существует!');
+            }
+
+        }
+
+        $validation = new Validator($this->request->post(), '', $this->rules);
+        $resultValidation = $validation->makeValidation();
+
+        if(!empty($resultValidation)) {
+            return json_encode($resultValidation);
+        }
+
+        $page = new Page;
+        $page->setParameters([
+            'title' => filter_var($this->request->post('title'), FILTER_SANITIZE_STRING),
+            'url' => filter_var($this->request->post('url'), FILTER_SANITIZE_STRING),
+            'isHidden' => !empty($this->request->post('isHidden')) && $this->request->post('isHidden') == 'on' ? 1 : 0,
+            'navigationHidden' => !empty($this->request->post('navigationHidden')) && $this->request->post('navigationHidden') == 'on' ? 1 : 0,
+        ]);
+        $page->setHtmlContent(cleanJSTags((string) $this->request->post('content')));
+        $page->makePage(new File);
+
+        (new ToastsController())->setToast('success', 'Данные страницы успешно сохранены.');
+
+        return json_encode([
+            'url' => '/admin/static-pages'
+        ]);
     }
 
     /**
@@ -182,16 +190,19 @@ class StaticPagesController extends AdminController
      */
     public function deletePage(): string
     {
-        if(checkToken() && !empty($this->request->post('pageName'))) {
-            $page = (new PageList(new FilesList()))->getPageByFileName( (string) $this->request->post('pageName'));
-            if($page->deletePage()) {
+        if(!checkToken() || empty($this->request->post('pageName'))) {
+            return ToastsController::getToast('warning', 'Не хватает данных для удаления попробуйте еще раз!');
+        }
 
-                (new ToastsController())->setToast('success', 'Страница успешно удалена.');
+        $page = (new PageList(new FilesList()))->getPageByFileName( (string) $this->request->post('pageName'));
 
-                return json_encode([
-                    'url' => '/admin/static-pages'
-                ]);
-            }
+        if($page->deletePage()) {
+
+            (new ToastsController())->setToast('success', 'Страница успешно удалена.');
+
+            return json_encode([
+                'url' => '/admin/static-pages'
+            ]);
         }
         return ToastsController::getToast('warning', 'Невозможно удалить страницу!');
     }

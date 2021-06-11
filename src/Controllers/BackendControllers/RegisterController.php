@@ -41,19 +41,26 @@ class RegisterController extends Controller
     }
 
     /**
-     * @return View|bool|string
-     * @throws \App\Exception\ValidationException
+     * Возвращает форму регистрации
+     * @return View
      */
-    public function signup()
+    public function signUp(): View
     {
-        if(!empty($this->request->post())) {
-            return $this->createUser($this->request->post());
-        } else {
-            return $this->form();
-        }
+        return $this->form();
     }
 
     /**
+     * Запускает регистрацию пользователя
+     * @return string
+     * @throws \App\Exception\ValidationException
+     */
+    public function registerUser(): string
+    {
+        return $this->createUser($this->request->post());
+    }
+
+    /**
+     * Вывод формы регистрации нового пользователя
      * @return View
      */
     private function form(): View
@@ -67,59 +74,60 @@ class RegisterController extends Controller
 
     /**
      * @param array $parameters
-     * @return bool|string
+     * @return string
      * @throws \App\Exception\ValidationException
      */
-    private function createUser(array $parameters): bool|string
+    private function createUser(array $parameters): string
     {
-        // Если есть POST данные и токен соответствует,
-        if(!empty($parameters) && checkToken()) {
 
-            if(empty($parameters['agreement']) || $parameters['agreement'] !== 'on') {
-                return ToastsController::getToast('warning', 'Необходимо согласие с пользовательским соглашением');
-            }
-            // то валидируем введеные данные с формы
-            // Создаем экземпляр валидации
-            $validator = new Validator($parameters, User::class);
-
-            // проверяем данные валидатором
-            $resultValidateForms = $validator->makeValidation();
-            // если ошибок в валидации не было,
-            if(!isset($resultValidateForms['error']))  {
-
-                $persistCode  = hashPassword(generateRandomHash());
-                $parameters['persist_code'] = $persistCode;
-                $parameters['is_activated'] = 1;
-                $parameters['role_id'] = 3;
-
-                // то создаем юзера в бд
-                $userController = new UserController();
-                $user = $userController->addUser($parameters);
-
-                // Если все сохранено, авторизируем пользователя
-                if($user !== null && $user instanceof User) {
-
-                    // Если есть такой юзер, то авторизуем его и возвращаем на страницу, с которой он логинился
-
-                    $this->auth->setAuthorized($persistCode);
-                    $this->auth->setUserAttributes($user);
-
-                    (new ToastsController())->setToast('success', 'Пользователь успешно создан!');
-                    return json_encode([
-                        'url' => $_SERVER['HTTP_REFERER']
-                    ]);
-                } else {
-                    // Если нет, то возвращаем сообщение об ошибке записи в БД.
-                    return ToastsController::getToast('warning', 'Ошибка записи в БД!');
-                }
-
-            } else {
-                return json_encode($resultValidateForms);
-            }
-
-        } else {
-            // Если нет, то возвращаем сообщение об ошибке создания пользователя.
+        if (empty($parameters) || !checkToken()) {
+            // Если нет post данных или токена, то возвращаем сообщение об ошибке создания пользователя.
             return ToastsController::getToast('warning', 'Невозможно создать пользователя');
         }
+        // Если есть POST данные и токен соответствует,
+
+        // Проверяем согласие с пользовательским соглашением
+        if(empty($parameters['agreement']) || $parameters['agreement'] !== 'on') {
+            return ToastsController::getToast('warning', 'Необходимо согласие с пользовательским соглашением');
+        }
+        // Валидируем введеные данные с формы
+        // Создаем экземпляр валидации
+        $validator = new Validator($parameters, User::class);
+
+        // проверяем данные валидатором
+        $resultValidateForms = $validator->makeValidation();
+
+        // если есть ошибки валидации, возвращаем их
+        if (isset($resultValidateForms['error'])) {
+            return json_encode($resultValidateForms);
+        }
+        // если ошибок в валидации не было
+
+        $persistCode  = hashPassword(generateRandomHash());
+        $parameters['persist_code'] = $persistCode;
+        $parameters['is_activated'] = 1;
+        $parameters['role_id'] = 3;
+
+        // то создаем юзера в бд
+        $userController = new UserController();
+        $user = $userController->addUser($parameters);
+
+        // Если все сохранено, авторизируем пользователя
+        if($user !== null && $user instanceof User) {
+
+            // Если успешно сохранился, то авторизуем его и возвращаем на страницу, с которой он логинился
+
+            $this->auth->setAuthorized($persistCode);
+            $this->auth->setUserAttributes($user);
+
+            // возвращаем сообщение об успешной регистрации
+            (new ToastsController())->setToast('success', 'Пользователь успешно создан!');
+
+            return json_encode([
+                'url' => $_SERVER['HTTP_REFERER']
+            ]);
+        }
+        // Если нет, то возвращаем сообщение об ошибке записи в БД.
+        return ToastsController::getToast('warning', 'Ошибка записи в БД!');
     }
 }

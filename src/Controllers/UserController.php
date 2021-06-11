@@ -125,30 +125,26 @@ class UserController extends Controller
     /**
      * Метод ищет пользователя по $login или $email и если находит, сверяет пароль с $password
      * и возвращает объект пользователя или FALSE при несовпадении пароля
-     * @param $login
+     * @param $email
      * @param $password
      * @return User|null
      */
-    public function findUser($login, $password): User|null
+    public function findUser($email, $password): ?User
     {
         // Ищем пользователя с логином $login
-        $userData = User::where('login', $login)
-            ->orWhere('email', $login)
+        $userData = User::where('email', $email)
             ->first();
 
-        // Если такой пользователь есть, сравниваем пароль $password с паролем пользователя
-        if(!empty($userData->login)) {
-            if(password_verify($password, $userData->password)) {
-                // Если пароль совпал, возвращается объект этого пользователя
-                return $userData;
-            } else {
-                // Иначе возвращается Null
-                return null;
-            }
-        } else {
-            // Иначе возвращается null
+        if (empty(($userData->email))) {
             return null;
         }
+
+        if (password_verify($password, $userData->password)) {
+            // Если пароль совпал, возвращается объект этого пользователя
+            return $userData;
+        }
+
+        return null;
     }
 
     /**

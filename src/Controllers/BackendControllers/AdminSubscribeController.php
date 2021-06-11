@@ -7,10 +7,15 @@ use App\Controllers\SubscribeRepository;
 use App\Controllers\ToastsController;
 use function Helpers\checkToken;
 
+/**
+ * Class AdminSubscribeController
+ * @package App\Controllers\BackendControllers
+ */
 class AdminSubscribeController extends AdminController
 {
 
     /**
+     * Подписка на уведомления
      * @return string
      * @throws \App\Exception\ValidationException
      */
@@ -23,10 +28,12 @@ class AdminSubscribeController extends AdminController
         if($this->request->post('switch') === 'true') {
             return (new PublicSubscribeController())->subscribe();
         }
+
         return '';
     }
 
     /**
+     * Отписка от уведомлений
      * @return string
      */
     public function unsubscribe(): string

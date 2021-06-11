@@ -2,8 +2,16 @@
 
 namespace App\Controllers\PublicControllers;
 
+use App\Auth\Auth;
+use App\Controllers\BackendControllers\AdminController;
+use App\Controllers\PostController;
+use App\Controllers\ToastsController;
+use App\Controllers\UserController;
 use App\Model\Comment;
+use App\Validate\Validator;
 use Illuminate\Database\Eloquent\Collection;
+
+use function Helpers\checkToken;
 
 /**
  * Class PublicCommentController
@@ -66,6 +74,56 @@ class PublicCommentController extends PublicController
             return $this->getAllCommentsByPostId($postId);
         }
         return $this->getAllModeratedCommentsByPostId($postId);
+    }
+
+    /**
+     * @return string
+     * @throws \App\Exception\ValidationException
+     */
+    public function addComment(): string
+    {
+
+        if(empty($this->request->post()) || !(new AdminController())->checkAuthorization() || !checkToken()) {
+            return ToastsController::getToast('warning', 'Нет входящих данных');
+        }
+
+        $commentDataToSave = [
+            'user_id' => $this->session->get('userId'),
+            'content' => strip_tags((string) $this->request->post('commentContent')),
+        ];
+
+        $commentDataToSave['has_moderated'] = (in_array((new UserController())
+            ->getCurrentUser()
+            ->role
+            ->code, ['admin', 'content-manager'])) ?  1 : 0;
+
+        // создаем валидатор
+        $validator = (new Validator($commentDataToSave, Comment::class));
+
+        // проверяем данные валидатором
+        $resultValidateForms = $validator->makeValidation();
+
+        // если есть ошибки, возвращаем Тост с ошибкой
+        if(!empty($resultValidateForms['error'])) {
+            return ToastsController::getToast('warning', 'Ошибка записи данных комментария');
+        }
+
+        $comment = new Comment($commentDataToSave);
+        $post = (new PostController())->getPostById((int) $this->request->post('postId'));
+
+        if($post !== null) {
+
+            $post->comments()->save($comment);
+
+            (new ToastsController())->setToast('success', 'Комментарий успешно сохранён.');
+
+            return json_encode([
+                'url' => '/post/' . $post->slug . '?#comments'
+            ]);
+
+        }
+
+        return ToastsController::getToast('warning', 'Указанного поста не существует');
     }
 
 }

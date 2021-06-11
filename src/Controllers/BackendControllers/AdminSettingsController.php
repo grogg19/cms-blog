@@ -51,6 +51,7 @@ class AdminSettingsController extends AdminController
     }
 
     /**
+     * Сохранение настроек
      * @return string
      */
     public function saveSettings(): string
@@ -61,6 +62,7 @@ class AdminSettingsController extends AdminController
 
         $data = $this->request->post();
         unset($data['_token']);
+
         if((new SystemSettingsRepository())->updateSystemSettings('preferences', $data)) {
 
             (new ToastsController())->setToast('success', 'Настройки успешно сохранены');

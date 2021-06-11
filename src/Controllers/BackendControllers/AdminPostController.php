@@ -63,14 +63,12 @@ class AdminPostController extends AdminController
 
     /**
      * Вывод страницы со списком статей
+     * @var $quantity -  Количество записей на страницу
      * @return View
      */
     public function listPosts(): View
     {
-        /**
-         * Количество записей на страницу
-         * @var  $quantity
-         */
+
         $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
 
         if($this->user->role->code = 'admin') {
@@ -79,6 +77,7 @@ class AdminPostController extends AdminController
             $posts = $this->postController
                 ->getPostsByUserId($this->user->id, $quantity);
         }
+
         if($posts instanceof LengthAwarePaginator) {
             $query = (!empty($quantity)) ? '?quantity=' . $quantity : '';
             $posts->setPath('posts' . $query);
@@ -166,7 +165,7 @@ class AdminPostController extends AdminController
      * Запись данных в модель
      * @param Request $request
      */
-    public function saveToDb(Request $request)
+    public function saveToDb(Request $request): void
     {
 
         if(!empty($request->post('idPost'))) {
@@ -220,40 +219,42 @@ class AdminPostController extends AdminController
 
     /**
      * Метод валидирует данные, отправляет на сохранение
-     * @return false|string
+     * @return string
      * @throws \App\Exception\ValidationException
      */
-    public function savePost(): false|string
+    public function savePost(): string
     {
+        if(!checkToken()) {
+            return ToastsController::getToast('warning', 'Неверный токен, обновите страницу');
+        }
+
         // Валидируем данные формы
-        if(checkToken()) {
-            $validator = new Validator($this->request->post(), Post::class);
-            $validateResult = $validator->makeValidation();
+        $validator = new Validator($this->request->post(), Post::class);
+        $validateResult = $validator->makeValidation();
 
-            // Если валидация полей не прошла и вернулся массив с ошибками
-            if(!empty($validateResult)) {
+        // Если валидация полей не прошла и вернулся массив с ошибками
+        if(!empty($validateResult)) {
 
-                // то возвращаем этот массив обработчику в клиент в формате json
-                return json_encode($validateResult);
+            // то возвращаем этот массив обработчику в клиент в формате json
+            return json_encode($validateResult);
 
-                // Если валидация прошла успешно
-            } else {
-                // Записываем значения в свойства модели
-                // и пробуем сохранить
-                try {
+            // Если валидация прошла успешно
+        } else {
+            // Записываем значения в свойства модели
+            // и пробуем сохранить
+            try {
 
-                    $this->saveToDb($this->request);
-                    (new ToastsController())->setToast('success', 'Статья успешно сохранена');
-                    return json_encode([
-                        'url' => '/admin/blog/posts'
-                    ]);
+                $this->saveToDb($this->request);
+                (new ToastsController())->setToast('success', 'Пост успешно сохранён');
+                return json_encode([
+                    'url' => '/admin/blog/posts'
+                ]);
 
-                } catch (QueryException $e) {
-                    return ToastsController::getToast('warning', 'Ошибка сохранения в БД: '. $e->getMessage());
-                }
+            } catch (QueryException $e) {
+                return ToastsController::getToast('warning', 'Ошибка сохранения в БД: '. $e->getMessage());
             }
         }
-        return false;
+
     }
 
     /**
@@ -267,6 +268,7 @@ class AdminPostController extends AdminController
     }
 
     /**
+     * Удаление поста
      * @return string
      */
     public function deletePost(): string
@@ -314,7 +316,9 @@ class AdminPostController extends AdminController
     public function imgDelete($fileName): string
     {
         if(!empty(Cookie::getArray('uploadImages'))) {
+
             $cookieArray = Cookie::getArray('uploadImages');
+
             if (($key = array_search($fileName, $cookieArray)) !== false) {
                 unset($cookieArray[$key]);
                 Cookie::setArray('uploadImages', $cookieArray);

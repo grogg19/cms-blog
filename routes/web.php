@@ -58,7 +58,8 @@ $router->get('post','/admin/auth', 'Controllers\BackendControllers\LoginControll
 $router->get('get','/logout', 'Controllers\BackendControllers\LoginController@logout');
 
 /** Форма регистрации  */
-$router->get(['get', 'post'],'/signup', 'Controllers\BackendControllers\RegisterController@signup');
+$router->get('get','/signup', 'Controllers\BackendControllers\RegisterController@signUp');
+$router->get('post','/register', 'Controllers\BackendControllers\RegisterController@registerUser');
 
 /** Управление статическими страницами */
 $router->get('get','/admin/static-pages', 'Controllers\BackendControllers\StaticPagesController@index');
@@ -68,7 +69,7 @@ $router->get('post','/admin/static-pages/save', 'Controllers\BackendControllers\
 $router->get('post','/admin/static-pages/delete', 'Controllers\BackendControllers\StaticPagesController@deletePage');
 
 /** Добавление нового комментария */
-$router->get('post','/blog/comments/add', 'Controllers\BackendControllers\AdminCommentController@addComment');
+$router->get('post','/blog/comments/add', 'Controllers\PublicControllers\PublicCommentController@addComment');
 
 /** Список комментариев в админке */
 $router->get('get','/admin/posts/comments', 'Controllers\BackendControllers\AdminCommentController@listComments');

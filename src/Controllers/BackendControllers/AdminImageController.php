@@ -12,6 +12,10 @@ use App\Cookie\Cookie;
 use function Helpers\checkToken;
 use function Helpers\request;
 
+/**
+ * Class AdminImageController
+ * @package App\Controllers\BackendControllers
+ */
 class AdminImageController
 {
     /**

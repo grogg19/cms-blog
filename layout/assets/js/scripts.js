@@ -362,12 +362,12 @@ const jump = async (h) => {
     });
 };
 
-const addComment = async (comment) => {
-    let commentBlock = document.querySelector('.comments-block');
-    if(commentBlock) {
-        commentBlock.appendChild(comment);
-    }
-};
+// const addComment = async (comment) => {
+//     let commentBlock = document.querySelector('.comments-block');
+//     if(commentBlock) {
+//         commentBlock.appendChild(comment);
+//     }
+// };
 
 const commentButtons = document.querySelectorAll('.btn-comment-content');
 //const commentsContent = document.querySelectorAll('.comment-content');

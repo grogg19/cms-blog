@@ -14,6 +14,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use function Helpers\checkToken;
 use function Helpers\generateToken;
 
+/**
+ * Class AdminUserManagerController
+ * @package App\Controllers\BackendControllers
+ */
 class AdminUserManagerController extends AdminController
 {
     /**
@@ -21,6 +25,9 @@ class AdminUserManagerController extends AdminController
      */
     private UserController $userController;
 
+    /**
+     * AdminUserManagerController constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -34,6 +41,7 @@ class AdminUserManagerController extends AdminController
     }
 
     /**
+     * Выводит список пользователей
      * @return View
      */
     public function listUsers(): View
@@ -68,25 +76,24 @@ class AdminUserManagerController extends AdminController
      */
     public function userChangeData(): string
     {
-        if(checkToken() && !empty($this->request->post('user'))) {
-
-            if(!empty($this->request->post('active_status'))) {
-                $data['is_activated'] = ($this->request->post('active_status') === 'true') ? 1 : 0;
-            }
-
-            if(!empty($this->request->post('role'))) {
-                $data['role_id'] = $this->request->post('role');
-            }
-
-            $user = (new UserController())->getUserById((int) $this->request->post('user'));
-
-            if($this->userController->updateUser($user, $data)) {
-                return ToastsController::getToast('success', 'Данные пользователя изменены');
-            } else {
-                return ToastsController::getToast('warning', 'Ошибка изменений в БД');
-            }
-        } else {
+        if(!checkToken() || empty($this->request->post('user'))) {
             return ToastsController::getToast('warning', 'Ошибка токена, обновите страницу.');
+        }
+
+        if(!empty($this->request->post('active_status'))) {
+            $data['is_activated'] = ($this->request->post('active_status') === 'true') ? 1 : 0;
+        }
+
+        if(!empty($this->request->post('role'))) {
+            $data['role_id'] = $this->request->post('role');
+        }
+
+        $user = $this->userController->getUserById((int) $this->request->post('user'));
+
+        if($this->userController->updateUser($user, $data)) {
+            return ToastsController::getToast('success', 'Данные пользователя изменены');
+        } else {
+            return ToastsController::getToast('warning', 'Ошибка изменений в БД');
         }
     }
 }
