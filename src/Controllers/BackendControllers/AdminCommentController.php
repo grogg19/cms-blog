@@ -28,7 +28,6 @@ class AdminCommentController extends AdminController
     public function __construct()
     {
         parent::__construct();
-
         $this->auth->checkPermissons(['admin', 'content-manager']);
     }
 
@@ -38,46 +37,48 @@ class AdminCommentController extends AdminController
      */
     public function addComment(): string
     {
-        if($this->request->post() and $this->checkAuthorization() && checkToken()) {
 
-            $commentDataToSave = [
-                'user_id' => $this->session->get('userId'),
-                'content' => strip_tags((string) $this->request->post('commentContent')),
-            ];
-
-            $commentDataToSave['has_moderated'] = (in_array((new UserController())
-                                                ->getCurrentUser()
-                                                ->role
-                                                ->code, ['admin', 'content-manager'])) ?  1 : 0;
-
-            // создаем валидатор
-            $validator = (new Validator($commentDataToSave, Comment::class));
-
-            // проверяем данные валидатором
-            $resultValidateForms = $validator->makeValidation();
-
-            if(empty($resultValidateForms['error'])) {
-                $comment = new Comment($commentDataToSave);
-                $post = (new PostController())->getPostById((int) $this->request->post('postId'));
-                if($post !== null) {
-
-                    $post->comments()->save($comment);
-
-                    (new ToastsController())->setToast('success', 'Комментарий успешно сохранён.');
-
-                    return json_encode([
-                        'url' => '/post/' . $post->slug . '?#comments'
-                    ]);
-
-                } else {
-                    return ToastsController::getToast('warning', 'Указанного поста не существует');
-                }
-            } else {
-                return ToastsController::getToast('warning', 'Ошибка записи данных комментария');
-            }
-        } else {
+        if(empty($this->request->post()) || !$this->checkAuthorization() || !checkToken()) {
             return ToastsController::getToast('warning', 'Нет входящих данных');
         }
+
+        $commentDataToSave = [
+            'user_id' => $this->session->get('userId'),
+            'content' => strip_tags((string) $this->request->post('commentContent')),
+        ];
+
+        $commentDataToSave['has_moderated'] = (in_array((new UserController())
+                                            ->getCurrentUser()
+                                            ->role
+                                            ->code, ['admin', 'content-manager'])) ?  1 : 0;
+
+        // создаем валидатор
+        $validator = (new Validator($commentDataToSave, Comment::class));
+
+        // проверяем данные валидатором
+        $resultValidateForms = $validator->makeValidation();
+
+        // если есть ошибки, возвращаем Тост с ошибкой
+        if(!empty($resultValidateForms['error'])) {
+            return ToastsController::getToast('warning', 'Ошибка записи данных комментария');
+        }
+
+        $comment = new Comment($commentDataToSave);
+        $post = (new PostController())->getPostById((int) $this->request->post('postId'));
+
+        if($post !== null) {
+
+            $post->comments()->save($comment);
+
+            (new ToastsController())->setToast('success', 'Комментарий успешно сохранён.');
+
+            return json_encode([
+                'url' => '/post/' . $post->slug . '?#comments'
+            ]);
+
+        }
+
+        return ToastsController::getToast('warning', 'Указанного поста не существует');
     }
 
     /**
@@ -145,6 +146,7 @@ class AdminCommentController extends AdminController
 
         $commentRepository = new CommentRepository();
         $comment = $commentRepository->setHasModeratedReject((int) $this->request->post('commentId'));
+
         if($comment == null) {
             return ToastsController::getToast('warning', 'Комментарий не найден');
         }

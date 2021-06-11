@@ -70,9 +70,12 @@ class AdminController extends Controller
         return true;
     }
 
+    /**
+     * Инициализация слушателя
+     */
     private function initListener()
     {
-        (new ListenerController())->ImageListener();
+        (new ListenerController())->ImageListener(); // чистильщик списка изображений в куках
     }
 
 }

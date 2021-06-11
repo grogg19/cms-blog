@@ -70,22 +70,10 @@ use App\View;
             <img src="/layout/assets/images/bg_top.jpg" class="jarallax-img" alt="">
             <div style="background-color: rgba(27, 27, 27, .6);"></div>
         </div>
-
         <div class="container mnb-8">
             <div class="row justify-content-center">
                 <div class="col-xl-7">
                     <h1 class="h4 mb-10 text-white text-center">Раздел администрирования</h1>
-
-                    <!-- START: Breadcrumbs -->
-                    <ul class="dx-breadcrumbs text-center">
-
-                        <li><a href="/index.html">Home</a></li>
-
-                        <li>Blog</li>
-
-                    </ul>
-                    <!-- END: Breadcrumbs -->
-
                 </div>
             </div>
         </div>

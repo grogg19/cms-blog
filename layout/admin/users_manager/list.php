@@ -29,6 +29,7 @@ use function Helpers\getDateTime;
         </div>
 	    <input type="hidden" name="_token" value="<?=$token?>">
         <?php
+        // количество элементов на странице
         (new View('partials.quantity_items', [
             'quantity' => $quantity,
             'items' => [10, 20, 50, 200, 'all']
@@ -76,6 +77,7 @@ use function Helpers\getDateTime;
 		        </div>
 		    <?php }?>
         <?php
+		// Пагинация
         if($users instanceof LengthAwarePaginator) {
             (new View('partials.pagination', [
                 'paginator' => $users

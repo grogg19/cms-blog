@@ -15,12 +15,12 @@ use App\Controllers\PublicControllers\PublicPostController;
 
                         <div class="dx-widget-footer">
                             <div class="dx-widget-title">
-                                <a href="index.html" class="dx-widget-logo">
+                                <a href="/" class="dx-widget-logo">
                                     <img src="/layout/assets/images/logo.svg" alt="" width="88px">
                                 </a>
                             </div>
                             <div class="dx-widget-text">
-                                <p class="mb-0">&copy; <?=date('Y')?> <span class="dib">All rights reserved.</span> <span class="dib">Dexad &amp; nK.</span></p>
+                                <p class="mb-0">&copy; <?=date('Y')?> <span class="dib">All rights reserved.</span> <span class="dib">Skillbox &amp; Co.</span></p>
                             </div>
 							<?php (new View('partials.footer.social_buttons'))->render(); ?>
                         </div>

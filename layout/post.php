@@ -60,15 +60,6 @@ use function Helpers\getDateTime;
                             </div>
                         </div>
                     <?php } ?>
-                    <div class="dx-separator"></div>
-                    <div class="dx-blog-post-box pt-30 pb-30">
-                        <ul class="dx-blog-post-tags mnt-6 mnb-1 db">
-                            <li class="dx-blog-post-tags-title">Tags:</li>
-                            <li><a href="#">Branding</a></li>
-                            <li><a href="#">Design</a></li>
-                            <li><a href="#">People</a></li>
-                        </ul>
-                    </div>
                 </div>
 	            <?php
 	            	/** Блок комментариев к посту*/

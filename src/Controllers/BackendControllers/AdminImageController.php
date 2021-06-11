@@ -28,10 +28,11 @@ class AdminImageController
     }
 
     /**
+     * метод удаляет файлы ищображений
      * @param array $fileNames
-     * @return false|string
+     * @return string
      */
-    public function imageDestructor(array $fileNames = [])
+    public function imageDestructor(array $fileNames = []): string
     {
 
         if(!empty(Cookie::getArray('uploadImages'))) {
@@ -40,7 +41,8 @@ class AdminImageController
             $listFilesForDelete = $fileNames;
         }
 
-        $message = [];
+        $message = []; // сообщения об ошибках
+
         foreach ($listFilesForDelete as $fileName) {
 
             $this->deleteImageFromDb($fileName);

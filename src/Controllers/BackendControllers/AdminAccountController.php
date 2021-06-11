@@ -18,6 +18,10 @@ use App\Parse\Yaml;
 use function Helpers\checkToken;
 use function Helpers\generateToken;
 
+/**
+ * Class AdminAccountController
+ * @package App\Controllers\BackendControllers
+ */
 class AdminAccountController extends AdminController
 {
     private UserController $userController;
@@ -57,7 +61,7 @@ class AdminAccountController extends AdminController
     public function getUserProfile(): View
     {
         if(!empty($this->session->get('userId'))) {
-            $user = (new UserController())->getUserById($this->session->get('userId'));
+            $user = $this->userController->getUserById($this->session->get('userId'));
         } else {
             return new View('404');
         }
@@ -91,75 +95,73 @@ class AdminAccountController extends AdminController
      */
     public function updateUserProfile(): false|string
     {
+        if(empty($this->request->post()) || !checkToken() || empty($this->session->get('userId'))) {
+            //  возвращаем сообщение об ошибке записи в БД.
+            return ToastsController::getToast('warning', 'Невозможно обновить данные пользователя');
+        }
+
         // Если есть POST данные и токен соответствует,
-        if(!empty($this->request->post()) && checkToken() && !empty($this->session->get('userId'))) {
+        $user = $this->userController->getUserById($this->session->get('userId'));
 
-            $userController = new UserController();
-            $user = $userController->getUserById($this->session->get('userId'));
+        $data = $this->request->post();
 
-            $data = $this->request->post();
+        // Подготовка правил для валидации
+        if(!empty($data['password'])) {
+            $ownRules = [
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'password' => ['between:6,255'],
+                'password_confirm' => ['required','identityWith:password', 'between:6,255']
+            ];
+        } else {
+            $ownRules = [
+                'first_name' => 'required',
+                'last_name' => 'required'
+            ];
+        }
 
-            // Подготовка правил для валидации
-            if(!empty($data['password'])) {
-                $ownRules = [
-                    'first_name' => 'required',
-                    'last_name' => 'required',
-                    'password' => ['between:6,255'],
-                    'password_confirm' => ['required','identityWith:password', 'between:6,255']
-                ];
-            } else {
-                $ownRules = [
-                    'first_name' => 'required',
-                    'last_name' => 'required'
-                ];
-            }
+        // Создаем экземпляр валидации
+        $validator = new Validator($data, User::class, $ownRules);
 
-            // Создаем экземпляр валидации
-            $validator = new Validator($data, User::class, $ownRules);
+        // проверяем данные валидатором
+        $resultValidateForms = $validator->makeValidation();
 
-            // проверяем данные валидатором
-            $resultValidateForms = $validator->makeValidation();
+        // если есть ошибки
+        if(isset($resultValidateForms['error']))  {
 
-            // если ошибок в валидации не было,
-            if(!isset($resultValidateForms['error']))  {
+            // возвращаем результат валидации в json
+            return json_encode($resultValidateForms);
+        }
 
-                // Подготовка данных к апдейту
-                $data = $this->prepareDataToUpdate();
+        // если ошибок в валидации не было
 
-                $uploadAvatar = $this->uploadAvatar($user); // Пробуем загрузить аватарку
+        // Подготовка данных к апдейту
+        $data = $this->prepareDataToUpdate();
 
-                // если получили сообщение об ошибке, то выведем его в блок аватара
-                if(isset($uploadAvatar->error)) {
+        $uploadAvatar = $this->uploadAvatar($user); // Пробуем загрузить аватарку
 
-                    return ToastsController::getToast('warning', $uploadAvatar->error);
+        // если получили сообщение об ошибке, то выведем его в блок аватара
+        if(isset($uploadAvatar->error)) {
 
-                } else {
-                    // Если ошибок нет, то добавляем к пользователю атрибут $data['avatar']
-                    $data['avatar'] = ($uploadAvatar === null) ? $user->avatar : $uploadAvatar->uploadFilesData[0]->fileName;
-                }
-
-                // записываем изменения в БД
-                if($userController->updateUser($user, $data)) {
-
-                    (new ToastsController())->setToast('success', 'Изменения успешно сохранены.');
-
-                    // Перенаправляем обратно в профиль
-                    return json_encode([
-                        'url' => '/admin/account/'
-                    ]);
-
-                    // Если не удалось сохранить изменения, выводим сообщение об этом
-                } else {
-                    return ToastsController::getToast('warning', 'Невозможно обновить данные пользователя');
-                }
-
-            } else {
-                // возвращаем результат валидации в json
-                return json_encode($resultValidateForms);
-            }
+            return ToastsController::getToast('warning', $uploadAvatar->error);
 
         } else {
-            // Если нет, то возвращаем сообщение об ошибке записи в БД.
+            // Если ошибок нет, то добавляем к пользователю атрибут $data['avatar']
+            $data['avatar'] = ($uploadAvatar === null) ? $user->avatar : $uploadAvatar->uploadFilesData[0]->fileName;
+        }
+
+        // записываем изменения в БД
+        if($this->userController->updateUser($user, $data)) {
+
+            (new ToastsController())->setToast('success', 'Изменения успешно сохранены.');
+
+            // Перенаправляем обратно в профиль
+            return json_encode([
+                'url' => '/admin/account/'
+            ]);
+
+            // Если не удалось сохранить изменения, выводим сообщение об этом
+        } else {
             return ToastsController::getToast('warning', 'Невозможно обновить данные пользователя');
         }
     }
@@ -171,9 +173,7 @@ class AdminAccountController extends AdminController
     protected function prepareDataToUpdate(): array
     {
         // Очищаем post - массив от пустых элементов
-        $data = array_diff(($this->request->post()), array(''));
-
-        return $data;
+        return array_diff(($this->request->post()), array(''));
     }
 
     /**
