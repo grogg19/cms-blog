@@ -361,7 +361,7 @@ const jump = async (h) => {
         behavior: "smooth"
     });
 };
-
+// при добавлении комментария вывести его в конце списка
 // const addComment = async (comment) => {
 //     let commentBlock = document.querySelector('.comments-block');
 //     if(commentBlock) {
