@@ -64,9 +64,9 @@ class Auth
 
     /**
      * Возвращает хэш пользователя из куки
-     * @return string
+     * @return string|null
      */
-    public function getHashUser(): string
+    public function getHashUser(): string|null
     {
         return Cookie::get('authUser');
     }
@@ -149,6 +149,31 @@ class Auth
             (new ToastsController())->setToast('info', 'У вас недостаточно прав для этого действия');
             Redirect::to('/admin/account');
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkAuthorization(): bool
+    {
+        if($this->getHashUser() == null) {
+            return false;
+        }
+        $this->setAuthorized($this->getHashUser());
+
+        if(!$this->isAuthorized()) {
+            (new ToastsController())->setToast('warning', 'Вы не авторизованы');
+            return false;
+        }
+
+        if(!$this->isActivated()) {
+            (new ToastsController())->setToast('warning', 'Ваша учетная запись недоступна');
+            return false;
+        } else {
+            $user = (new UserController())->getUserById($this->session->get('userId'));
+            $this->setUserAttributes($user);
+        }
+        return true;
     }
 
 }

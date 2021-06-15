@@ -2,7 +2,7 @@
 
 namespace App\Controllers\PublicControllers;
 
-use App\Controllers\BackendControllers\AdminController;
+use App\Auth\Auth;
 use App\Controllers\PostController;
 use App\Controllers\ToastsController;
 use App\Controllers\UserController;
@@ -86,7 +86,11 @@ class PublicCommentController extends PublicController
     public function addComment(): string
     {
 
-        if(empty($this->request->post()) || !(new AdminController())->checkAuthorization() || !checkToken()) {
+        if(!(new Auth())->checkAuthorization()) {
+            return ToastsController::getToast('warning', 'Оставлять комментарии могут только зарегистрированные пользователи');
+        }
+
+        if(empty($this->request->post()) || !checkToken()) {
             return ToastsController::getToast('warning', 'Нет входящих данных');
         }
 

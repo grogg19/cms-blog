@@ -11,9 +11,9 @@
             </div>
             <div class="col-lg-4">
                 <div class="dx-sticky dx-sidebar" data-sticky-offsetTop="120" data-sticky-offsetBot="40">
-
                 </div>
             </div>
+	        <div id="messageToast"></div>
         </div>
     </div>
 </div>

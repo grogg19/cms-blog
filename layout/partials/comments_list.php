@@ -28,7 +28,6 @@ $postId = !empty($postId) ? $postId : 0;
     <?php }	else { ?>
 	<div class="dx-comment text-center"><i>Нет ни одного комментария.</i></div>
 	<?php } ?>
-	<?php if($userRole !== 'none') { ?>
     <form method='post' action="/blog/comments/add" class="dx-form mt-50" name="form_add_comment" id="form_add_comment">
         <div class="row vertical-gap">
             <div class="col-12">
@@ -41,7 +40,4 @@ $postId = !empty($postId) ? $postId : 0;
             </div>
         </div>
     </form>
-	<?php } else { ?>
-	<div class="text-center font-weight-normal mt-20">Оставлять комментарии могут только <a href="/signup">зарегистрированные</a> пользователи.</div>
-	<?php } ?>
 </div>
