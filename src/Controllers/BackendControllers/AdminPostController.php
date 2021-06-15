@@ -291,6 +291,7 @@ class AdminPostController extends AdminController
     }
 
     /**
+     * Загрузка изображений
      * @return false|string
      */
     public function imgUpload(): false|string
@@ -303,7 +304,8 @@ class AdminPostController extends AdminController
 
         if(!empty($this->request->files())) {
             $imageUploader = new Upload($this->request->files());
-            return $imageUploader->upload();
+
+            return json_decode($imageUploader->upload());
         }
         return ToastsController::getToast('warning', 'Отсутствуют файлы для загрузки');
 

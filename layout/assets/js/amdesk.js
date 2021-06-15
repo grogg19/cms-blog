@@ -1513,7 +1513,7 @@
                 var toolbarOptions = [
                     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
                     ['blockquote', 'code-block'],
-                    
+
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                     [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
                     [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
@@ -1587,11 +1587,11 @@
                     resizeMethod: "crop",
 
                     dictFileTooBig: "Файл слишком большой ({{filesize}}mb). Максимально возможно {{maxFilesize}}mb",
-                    dictInvalidFileType: "Invalid File Type",
-                    dictCancelUpload: "Cancel",
-                    dictRemoveFile: "Remove",
-                    dictMaxFilesExceeded: "Only {{maxFiles}} files are allowed",
-                    dictDefaultMessage: "Drop files here to upload",
+                    dictInvalidFileType: "Неверный тип файла",
+                    dictCancelUpload: "Отменить",
+                    dictRemoveFile: "Удалить",
+                    dictMaxFilesExceeded: "Разрешено загружать максиум {{maxFiles}} файлов",
+                    dictDefaultMessage: "Перетащите сюда файлы для загрузки",
 
                     error: async (file, e) => {
                         let data = {

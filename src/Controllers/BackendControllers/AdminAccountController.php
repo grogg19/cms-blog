@@ -142,8 +142,8 @@ class AdminAccountController extends AdminController
 
         // если получили сообщение об ошибке, то выведем его в блок аватара
         if(isset($uploadAvatar->error)) {
-
-            return ToastsController::getToast('warning', $uploadAvatar->error);
+            $error = implode(', ', $uploadAvatar->error);
+            return ToastsController::getToast('warning', $error);
 
         } else {
             // Если ошибок нет, то добавляем к пользователю атрибут $data['avatar']
@@ -179,9 +179,9 @@ class AdminAccountController extends AdminController
     /**
      *  Метод загружает аватар и возвращает результат его загрузки
      * @param User $user
-     * @return mixed|null
+     * @return string|null
      */
-    protected function uploadAvatar(User $user)
+    protected function uploadAvatar(User $user): string|null
     {
         // Если есть файл на загрузку в массиве $_FILES
         if($this->request->files('avatar')['size'] !== 0) {
@@ -193,8 +193,8 @@ class AdminAccountController extends AdminController
             $resultUpload = json_decode($uploader->upload('avatars'));
 
             // Удаляем старый аватар если он был
-            if(!empty($user->avatar) && file_exists($this->userController->getUserAvatarPath() . $user->avatar) && !isset($resultUpload->error)) {
-                unlink($this->userController->getUserAvatarPath() . $user->avatar);
+            if(!empty($user->avatar) && file_exists($this->userController->getUserAvatarRootPath() . $user->avatar) && !isset($resultUpload->error)) {
+                unlink($this->userController->getUserAvatarRootPath() . $user->avatar);
             }
 
             return $resultUpload;

@@ -172,7 +172,7 @@ class UserController extends Controller
     }
 
     /**
-     * Метод возвращает web - адрес изображения с аватаром
+     * Метод возвращает web - адрес каталога с аватаром
      * @return string
      */
     public function getUserAvatarPath(): string
@@ -180,6 +180,17 @@ class UserController extends Controller
         $path = Config::getInstance()->getConfig('avatars')['pathToUpload'];
 
         return SITE_ROOT . $path . DIRECTORY_SEPARATOR ;
+    }
+
+    /**
+     * Метод возвращает локальный - адрес каталога с аватаром
+     * @return string
+     */
+    public function getUserAvatarRootPath(): string
+    {
+        $path = Config::getInstance()->getConfig('avatars')['pathToUpload'];
+
+        return APP_DIR . $path . DIRECTORY_SEPARATOR ;
     }
 
     /**

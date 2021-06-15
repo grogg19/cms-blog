@@ -7,6 +7,7 @@ namespace App\Uploader;
 
 use App\Config;
 use App\Controllers\BackendControllers\AdminController;
+use App\Controllers\ToastsController;
 use App\Cookie\Cookie;
 
 /**
@@ -47,20 +48,25 @@ class Upload extends AdminController
             // Проверяем, нет ли ошибки при загрузке файлов
             if ($file['error'] !== 0) {
                 $message['error'][] = "Файл не загружен.";
+                return json_encode($message);
             }
 
             $fileMimeType = mime_content_type($file['tmp_name']);
             $maxImageSize = $configImages['maxImageSize'] * pow(1024,2);
 
             // Проверяем загружаемые файлы на соответствие mime-типам и максимальному размеру для загрузки
-            if(!in_array($fileMimeType, $configImages['mimeTypes']) || $file['size'] < ($maxImageSize)) {
-                //return ToastsController::getToast('warning', 'Файл "'.$file["name"].'" не удовлетворяет требованиям к загрузке.');
+            if(!in_array($fileMimeType, $configImages['mimeTypes']) || $file['size'] > ($maxImageSize)) {
+
                 $message['error'][] = 'Файл "'.$file["name"].'" не удовлетворяет требованиям к загрузке.';
+                return json_encode($message);
+                //ToastsController::getToast('warning', 'Файл "'.$file["name"].'" не удовлетворяет требованиям к загрузке.');
+
             }
 
 
             if(!file_exists($file['tmp_name'])) {
                 $message['error'][] = 'Временный файл "'.$file["name"].'" отсутствует, выберите загружаемые файлы заново.';
+                return json_encode($message);
             }
 
             // Если временный файл существует, то выгружаем его в папку UPLOAD_PATH
@@ -70,6 +76,7 @@ class Upload extends AdminController
 
             if(!move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $configImages['pathToUpload'] . DIRECTORY_SEPARATOR . $fileName)) {
                 $message['error'][] = 'При загрузке файла "'.$file["name"].'" произошла ошибка.';
+                return json_encode($message);
             }
 
             $message['success'][] = 'Файл "'.$file["name"].'" успешно загружен.';
