@@ -179,9 +179,9 @@ class AdminAccountController extends AdminController
     /**
      *  Метод загружает аватар и возвращает результат его загрузки
      * @param User $user
-     * @return string|null
+     * @return object|null
      */
-    protected function uploadAvatar(User $user): string|null
+    protected function uploadAvatar(User $user): object|null
     {
         // Если есть файл на загрузку в массиве $_FILES
         if($this->request->files('avatar')['size'] !== 0) {
