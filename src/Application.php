@@ -8,6 +8,7 @@ namespace App;
 
 use App\Auth\Auth;
 use App\Controllers\System\MigrationController;
+use App\Controllers\UserController;
 use App\Cookie\Cookie;
 use App\Router as Router;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -109,12 +110,22 @@ class Application
     {
         $this->session = new Session();
 
+        // Если существует кука авторизации, стартуем сессию
         if(!empty(Cookie::get('authUser'))) {
             $this->session->start();
+            $currentUser = (new UserController())->getCurrentUser();
+
+            // если текущего пользователя не существует, то уничтожаем авторизацию
+            if($currentUser === null) {
+                (new Auth())->unAuthorize();
+            }
+
+            // если нет userId в куки, то уничтожаем авторизацию
             if($this->session->get('userId') === null) {
                 (new Auth())->unAuthorize();
             }
         }
+
     }
 
     /**

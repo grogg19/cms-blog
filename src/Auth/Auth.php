@@ -173,7 +173,11 @@ class Auth
             $user = (new UserController())->getUserById($this->session->get('userId'));
             $this->setUserAttributes($user);
         }
+
+
         return true;
     }
+
+
 
 }

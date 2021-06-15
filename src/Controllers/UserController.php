@@ -10,7 +10,6 @@ use App\Controllers\BackendControllers\UserRoleController;
 use App\Controllers\Controller as Controller;
 use App\Model\User;
 use App\Config;
-use App\Redirect;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -51,15 +50,15 @@ class UserController extends Controller
             return null;
         }
         if(!empty($this->session->get('userId'))) {
-            $user = $this->getUserById($this->session->get('userId'));
 
-            return $user !== null ? $user : Redirect::to('/logout');
+            return $this->getUserById($this->session->get('userId'));
+
         }
         return null;
     }
 
     /**
-     * возвращает коллекцию всех пользователей кроме супер-пользователя
+     * возвращает коллекцию всех пользователей кроме супер-пользователя и текущего админа
      * @param string $sortDirection
      * @param string $quantity
      * @return LengthAwarePaginator|Collection
@@ -71,6 +70,7 @@ class UserController extends Controller
             $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
 
             return User::where('is_superuser', 0)
+                ->where('id', '!=', $this->getCurrentUser()->id)
                 ->orderBy('is_activated', $sortDirection)
                 ->paginate($quantity, '*', 'page', $page);
         }
