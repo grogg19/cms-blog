@@ -5,8 +5,6 @@
 
 namespace App;
 
-use App\Url;
-use function Helpers\printArray;
 
 /**
  * Class Redirect
@@ -15,6 +13,7 @@ use function Helpers\printArray;
 class Redirect
 {
     /**
+     * Редирект по url
      * @param $pathToRedirect
      */
     public static function to($pathToRedirect)
@@ -25,5 +24,4 @@ class Redirect
             header("Location: " . $url->baseUrl() . $pathToRedirect );
         }
     }
-
 }

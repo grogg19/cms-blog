@@ -31,10 +31,10 @@ class Router
     }
 
     /**
-     * @return mixed
+     * @return View|string|null
      * @throws NotFoundException
      */
-    public function dispatch()
+    public function dispatch(): View|string|null
     {
         foreach ($this->routes as $route) {
             if($route->match(strtolower($_SERVER['REQUEST_METHOD']), $_SERVER['REQUEST_URI']) == true)
@@ -42,13 +42,12 @@ class Router
                 return $route->run();
             }
         }
-
         throw new NotFoundException ("Такой страницы не существует", 500);
-
     }
 
     /**
-     * @return mixed
+     * возвращает массив маршрутов
+     * @return array
      */
     public function getRoutes(): array
     {

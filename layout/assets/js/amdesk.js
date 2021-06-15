@@ -1509,7 +1509,25 @@
                     var $this = (0, _utility.$)(this);
                     $this.css({ 'min-height': parseInt($this.attr('data-editor-height'), 10), 'max-height': parseInt($this.attr('data-editor-maxHeight'), 10) });
                 });
-                var toolbarOptions = [['bold', 'italic', 'underline', 'strike'], ['clean'], [{ list: 'ordered' }, { list: 'bullet' }], ['link']];
+                //var toolbarOptions = [['bold', 'italic', 'underline', 'strike'], ['clean'], [{ list: 'ordered' }, { list: 'bullet' }], ['link']];
+                var toolbarOptions = [
+                    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                    ['blockquote', 'code-block'],
+                    
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+                    [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+                    [{ 'direction': 'rtl' }],                         // text direction
+
+                    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+                    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                    [{ 'font': [] }],
+                    [{ 'align': [] }],
+
+                    ['clean']
+                ]
                 // eslint-disable-next-line
                 var quill = new Quill('.dx-editor', {
                     modules: {
@@ -1568,12 +1586,20 @@
                     thumbnailMethod: "crop",
                     resizeMethod: "crop",
 
-                    dictFileTooBig: "File is to big ({{filesize}}mb). Max allowed file size is {{maxFilesize}}mb",
+                    dictFileTooBig: "Файл слишком большой ({{filesize}}mb). Максимально возможно {{maxFilesize}}mb",
                     dictInvalidFileType: "Invalid File Type",
                     dictCancelUpload: "Cancel",
                     dictRemoveFile: "Remove",
                     dictMaxFilesExceeded: "Only {{maxFiles}} files are allowed",
                     dictDefaultMessage: "Drop files here to upload",
+
+                    error: async (file, e) => {
+                        let data = {
+                            message: e,
+                        };
+
+                        await getToast("warning", data);
+                    },
 
                     init: async(e) => {
 
@@ -1625,6 +1651,7 @@
                     //alert(file.name);
                 });
 
+
                 myDropzone.on('removedfile', async (file) => {
 
 
@@ -1647,12 +1674,12 @@
                         method: 'POST',
                         body: formData
                     });
+
                 });
 
                 myDropzone.on("successmultiple", function(file, serverResponse) {
 
                     // Called after the file successfully uploaded
-
 
                     //myDropzone.removeAllFiles();
 

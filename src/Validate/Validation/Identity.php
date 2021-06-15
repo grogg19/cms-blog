@@ -38,6 +38,7 @@ class Identity extends Validation
     }
 
     /**
+     * реализация валидации
      * @return bool
      */
     private function AreObjectsIdentically(): bool

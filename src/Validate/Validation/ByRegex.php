@@ -39,6 +39,7 @@ class ByRegex extends Validation
     }
 
     /**
+     * реализация валидации
      * @return bool
      */
     private function validateByRegex(): bool

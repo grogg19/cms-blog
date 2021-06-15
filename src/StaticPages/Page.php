@@ -44,7 +44,7 @@ class Page
     /**
      * Возвращает конкретный параметр страницы
      * @param string $parameter
-     * @return mixed|string
+     * @return string
      */
     public function getParameter(string $parameter): string
     {

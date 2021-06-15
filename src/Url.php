@@ -5,42 +5,60 @@
 
 namespace App;
 
+use App\Cookie\Cookie;
 
-use App\Redirect;
-use function Helpers\printArray;
-
+/**
+ * Class Url
+ * @package App
+ */
 class Url
 {
+    /**
+     * @var string
+     */
     private $url;
 
+    /**
+     * Url constructor.
+     */
     public function __construct()
     {
         $this->url = explode('?', ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'])[0];
     }
 
-    public function url()
+    /**
+     * возвращает текущий url
+     * @return string
+     */
+    public function url(): string
     {
         return $this->url . $_SERVER['REQUEST_URI'];
     }
 
-    public function baseUrl()
+    /**
+     * возвращает текщий адрес сайта
+     * @return string
+     */
+    public function baseUrl(): string
     {
         return $this->url;
     }
 
-    public function previousUrl()
+    /**
+     * возвращает адрес предыдущей страницы
+     * @return string
+     */
+    public function previousUrl(): string
     {
         return $_SERVER['HTTP_REFERER'];
     }
 
     /**
-     * Метод запоминает Url в сессии и редиректит на страницу авторизации
+     * Метод запоминает Url в куки и редиректит на страницу авторизации
      */
     public function toLogin() {
 
-       $_SESSION['targetUrl'] = $this->url();
-
-        //header('Location: '. (new Url)->baseUrl() . '/login');
-        Redirect::to('/login');
+       Cookie::set('targetUrl', $this->url());
+       Redirect::to('/login');
     }
 }

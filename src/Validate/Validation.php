@@ -4,6 +4,10 @@
  */
 namespace App\Validate;
 
+/**
+ * Class Validation
+ * @package App\Validate
+ */
 abstract class Validation
 {
     /**

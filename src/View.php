@@ -5,9 +5,6 @@
 
 namespace App;
 
-use App\Renderable as Renderable;
-
-
 /**
  * Class View
  * @package App
@@ -32,22 +29,23 @@ class View implements Renderable
     /**
      * Метод проверяет существование шаблона $this->view и делает require при его наличии
      * Параметры для вывода находятся в массиве $parameters
-     * @return mixed|void
      */
-    public function render()
+    public function render(): void
     {
         extract($this->parameters);
 
         if(file_exists($this->view)) {
             require $this->view;
-            //return true;
         } else {
             echo "Данного шаблона не существует";
-            //return false;
         }
     }
 
-    public function getParameters()
+    /**
+     * Возвращает параметры для вывода
+     * @return array
+     */
+    public function getParameters(): array
     {
         return $this->parameters;
     }

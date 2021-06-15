@@ -40,6 +40,7 @@ class IsUniqueModel extends Validation
     }
 
     /**
+     * реализация валидации
      * @return bool
      */
     private function isUnique(): bool

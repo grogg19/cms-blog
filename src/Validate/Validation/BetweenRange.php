@@ -38,6 +38,7 @@ class BetweenRange extends Validation
     }
 
     /**
+     * реализация валидации
      * @return bool
      */
     private function validateInRange(): bool

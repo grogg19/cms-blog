@@ -31,6 +31,7 @@ class IsEmpty extends Validation
     }
 
     /**
+     * реализация валидации
      * @return bool
      */
     private function isEmpty(): bool

@@ -54,6 +54,7 @@ class Upload extends AdminController
 
             // Проверяем загружаемые файлы на соответствие mime-типам и максимальному размеру для загрузки
             if(!in_array($fileMimeType, $configImages['mimeTypes']) || $file['size'] < ($maxImageSize)) {
+                //return ToastsController::getToast('warning', 'Файл "'.$file["name"].'" не удовлетворяет требованиям к загрузке.');
                 $message['error'][] = 'Файл "'.$file["name"].'" не удовлетворяет требованиям к загрузке.';
             }
 

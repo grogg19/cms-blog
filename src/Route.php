@@ -5,6 +5,10 @@
 
 namespace App;
 
+/**
+ * Class Route
+ * @package App
+ */
 class Route
 {
     private $method;
@@ -27,13 +31,13 @@ class Route
     /**
      * Метод в зависимости от типа возвращает либо результат статического метода, метода объекта, либо как результат функции
      * @param $callback
-     * @return mixed
+     * @return View|string|null
      */
-    private function prepareCallback($callback)
+    private function prepareCallback($callback): View|string|null
     {
         if (is_string($callback)) { // Если значение $callback строка, разделяем ее по разделителю "@"
             // Если ссылка на стандартный метод
-            if(strpos($callback, "@") !== false)
+            if(str_contains($callback, "@"))
             {
                 list($controller, $action) = explode("@", $callback);
                 $controllerClassName = '\\'. __NAMESPACE__.'\\' . $controller; // Полная ссылка на Класс контроллера c Namespace
@@ -42,7 +46,7 @@ class Route
             }
 
             // Если ссылка на статический метод
-            if(strpos($callback, "::") !== false)
+            if(str_contains($callback, "::"))
             {
                 $callback = '\\'. __NAMESPACE__.'\\'. $callback; // Полная ссылка на Класс c Namespace
                 return $callback();
@@ -51,13 +55,14 @@ class Route
         } else if(is_object($callback)) { // Если значение $callback объект, то выводим значение методом __invoke()
             return $callback->__invoke();
         }
+        return null;
     }
 
     /**
      * Метод возвращает uri маршрута
-     * @return mixed
+     * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -92,9 +97,9 @@ class Route
 
     /**
      * Метод запускает и возвращает результат работы $callback
-     * @return mixed
+     * @return View|string|null
      */
-    public function run()
+    public function run(): View|string|null
     {
         return $this->prepareCallback($this->callback);
     }

@@ -6,7 +6,6 @@ namespace App\Validate\Validation;
 
 use App\Router;
 use App\Validate\Validation;
-use App\Config;
 
 /**
  * Class IsUniquePage
@@ -39,20 +38,17 @@ class IsUniquePage extends Validation
      */
     private function isUniquePage(): bool
     {
-        if(Config::getInstance()->getConfig('cms')['staticPages'] === 'files') {
+        $router = require APP_DIR . '/routes/web.php';
 
-            $router = require APP_DIR . '/routes/web.php';
-            if($router instanceof Router) {
-                if($router->isRouteExist($this->data)) {
-                    $this->message = 'Страница с таким URL уже существует';
-                    return false;
-                };
-                return true;
-            }
-        } else {
-            $this->message = 'Реализация статических страниц в БД еще не разработана, используй файловую систему';
+        if(!$router instanceof Router) {
             return false;
         }
+
+        if(!$router->isRouteExist($this->data)) {
+            return true;
+        };
+
+        $this->message = 'Страница с таким URL уже существует';
         return false;
     }
 }

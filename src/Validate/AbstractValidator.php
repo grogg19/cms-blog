@@ -27,7 +27,6 @@ abstract class AbstractValidator
         $this->rules = $rules;
     }
 
-
     /**
      * @param string $type
      * @param string $key

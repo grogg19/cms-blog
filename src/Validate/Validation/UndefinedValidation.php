@@ -25,6 +25,7 @@ class UndefinedValidation extends Validation
     }
 
     /**
+     * выводит сообщение об ошибке
      * @return string
      */
     public function getMessage(): string
