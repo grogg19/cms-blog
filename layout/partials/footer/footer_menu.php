@@ -1,20 +1,17 @@
 <div class="dx-widget-footer">
     <div class="dx-widget-title">
-        Useful Links
+        Ссылки
     </div>
     <ul class="dx-widget-list">
-        <li><a href="/store.html">Store</a></li>
-        <li><a href="/checkout.html">Checkout</a></li>
-        <li><a href="/forums.html">Forums</a></li>
-        <li><a href="/blog.html">Blog</a></li>
+        <li><a href="/posts">Блог</a></li>
+        <li><a href="/pravila-polzovaniya-sajtom">Пользовательское соглашение</a></li>
     </ul>
     <ul class="dx-widget-list">
-        <li><a href="/help-center.html">Help Center</a></li>
         <li>
-            <a data-fancybox data-touch="false" data-close-existing="true" data-src="#signup" href="javascript:;">Sign Up</a>
+            <a data-fancybox data-type="ajax" data-touch="false" data-close-existing="true" data-src="/signup" data-filter="#block_signup" href="javascript:;">Регистрация</a>
         </li>
         <li>
-            <a data-fancybox data-touch="false" data-close-existing="true" data-src="#login" href="javascript:;">Log In</a>
+            <a data-fancybox data-type="ajax"  data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>
         </li>
     </ul>
 </div>
