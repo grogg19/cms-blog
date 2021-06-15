@@ -15,6 +15,10 @@ use App\Validate\Validation\IsUniquePage;
 use App\Validate\Validation\UndefinedValidation;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Validator
+ * @package App\Validate
+ */
 class Validator extends AbstractValidator
 {
     private Model $model;
@@ -38,6 +42,7 @@ class Validator extends AbstractValidator
     }
 
     /**
+     * Метод производит валидацию массива данных
      * @return array
      * @throws ValidationException
      */
@@ -52,36 +57,44 @@ class Validator extends AbstractValidator
         foreach ($this->rules as $key => $rule) {
             if (is_array($rule)) {
                 foreach ($rule as $r) {
-                    if(isset($this->data[$key]) && !isset($messagesValidations['error'][$key])) {
-
-                        $validation = $this->createValidation($r, $key);
-
-                        if($validation->run() !== true) {
-                            $messagesValidations['error'][$key] = [
-                                'field' => $key,
-                                'errorMessage' => $validation->getMessage()
-                            ];
-                        }
-                    }
+                    $messagesValidations = $this->hasError($key, $r, $messagesValidations);
                 }
             } else {
-                if(isset($this->data[$key]) && !isset($messagesValidations['error'][$key])){
-
-                    $validation = $this->createValidation($rule, $key);
-
-                    if($validation->run() !== true) {
-                        $messagesValidations['error'][$key] = [
-                            'field' => $key,
-                            'errorMessage' => $validation->getMessage()
-                        ];
-                    }
-                }
+                $messagesValidations = $this->hasError($key, $rule, $messagesValidations);
             }
         }
         return $messagesValidations;
     }
 
     /**
+     * метод принимает названия валидаций, генерирует их и при возникновении ошибки валидации создает сообщение об ошибке,
+     * в результате выводит массив ошибок валидации данных конкретных полей формы
+     * @param string $key
+     * @param string $rule
+     * @param array $messageValidations
+     * @return array
+     */
+    private function hasError(string $key, string $rule, array $messageValidations = []): array
+    {
+        if(isset($this->data[$key]) && !isset($messagesValidations['error'][$key])) {
+
+            $validation = $this->createValidation($rule, $key);
+
+            if($validation->run() !== true) {
+
+                $messageValidations['error'][$key] = [
+                    'field' => $key,
+                    'errorMessage' => $validation->getMessage()
+                ];
+
+                return $messageValidations;
+            }
+        }
+        return [];
+    }
+
+    /**
+     * фабричный метод, генерирует валидации
      * @param string $type
      * @param string $key
      * @return Validation
