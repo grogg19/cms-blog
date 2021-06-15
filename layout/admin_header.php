@@ -3,6 +3,12 @@
  * User header
  */
 use App\View;
+use App\Model\User;
+use function Helpers\session;
+
+/**
+ * @var User $user
+ */
 
 (new View('base.header', ['title' => !empty($title) ? $title : '']))->render();
 
@@ -20,12 +26,14 @@ use App\View;
         </button>
 
         <div class="dx-navbar-content">
-            <?php
-            (new View('partials.header.main_admin_menu'))->render();
-            ?>
+            <?php if(!empty($user) && in_array($user->role->code, ['admin', 'content-manager'])) {
+                (new View('partials.header.main_admin_menu'))->render();
+            } else {
+                (new View('partials.header.main_public_menu'))->render();
+            } ?>
             <ul class="dx-nav dx-nav-align-right">
-                <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
-                    (new View('partials.header.admin_menu', ['user' => !empty($user) ? $user : '']))->render();
+                <?php if(!empty($user)) {
+                    (new View('partials.header.admin_menu', ['user' => $user]))->render();
                 } else { ?>
                     <li>
                         <a data-fancybox data-type="ajax" data-options='{"ajax" : {"settings" : {"type" : "post"}}  }' data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>
@@ -44,12 +52,14 @@ use App\View;
             <span></span><span></span><span></span>
         </button>
         <div class="dx-navbar-content">
-	        <?php
-	        (new View('partials.header.main_admin_menu'))->render();
-	        ?>
+            <?php if(!empty($user) && in_array($user->role->code, ['admin', 'content-manager'])) {
+                (new View('partials.header.main_admin_menu'))->render();
+            } else {
+                (new View('partials.header.main_public_menu'))->render();
+            } ?>
             <ul class="dx-nav dx-nav-align-right">
-                <?php if( session_status() == PHP_SESSION_ACTIVE && \Helpers\session()->get('authAuthorized') == 1) {
-                    (new View('partials.header.admin_menu', ['user' => !empty($user) ? $user : '']))->render();
+                <?php if(!empty($user)) {
+                    (new View('partials.header.admin_menu', ['user' => $user]))->render();
                 } else { ?>
                     <li>
                         <a data-fancybox data-type="ajax" data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>

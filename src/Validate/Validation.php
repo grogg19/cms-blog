@@ -10,6 +10,11 @@ namespace App\Validate;
  */
 abstract class Validation
 {
+    public function __construct()
+    {
+
+    }
+
     /**
      * @var string
      */

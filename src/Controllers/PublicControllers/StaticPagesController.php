@@ -42,7 +42,14 @@ class StaticPagesController extends PublicController
             $content = cleanJSTags($page->getHtmlContent());
             $pageParameters = $page->getParameters();
 
-            return new View('index', ['view' => 'static_pages', 'data' => ['content' => $content, 'pageParameters' => $pageParameters]]);
+            return new View('index', [
+                'view' => 'static_pages',
+                'title' => 'Блог | ' . $pageParameters['title'],
+                'data' => [
+                    'content' => $content,
+                    'pageParameters' => $pageParameters
+                ]
+            ]);
         } else {
             Redirect::to('/404');
         }

@@ -10,6 +10,7 @@ use App\Controllers\BackendControllers\UserRoleController;
 use App\Controllers\Controller as Controller;
 use App\Model\User;
 use App\Config;
+use App\Redirect;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -33,9 +34,9 @@ class UserController extends Controller
     /**
      * Возвращает пользователя по ID
      * @param int $id
-     * @return User
+     * @return User|null
      */
-    public function getUserById(int $id): User
+    public function getUserById(int $id): ?User
     {
         return User::find($id);
     }
@@ -50,7 +51,9 @@ class UserController extends Controller
             return null;
         }
         if(!empty($this->session->get('userId'))) {
-            return $this->getUserById($this->session->get('userId'));
+            $user = $this->getUserById($this->session->get('userId'));
+
+            return $user !== null ? $user : Redirect::to('/logout');
         }
         return null;
     }

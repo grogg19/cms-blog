@@ -55,13 +55,13 @@ class Validator extends AbstractValidator
         }
 
         foreach ($this->rules as $key => $rule) {
-            if (is_array($rule)) {
-                foreach ($rule as $r) {
-                    $messagesValidations = $this->hasError($key, $r, $messagesValidations);
-                }
-            } else {
-                $messagesValidations = $this->hasError($key, $rule, $messagesValidations);
+
+            $result = $this->hasError($key, $rule, $messagesValidations);
+
+            if(!empty($result)) {
+                $messagesValidations['error'][$key] = $result;
             }
+
         }
         return $messagesValidations;
     }
@@ -70,27 +70,41 @@ class Validator extends AbstractValidator
      * метод принимает названия валидаций, генерирует их и при возникновении ошибки валидации создает сообщение об ошибке,
      * в результате выводит массив ошибок валидации данных конкретных полей формы
      * @param string $key
-     * @param string $rule
-     * @param array $messageValidations
+     * @param string|array $rule
+     * @param array $messagesValidations
      * @return array
      */
-    private function hasError(string $key, string $rule, array $messageValidations = []): array
+    private function hasError(string $key,  string|array $rule, array $messagesValidations = []): array
     {
-        if(isset($this->data[$key]) && !isset($messagesValidations['error'][$key])) {
 
-            $validation = $this->createValidation($rule, $key);
+        if(is_array($rule)) {
+            foreach ($rule as $r) {
+                $result = $this->hasError($key, $r, $messagesValidations);
 
-            if($validation->run() !== true) {
-
-                $messageValidations['error'][$key] = [
-                    'field' => $key,
-                    'errorMessage' => $validation->getMessage()
-                ];
-
-                return $messageValidations;
+                if(!empty($result)) {
+                    return $result;
+                }
             }
+            return [];
         }
-        return [];
+
+
+        if(!isset($this->data[$key]) || isset($messagesValidations['error'][$key])) {
+            return [];
+        }
+
+        $validation = $this->createValidation($rule, $key);
+
+        if($validation->run() !== true) {
+
+            return [
+                'field' => $key,
+                'errorMessage' => $validation->getMessage()
+            ];
+
+        } else {
+            return [];
+        }
     }
 
     /**

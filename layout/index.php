@@ -3,7 +3,6 @@
 use App\View;
 use App\Controllers\UserController;
 
-
 (new View('header', [
     'title' => (!empty($title)) ? $title : "",
     'user' => (new UserController())->getCurrentUser()

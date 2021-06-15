@@ -15,6 +15,8 @@ class UndefinedValidation extends Validation
     public string $type;
     public function __construct(string $type)
     {
+        parent::__construct();
+
         $this->type = $type;
     }
 

@@ -4,8 +4,14 @@
  */
 
 use App\View;
+use App\Model\User;
+
 use function Helpers\session;
 use function Helpers\request;
+
+/**
+ * @var User $user
+ */
 
 (new View('base.header', ['title' => (!empty($title)) ? $title : '']))->render();
 ?>
@@ -19,13 +25,14 @@ use function Helpers\request;
             <span></span><span></span><span></span>
         </button>
         <div class="dx-navbar-content">
-            <?php if( session_status() == PHP_SESSION_ACTIVE && session()->get('authAuthorized') == 1) {
+            <?php if(!empty($user) && in_array($user->role->code, ['admin', 'content-manager'])) {
+
                 (new View('partials.header.main_admin_menu'))->render();
             } else {
                 (new View('partials.header.main_public_menu'))->render();
             } ?>
             <ul class="dx-nav dx-nav-align-right">
-            <?php if( session_status() == PHP_SESSION_ACTIVE && session()->get('authAuthorized') == 1) {
+                <?php if(!empty($user)) {
                 (new View('partials.header.admin_menu',['user' => !empty($user) ? $user : '']))->render();
             } else { ?>
 	            <?php if(!in_array(request()->server('REQUEST_URI'), ['/login', '/signup'])) { ?>
@@ -47,13 +54,13 @@ use function Helpers\request;
             <span></span><span></span><span></span>
         </button>
         <div class="dx-navbar-content" >
-            <?php if( session_status() == PHP_SESSION_ACTIVE && session()->get('authAuthorized') == 1) {
+	        <?php if(!empty($user) && in_array($user->role->code, ['admin', 'content-manager'])) {
                 (new View('partials.header.main_admin_menu'))->render();
             } else {
 	            (new View('partials.header.main_public_menu'))->render();
 	        } ?>
 	        <ul class="dx-nav dx-nav-align-right">
-                <?php if( session_status() == PHP_SESSION_ACTIVE && session()->get('authAuthorized') == 1) {
+		        <?php if(!empty($user)) {
                     (new View('partials.header.admin_menu',['user' => $user]))->render();
                 } else { ?>
                     <?php if(!in_array(request()->server('REQUEST_URI'), ['/login', '/signup'])) { ?>

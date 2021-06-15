@@ -1,9 +1,15 @@
+<?php
+use App\Model\User;
+/**
+ * @var User $user
+ */
+?>
 <ul class="dx-nav dx-nav-align-left">
     <li class="dx-drop-item">
-        <a href="/posts">Блог</a>
+        <a href="/admin/blog/posts">Блог</a>
 	    <ul class="dx-navbar-dropdown">
             <li>
-                <a href="/posts">Все посты</a>
+                <a href="/admin/blog/posts">Все посты</a>
             </li>
             <li>
                 <a href="/admin/blog/posts/create">Создать пост</a>
@@ -21,4 +27,7 @@
             </li>
         </ul>
     </li>
+	<li class="dx-drop-item">
+		<a href="/pravila-polzovaniya-sajtom">Пользовательское соглашение</a>
+	</li>
 </ul>

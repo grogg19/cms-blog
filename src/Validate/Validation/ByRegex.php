@@ -25,6 +25,8 @@ class ByRegex extends Validation
      */
     public function __construct(string $data, string $regex)
     {
+        parent::__construct();
+
         $this->data = $data;
         $this->regex = $regex;
     }

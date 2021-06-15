@@ -30,7 +30,7 @@ use function \Helpers\session;
 		        <a href="/admin/posts/comments"><span class="icon pe-7s-check"></span> Модерация комментариев</a>
 	        </li>
 	        <?php } ?>
-	        <?php if($user->is_superuser === 1) { ?>
+	        <?php if($user->role->code === 'admin') { ?>
             <li>
                 <a href="/admin/user-manager"><span class="icon pe-7s-users"></span> Управление пользователями</a>
             </li>

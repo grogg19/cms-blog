@@ -16,6 +16,8 @@ class IsEmail extends Validation
      */
     public function __construct(string $data)
     {
+        parent::__construct();
+
         $this->data = $data;
     }
 

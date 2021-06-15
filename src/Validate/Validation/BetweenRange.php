@@ -24,6 +24,8 @@ class BetweenRange extends Validation
      */
     public function __construct(string $data, string $range)
     {
+        parent::__construct();
+
         $this->data = $data;
         $this->range = explode(',', $range, 2);
     }

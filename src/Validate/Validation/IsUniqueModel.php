@@ -25,6 +25,8 @@ class IsUniqueModel extends Validation
      */
     public function __construct(Model $model, string $key, string $data)
     {
+        parent::__construct();
+        
         $this->data = $data;
         $this->model = $model;
         $this->key = $key;

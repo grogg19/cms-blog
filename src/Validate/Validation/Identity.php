@@ -24,6 +24,8 @@ class Identity extends Validation
      */
     public function __construct(string $data = '', string $dataConfirmation = '')
     {
+        parent::__construct();
+
         $this->data = $data;
         $this->dataConfirmation = $dataConfirmation;
     }
@@ -44,6 +46,7 @@ class Identity extends Validation
     private function AreObjectsIdentically(): bool
     {
         if(empty($this->data) || empty($this->dataConfirmation)) {
+            $this->message = "Поля не совпадают";
             return false;
         }
 
