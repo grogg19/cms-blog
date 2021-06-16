@@ -10,6 +10,7 @@ use App\Validate\Validation\ByRegex;
 use App\Validate\Validation\Identity;
 use App\Validate\Validation\IsEmail;
 use App\Validate\Validation\IsEmpty;
+use App\Validate\Validation\IsNumeric;
 use App\Validate\Validation\IsUniqueModel;
 use App\Validate\Validation\IsUniquePage;
 use App\Validate\Validation\UndefinedValidation;
@@ -127,6 +128,7 @@ class Validator extends AbstractValidator
             'unique' => new IsUniqueModel($this->model, $key, $this->data[$key]),
             'identityWith' => new Identity($this->data[$key], $this->data[$parameters]),
             'email' => new IsEmail($this->data[$key]),
+            'isNumeric' => new IsNumeric($this->data[$key]),
             default => new UndefinedValidation($type)
         };
     }
