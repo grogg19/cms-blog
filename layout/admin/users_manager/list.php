@@ -72,7 +72,7 @@ use function Helpers\getDateTime;
 				                data-onstyle="danger"
 				                data-offstyle="success"
 				                data-for-send="<?=$user->id?>" data-method="userChangeActivate" data-field="active_status"
-					            <?=($user->is_activated == true) ? 'checked' : ''?>
+					            <?= $user->is_activated != true ?: 'checked' ?>
                                 <?= $user->id !== $currentUser ?: 'disabled' ?>
 				        />
 				    </span>
