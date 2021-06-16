@@ -6,6 +6,7 @@ use App\View;
 use App\Controllers\PublicControllers\PublicPostController;
 ?>
     <!-- START: Footer -->
+
     <footer class="dx-footer">
         <div class="dx-box-1">
             <div class="container">

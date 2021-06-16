@@ -88,7 +88,8 @@ class Auth
     {
         Cookie::delete('authUser');
         Cookie::delete('_token');
-        session_destroy();
+        $this->session->invalidate();
+
     }
 
     /**

@@ -14,4 +14,3 @@ $application = new Application($router);
 
 // Запуск приложения
 $application->run();
-

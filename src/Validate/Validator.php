@@ -76,7 +76,6 @@ class Validator extends AbstractValidator
      */
     private function hasError(string $key,  string|array $rule, array $messagesValidations = []): array
     {
-
         if(is_array($rule)) {
             foreach ($rule as $r) {
                 $result = $this->hasError($key, $r, $messagesValidations);
@@ -87,7 +86,6 @@ class Validator extends AbstractValidator
             }
             return [];
         }
-
 
         if(!isset($this->data[$key]) || isset($messagesValidations['error'][$key])) {
             return [];

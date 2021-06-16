@@ -30,18 +30,11 @@ use function Helpers\getCurrentDate;
 class LoginController extends Controller
 {
     /**
-     * @var Auth
-     */
-    protected Auth $auth;
-
-    /**
      * LoginController constructor.
      */
     public function __construct()
     {
-        $this->auth = new Auth();
         parent::__construct();
-
     }
 
     /**
@@ -98,7 +91,8 @@ class LoginController extends Controller
             return ToastsController::getToast('warning', 'Пользователь с такими данными не найден!');
         }
 
-        if(!$this->auth->isActivated($user)) {
+        $auth = new Auth();
+        if(!$auth->isActivated($user)) {
             return ToastsController::getToast('warning', 'Ваша учетная запись деактивирована');
         }
         // Если есть такой юзер, то авторизуем его и возвращаем на страницу, с которой он логинился
@@ -108,8 +102,8 @@ class LoginController extends Controller
         $user->last_login = getCurrentDate();
         $user->save();
 
-        $this->auth->setAuthorized($persistCode);
-        $this->auth->setUserAttributes($user);
+        $auth->setAuthorized($persistCode);
+        $auth->setUserAttributes($user);
 
         (new ToastsController())->setToast('success', 'Вы успешно вошли в систему управления.');
 
@@ -123,7 +117,8 @@ class LoginController extends Controller
      */
     public function logout(): void
     {
-        $this->auth->unAuthorize();
+        $auth = new Auth();
+        $auth->unAuthorize();
         (new ListenerController())->ImageListener(); // удаляем несохраненные изображения
         Redirect::to('/'); // Редирект на главную страницу
     }
