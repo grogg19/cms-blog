@@ -70,7 +70,7 @@ class UserController extends Controller
             $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
 
             return User::where('is_superuser', 0)
-                ->where('id', '!=', $this->getCurrentUser()->id)
+                //->where('id', '!=', $this->getCurrentUser()->id)
                 ->orderBy('is_activated', $sortDirection)
                 ->paginate($quantity, '*', 'page', $page);
         }

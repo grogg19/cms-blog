@@ -10,6 +10,7 @@
  * @var $roles
  * @var $quantity
  * @var $title
+ * @var $currentUser;
  */
 
 use App\View;
@@ -54,7 +55,7 @@ use function Helpers\getDateTime;
 		                    <li>Комментарии: <?= count($user->comments) ?></li>
 		                    <li>
 		                        <span class="dx-form-group-inputs">
-		                            <select class="custom-select form-control-sm form-control-style-2" data-field="role" data-for-send="<?=$user->id?>" data-method="userChangeRole">
+		                            <select class="custom-select form-control-sm form-control-style-2" data-field="role" data-for-send="<?=$user->id?>" data-method="userChangeRole" <?= $user->id !== $currentUser ?: 'disabled' ?>>
 		                            <?php foreach ($roles as $role) { ?>
 		                                <option value="<?=$role->id?>" <?=($user->role->code === $role->code) ? 'selected' : ''?> ><?=$role->name?></option>
 		                            <?php } ?>
@@ -72,6 +73,7 @@ use function Helpers\getDateTime;
 				                data-offstyle="success"
 				                data-for-send="<?=$user->id?>" data-method="userChangeActivate" data-field="active_status"
 					            <?=($user->is_activated == true) ? 'checked' : ''?>
+                                <?= $user->id !== $currentUser ?: 'disabled' ?>
 				        />
 				    </span>
 		        </div>

@@ -63,7 +63,8 @@ class AdminUserManagerController extends AdminController
                 'token' => generateToken(),
                 'pathToAvatar' => $this->userController->getUserAvatarPath(),
                 'roles' => $this->userController->getUserRoles(),
-                'quantity' => $quantity
+                'quantity' => $quantity,
+                'currentUser' => $this->session->get('userId')
             ],
             'title' => 'Редактирование профиля пользователя'
         ]);
