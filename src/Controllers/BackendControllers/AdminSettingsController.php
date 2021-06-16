@@ -67,7 +67,7 @@ class AdminSettingsController extends AdminController
         unset($data['_token']);
 
         $rules = [
-            'per_page' => 'isNumeric'
+            'per_page' => 'isNaturalNumeric'
         ];
 
         $resultValidation = (new Validator($data, SystemSetting::class, $rules))->makeValidation();

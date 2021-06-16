@@ -8,7 +8,7 @@ use App\Validate\Validation;
  * Class IsEmail
  * @package App\Validate\Validation
  */
-class IsNumeric extends Validation
+class IsNaturalNumeric extends Validation
 {
     /**
      * IsEmail constructor.
@@ -27,16 +27,16 @@ class IsNumeric extends Validation
      */
     public function run(): bool
     {
-        return $this->isNumeric();
+        return $this->isNaturalNumeric();
     }
 
     /**
      * реализация валидации
      * @return bool
      */
-    private function isNumeric(): bool
+    private function isNaturalNumeric(): bool
     {
-        if(!filter_var($this->data, FILTER_SANITIZE_NUMBER_INT)) {
+        if(!preg_match('/^[0-9]+$/i', $this->data) || $this->data == 0) {
             $this->message = 'В поле должно быть целое число > 0' ;
             return false;
         }
