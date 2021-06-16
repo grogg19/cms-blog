@@ -29,7 +29,7 @@
 			                            </div>
 		                            </div>
 		                            <div class="dx-form-group-md div-per_page form-element">
-			                            <label for="per_page" >Количество постов на главное странице:</label>
+			                            <label for="per_page" >Количество постов на главной странице:</label>
 			                            <input name="per_page" type="text" id="per_page" class="form-control form-control-style-2" value="<?= $parameters->per_page ?>"/>
 		                            </div>
 		                            <div class="row justify-content-between mt-30">

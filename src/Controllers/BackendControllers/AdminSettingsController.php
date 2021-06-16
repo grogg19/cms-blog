@@ -7,6 +7,8 @@ namespace App\Controllers\BackendControllers;
 
 use App\Controllers\ToastsController;
 use App\Controllers\UserController;
+use App\Model\SystemSetting;
+use App\Validate\Validator;
 use App\View;
 use App\Controllers\SystemSettingsRepository;
 use function Helpers\checkToken;
@@ -53,6 +55,7 @@ class AdminSettingsController extends AdminController
     /**
      * Сохранение настроек
      * @return string
+     * @throws \App\Exception\ValidationException
      */
     public function saveSettings(): string
     {
@@ -62,6 +65,16 @@ class AdminSettingsController extends AdminController
 
         $data = $this->request->post();
         unset($data['_token']);
+
+        $rules = [
+            'per_page' => 'isNumeric'
+        ];
+
+        $resultValidation = (new Validator($data, SystemSetting::class, $rules))->makeValidation();
+
+        if(!empty($resultValidation['error'])) {
+            return ToastsController::getToast('warning', $resultValidation['error']['per_page']['errorMessage']);
+        }
 
         if((new SystemSettingsRepository())->updateSystemSettings('preferences', $data)) {
 
