@@ -11,9 +11,4 @@
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-
-INSERT INTO blog_post_images (id, file_name, post_id, sort) VALUES (6, '1611617883_Clouds-Black-and-White-Planet-1800x2880.jpg', 18, 1);
-INSERT INTO blog_post_images (id, file_name, post_id, sort) VALUES (7, '1611617883_magical-cosmic-place-space-wallpapers-2560x1920.jpg', 18, 2);
-INSERT INTO blog_post_images (id, file_name, post_id, sort) VALUES (24, '1611757307_20190829-IMG_7044_resize.jpg', 18, 0);
-INSERT INTO blog_post_images (id, file_name, post_id, sort) VALUES (25, '1611757307_20190829-IMG_7045_resize.jpg', 18, 1);
-INSERT INTO blog_post_images (id, file_name, post_id, sort) VALUES (27, '1611757385_IMG_0227.jpg', 18, 0);
+INSERT INTO `blog_post_images` (`id`, `file_name`, `post_id`, `sort`) VALUES (37,'1623770982_B4kIuT.jpg',18,0),(38,'1623770982_EBiHrRhVAAMNfi1.jpg-large.jpeg',18,1),(39,'1623770982_screen-5.jpg',18,2),(40,'1623841105_fyTwCzLkWm.jpg',23,0),(41,'1623841115_Alexander-Yakovlev-118.jpg',23,1),(42,'1623841121_adfaa263805e4f4c1d0e77276f4c05dc.jpeg',23,2);

@@ -16,5 +16,4 @@
 -- Dumping data for table `system_settings`
 --
 
-INSERT INTO system_settings (item, name, value, created_at, updated_at) VALUES ('preferences', 'Системные настройки', '{"per_page":"10"}', '2021-05-29 19:07:08', '2021-05-29 20:13:11');
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+INSERT INTO `system_settings` (`id`, `item`, `name`, `value`, `created_at`, `updated_at`) VALUES (1,'preferences','Системные настройки','{\"per_page\":\"4\"}','2021-05-29 19:07:08','2021-06-10 13:27:21');
