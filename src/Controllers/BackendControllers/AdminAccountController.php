@@ -108,15 +108,15 @@ class AdminAccountController extends AdminController
         // Подготовка правил для валидации
         if(!empty($data['password'])) {
             $ownRules = [
-                'first_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/i'],
-                'last_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/i'],
+                'first_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/iu'],
+                'last_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/iu'],
                 'password' => ['between:6,255', 'identityWith:password_confirm'],
                 'password_confirm' => ['required','identityWith:password', 'between:6,255']
             ];
         } else {
             $ownRules = [
-                'first_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/i'],
-                'last_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/i']
+                'first_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/iu'],
+                'last_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/iu']
             ];
         }
 
@@ -125,8 +125,6 @@ class AdminAccountController extends AdminController
 
         // проверяем данные валидатором
         $resultValidateForms = $validator->makeValidation();
-
-        //dd($resultValidateForms);
 
         // если есть ошибки
         if(isset($resultValidateForms['error']))  {
