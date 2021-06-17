@@ -25,12 +25,7 @@ use function Helpers\request;
             <span></span><span></span><span></span>
         </button>
         <div class="dx-navbar-content">
-            <?php if(!empty($user) && in_array($user->role->code, ['admin', 'content-manager'])) {
-
-                (new View('partials.header.main_admin_menu'))->render();
-            } else {
-                (new View('partials.header.main_public_menu'))->render();
-            } ?>
+            <?php (new View('partials.header.main_public_menu'))->render(); ?>
             <ul class="dx-nav dx-nav-align-right">
                 <?php if(!empty($user)) {
                 (new View('partials.header.admin_menu',['user' => !empty($user) ? $user : '']))->render();
