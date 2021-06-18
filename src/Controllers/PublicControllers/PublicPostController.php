@@ -111,6 +111,11 @@ class PublicPostController extends PublicController implements Renderable
         list($module, $slug) = parseRequestUri(); // $module - каталог, $slug - название новости латиницей
 
         $post = (new PostRepository())->getPostBySlug($slug);
+
+        if(empty($post)) {
+            Redirect::to('/404');
+        }
+
         if(!empty($post)) {
 
             $userRole = ($this->session->get('userId') !== null) ? (new UserRepository())->getCurrentUser()->role->code : 'none';
@@ -132,8 +137,6 @@ class PublicPostController extends PublicController implements Renderable
             $this->view = 'index';
             $this->render();
         }
-
-        Redirect::to('/404');
     }
 
     /**
