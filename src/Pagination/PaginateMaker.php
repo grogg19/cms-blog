@@ -1,19 +1,19 @@
 <?php
 /**
- * Class PaginateController
+ * Class PaginateMaker
  */
 
-namespace App\Controllers;
+namespace App\Pagination;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
 /**
- * Class PaginateController
- * @package App\Controllers
+ * Class PaginateMaker
+ * @package App\Pagination
  */
-class PaginateController extends Controller
+class PaginateMaker
 {
     /**
      * Создает и возвращает пагинацию из коллекции
@@ -23,7 +23,7 @@ class PaginateController extends Controller
      * @param array $options
      * @return LengthAwarePaginator
      */
-    function paginate($items, int $perPage = 5, $page = null, array $options = []): LengthAwarePaginator
+    public function paginate($items, int $perPage = 5, $page = null, array $options = []): LengthAwarePaginator
     {
 
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);

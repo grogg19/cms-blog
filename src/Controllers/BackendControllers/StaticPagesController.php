@@ -3,7 +3,7 @@
 
 namespace App\Controllers\BackendControllers;
 
-use App\Controllers\PaginateController;
+use App\Pagination\PaginateMaker;
 use App\Controllers\ToastsController;
 use App\Parse\Yaml;
 use App\Redirect;
@@ -59,7 +59,7 @@ class StaticPagesController extends AdminController
         $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
 
         if($quantity !== 'all') {
-            $pages = (new PaginateController())->paginate($items, $quantity, $page);
+            $pages = (new PaginateMaker())->paginate($items, $quantity, $page);
         } else {
             $pages = Collection::make($items);
         }
