@@ -1,11 +1,11 @@
 <?php
 
 use App\View;
-use App\Controllers\UserController;
+use App\Repository\UserRepository;
 
 (new View('header', [
     'title' => (!empty($title)) ? $title : "",
-    'user' => (new UserController())->getCurrentUser()
+    'user' => (new UserRepository())->getCurrentUser()
 ]))->render();
 
 ?>

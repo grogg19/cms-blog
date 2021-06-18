@@ -3,7 +3,7 @@
  * Класс CommentRepository
  */
 
-namespace App\Controllers;
+namespace App\Repository;
 
 use App\Model\Comment;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
  * Class CommentRepository
  * @package App\Controllers
  */
-class CommentRepository
+class CommentRepository extends Repository
 {
     /** Возвращает коллекцию коммент с пагинацией
      * @param string $orderByDirection

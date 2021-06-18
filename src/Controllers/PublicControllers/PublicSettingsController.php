@@ -5,8 +5,7 @@
 namespace App\Controllers\PublicControllers;
 
 use App\Controllers\Controller;
-use App\Controllers\SystemSettingsRepository;
-use Illuminate\Contracts\Support\Jsonable;
+use App\Repository\SystemSettingsRepository;
 
 /**
  * Class PublicSettingsController

@@ -5,25 +5,21 @@
 
 namespace App\Controllers\PublicControllers;
 
-use App\Controllers\UserController;
+use App\Repository\UserRepository;
 
-class PublicUserController extends UserController
+class PublicUserController extends PublicController
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /**
      * @return bool
      */
     public function checkUserForComments(): bool
     {
-        if(!$this->getCurrentUser()) {
+        $userRepository = new UserRepository();
+        if(!$userRepository->getCurrentUser()) {
             return false;
         }
 
-        if(in_array($this->getCurrentUser()->role->code, ['admin', 'content-manager'])) {
+        if(in_array($userRepository->getCurrentUser()->role->code, ['admin', 'content-manager'])) {
             return true;
         }
         return false;

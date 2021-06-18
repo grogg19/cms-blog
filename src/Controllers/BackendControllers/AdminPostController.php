@@ -5,8 +5,6 @@
 
 namespace App\Controllers\BackendControllers;
 
-use App\Controllers\PostController;
-use App\Controllers\UserController;
 use App\Cookie\Cookie;
 use App\Exception\NotFoundException;
 use App\Model\Post;
@@ -14,6 +12,8 @@ use App\Notification\Notification;
 use App\Notification\Type\NotificationToLog;
 use App\Parse\Yaml;
 use App\Redirect;
+use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use App\Request\Request;
 use App\Validate\Validator;
 use App\View;
@@ -39,9 +39,9 @@ use function Helpers\getDateTimeForDb;
 class AdminPostController extends AdminController
 {
     /**
-     * @var PostController
+     * @var PostRepository
      */
-    protected $postController;
+    protected $postRepository;
     protected $user;
 
     /**
@@ -51,8 +51,8 @@ class AdminPostController extends AdminController
     {
         parent::__construct();
 
-        $this->postController = new PostController();
-        $this->user = (new UserController())->getUserById($this->session->get('userId'));
+        $this->postRepository = new PostRepository();
+        $this->user = (new UserRepository())->getUserById($this->session->get('userId'));
 
         if(!empty($this->session->get('postId'))) {
             $this->onCloseCleanImage();
@@ -72,9 +72,9 @@ class AdminPostController extends AdminController
         $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
 
         if($this->user->role->code = 'admin') {
-            $posts = $this->postController->getAllPosts('desc', $quantity);
+            $posts = $this->postRepository->getAllPosts('desc', $quantity);
         } else {
-            $posts = $this->postController
+            $posts = $this->postRepository
                 ->getPostsByUserId($this->user->id, $quantity);
         }
 
@@ -135,7 +135,7 @@ class AdminPostController extends AdminController
         }
 
         // получаем экземпляр поста с postId
-        $post = $this->postController->getPostById($postId);
+        $post = $this->postRepository->getPostById($postId);
 
         // если такого поста нет, выбрасываем исключение 404
         if($post == null) {
@@ -170,11 +170,11 @@ class AdminPostController extends AdminController
 
         if(!empty($request->post('idPost'))) {
 
-            $post = $this->postController->getPostById((int) $request->post('idPost'));
+            $post = $this->postRepository->getPostById((int) $request->post('idPost'));
 
         } else {
 
-            $post = $this->postController->createNewPost();
+            $post = $this->postRepository->createNewPost();
             $post->user_id = $this->user->id;
 
         }
@@ -273,12 +273,12 @@ class AdminPostController extends AdminController
      */
     public function deletePost(): string
     {
-        $post = $this->postController->getPostById((int) $this->request->post('postId'));
+        $post = $this->postRepository->getPostById((int) $this->request->post('postId'));
         try {
             foreach ($post->images as $image) {
                 $this->imgDelete($image->file_name);
             }
-            $this->postController->deletePost($post);
+            $this->postRepository->deletePost($post);
         } catch (Exception $exception) {
             return ToastsController::getToast('warning', 'Ошибка удаления поста! Сообщение: ' . $exception->getMessage());
         }

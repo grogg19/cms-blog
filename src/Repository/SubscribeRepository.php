@@ -3,16 +3,18 @@
  * class SubscribeRepository
  */
 
-namespace App\Controllers;
+namespace App\Repository;
 
 use App\Model\Subscriber;
 use Illuminate\Support\Collection;
+use App\Controllers\ToastsController;
+
 use function Helpers\generateRandomHash;
 /**
  * Class SubscribeRepository
  * @package App\Controllers
  */
-class SubscribeRepository
+class SubscribeRepository extends Repository
 {
     /**
      * создание подписчика

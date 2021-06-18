@@ -5,9 +5,10 @@
 
 namespace App\Controllers\PublicControllers;
 
-use App\Controllers\UserController;
+use App\Renderable;
+use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use App\View;
-use App\Controllers\PostController;
 use App\Config;
 use App\Redirect;
 
@@ -18,12 +19,22 @@ use function Helpers\parseRequestUri;
  * Class PublicPostController
  * @package App\Controllers\PublicControllers
  */
-class PublicPostController extends PublicController
+class PublicPostController extends PublicController implements Renderable
 {
     /**
      * @var mixed|null
      */
     private mixed $configImages;
+
+    /**
+     * @var string;
+     */
+    private $view;
+
+    /**
+     * @var array
+     */
+    private $data;
 
     /**
      * PublicPostController constructor.
@@ -36,86 +47,101 @@ class PublicPostController extends PublicController
 
     /**
      * Выводит все посты на странице
-     * @return View
      */
     public function index()
     {
-        return $this->allPosts();
+        $this->allPosts();
     }
 
     /**
      * Вывод всех опубликованных постов
-     * @return View
      */
-    public function allPosts(): View
+    public function allPosts()
     {
         $page = !empty($this->request->post('page')) ? $this->request->post('page') : 1;
 
-        $data = [
-            'posts' => (new PostController())->getAllPublishedPosts('desc', $page),
-            'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
-            'token' => generateToken()
-        ];
-
         if(!empty($this->request->post('page'))) {
 
-            return new View('partials.posts_items', [
-                'posts' => $data['posts'],
-                'imgPath' => $data['imgPath']
-            ]);
+            $this->view = 'partials.posts_items';
+
+            $this->data = [
+                'posts' => (new PostRepository())->getAllPublishedPosts('desc', $page),
+                'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+                'token' => generateToken(),
+            ];
+        } else {
+
+            $this->data = [
+                'view' => 'posts',
+                'data' => [
+                    'posts' => (new PostRepository())->getAllPublishedPosts('desc', $page),
+                    'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+                    'token' => generateToken(),
+                ],
+                'title' => 'Курсовая работа CMS для Блога'
+            ];
+
+            $this->view = 'index';
         }
-        return new View('index', [
-            'view' => 'posts',
-            'data' => $data,
-            'title' => 'Блог'
-        ]);
+
+        $this->render();
     }
 
     /**
      * Вывод списка последних постов
-     * @return array
+     * @param string $view
      */
-    public function latestPosts(): array
+    public function latestPosts(string $view = 'partials.latest_posts')
     {
-        $data = [
-            'posts' => (new PostController())->getLatestPosts(),
+        $this->view = $view;
+        $this->data['title'] = 'Блог';
+        $this->data['latestPosts'] = [
+            'posts' => (new PostRepository())->getLatestPosts(),
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
         ];
 
-        return ['view' => 'partials/latest_posts', 'latestPosts' => $data];
+        $this->render();
     }
 
     /**
      * Возвращает страницу с постом
-     * @return View
      */
-    public function getPost(): View
+    public function getPost()
     {
         list($module, $slug) = parseRequestUri(); // $module - каталог, $slug - название новости латиницей
 
-        $post = (new PostController())->getPostBySlug($slug);
+        $post = (new PostRepository())->getPostBySlug($slug);
         if(!empty($post)) {
 
-            $userRole = ($this->session->get('userId') !== null) ? (new UserController())->getCurrentUser()->role->code : 'none';
+            $userRole = ($this->session->get('userId') !== null) ? (new UserRepository())->getCurrentUser()->role->code : 'none';
 
             $comments = new PublicCommentController();
 
-            $data = [
-                $module => $post,
-                'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
-                'userRole' => $userRole,
-                'comments' => $comments->getAllowableCommentsByPostId($post->id),
-                'token' => generateToken()
+            $this->data = [
+                'view' => 'post',
+                'data' => [
+                    $module => $post,
+                    'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+                    'token' => generateToken(),
+                    'userRole' => $userRole,
+                    'comments' => $comments->getAllowableCommentsByPostId($post->id)
+                ],
+                'title' => 'Блог | ' . $post->title
             ];
 
-            return new View('index', [
-                'view' => 'post',
-                'data' => $data,
-                'title' => 'Блог | ' . $post->title
-            ]);
+            $this->view = 'index';
+            $this->render();
         }
 
         Redirect::to('/404');
+    }
+
+    /**
+     * Вывод данных в шаблон и отрисовка
+     */
+    public function render(): void
+    {
+        (new View($this->view, $this->data))->render();
     }
 
 }

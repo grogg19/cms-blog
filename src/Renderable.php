@@ -11,8 +11,5 @@ namespace App;
  */
 interface Renderable
 {
-    /**
-     * @return mixed
-     */
-    public function render();
+    public function render(): void;
 }

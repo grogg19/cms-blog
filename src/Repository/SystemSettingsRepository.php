@@ -3,7 +3,7 @@
  * Класс SystemSettingsController
  */
 
-namespace App\Controllers;
+namespace App\Repository;
 
 use App\Model\SystemSetting;
 
@@ -11,7 +11,8 @@ use App\Model\SystemSetting;
  * Class SystemSettingsController
  * @package App\Controllers\BackendControllers
  */
-class SystemSettingsRepository {
+class SystemSettingsRepository extends Repository
+{
 
     /**
      * возвращает настройку по идентификатору $item

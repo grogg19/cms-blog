@@ -1,9 +1,11 @@
 <?php
 
-use App\Controllers\UserController;
+use App\Repository\UserRepository;
 use App\View;
 
-$avatarPath = (new UserController())->getUserAvatarPath();
+/** Перетащить это все в PublicCommentsController */
+
+$avatarPath = (new UserRepository())->getUserAvatarPath();
 $token = !empty($token) ? $token : '';
 $userRole = !empty($userRole) ? $userRole : 'none';
 $comments = !empty($comments) ? $comments : [];
