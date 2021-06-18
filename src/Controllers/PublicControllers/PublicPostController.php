@@ -6,6 +6,7 @@
 namespace App\Controllers\PublicControllers;
 
 use App\Renderable;
+use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\View;
@@ -115,7 +116,7 @@ class PublicPostController extends PublicController implements Renderable
 
             $userRole = ($this->session->get('userId') !== null) ? (new UserRepository())->getCurrentUser()->role->code : 'none';
 
-            $comments = new PublicCommentController();
+            $comments = new CommentRepository();
 
             $this->data = [
                 'view' => 'post',

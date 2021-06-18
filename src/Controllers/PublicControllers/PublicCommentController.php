@@ -4,14 +4,13 @@ namespace App\Controllers\PublicControllers;
 
 use App\Auth\Auth;
 use App\Jsonable;
-use App\Renderable;
+use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
 use App\Controllers\ToastsController;
 use App\Repository\UserRepository;
 use App\Model\Comment;
 use App\Validate\Validator;
-use App\View;
-use Illuminate\Database\Eloquent\Collection;
+
 
 use function Helpers\checkToken;
 
@@ -19,69 +18,20 @@ use function Helpers\checkToken;
  * Class PublicCommentController
  * @package App\Controllers\PublicControllers
  */
-class PublicCommentController extends PublicController implements Renderable, Jsonable
+class PublicCommentController extends PublicController implements Jsonable
 {
-    /**
-     * @var string
-     */
-    private $view;
-
     /**
      * @var array
      */
     private $data;
 
     /**
-     * Возвращает комментарий по его id
-     * @param int $id
-     * @return Comment
+     * PublicCommentController constructor.
      */
-    public function getCommentById(int $id): Comment
+    public function __construct()
     {
-        return Comment::find($id);
-    }
-
-    /**
-     * Возвращает все комментарии поста
-     * @param int $postId
-     * @return Collection
-     */
-    public function getAllCommentsByPostId(int $postId): Collection
-    {
-        return Comment::where('post_id', $postId)->get();
-    }
-
-    /**
-     * возвращает все проверенные комментарии поста
-     * @param int $postId
-     * @return Collection
-     */
-    public function getAllModeratedCommentsByPostId(int $postId): Collection
-    {
-        $userId = !empty($this->session->get('userId')) ? $this->session->get('userId') : 0;
-
-        return Comment::where(function ($query) use ($postId) {
-            $query->where('has_moderated', 1)
-                  ->where('post_id', $postId);
-        })
-            ->orWhere(function($query) use ($postId, $userId) {
-                    $query->where('post_id', $postId)
-                          ->where('user_id', $userId);
-            })
-            ->get();
-    }
-
-    /**
-     * Возвращает коллекцию доступных комментариев для поста с postId
-     * @param $postId
-     * @return Collection
-     */
-    public function getAllowableCommentsByPostId($postId): Collection
-    {
-        if((new PublicUserController())->checkUserForComments()) {
-            return $this->getAllCommentsByPostId($postId);
-        }
-        return $this->getAllModeratedCommentsByPostId($postId);
+        parent::__construct();
+        $this->commentRepository = new CommentRepository();
     }
 
     /**
@@ -146,14 +96,6 @@ class PublicCommentController extends PublicController implements Renderable, Js
     public function json(): string
     {
         return json_encode($this->data);
-    }
-
-    /**
-     * Вывод данных в шаблон и отрисовка
-     */
-    public function render(): void
-    {
-        (new View($this->view, $this->data))->render();
     }
 
 }
