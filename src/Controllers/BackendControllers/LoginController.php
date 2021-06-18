@@ -7,7 +7,7 @@ namespace App\Controllers\BackendControllers;
 
 
 use App\Controllers\ToastsController;
-use App\Controllers\UserController;
+use App\Repository\UserRepository;
 use App\Parse\Yaml;
 use App\Validate\Validator;
 use App\View;
@@ -29,13 +29,6 @@ use function Helpers\getCurrentDate;
  */
 class LoginController extends Controller
 {
-    /**
-     * LoginController constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * вывод формы для авторизации
@@ -61,7 +54,7 @@ class LoginController extends Controller
     public function adminAuth(): string
     {
         if(empty($this->request->post()) || !checkToken()) {
-            return ToastsController::getToast('warning', 'Нет хватает данных для входа, обновите страницу!');
+            return (new ToastsController())->getToast('warning', 'Нет хватает данных для входа, обновите страницу!');
         }
 
         // Если есть данные в request и токены совпадают,
@@ -84,16 +77,16 @@ class LoginController extends Controller
 
         // если ошибок в валидации не было,
         // то ищем юзера с парой email-пароль в бд
-        $user = (new UserController())->findUser($this->request->post('email'), $this->request->post('password'));
+        $user = (new UserRepository())->findUser($this->request->post('email'), $this->request->post('password'));
 
         if($user === null) {
             // Если пользователя нет, возвращаем сообщение, что такого пользователя нет.
-            return ToastsController::getToast('warning', 'Пользователь с такими данными не найден!');
+            return (new ToastsController())->getToast('warning', 'Пользователь с такими данными не найден!');
         }
 
         $auth = new Auth();
         if(!$auth->isActivated($user)) {
-            return ToastsController::getToast('warning', 'Ваша учетная запись деактивирована');
+            return (new ToastsController())->getToast('warning', 'Ваша учетная запись деактивирована');
         }
         // Если есть такой юзер, то авторизуем его и возвращаем на страницу, с которой он логинился
         $persistCode = $this->makeUserHash($user);

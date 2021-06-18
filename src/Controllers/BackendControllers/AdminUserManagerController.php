@@ -7,7 +7,7 @@
 namespace App\Controllers\BackendControllers;
 
 use App\Controllers\ToastsController;
-use App\Controllers\UserController;
+use App\Repository\UserRepository;
 use App\View;
 
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -21,9 +21,9 @@ use function Helpers\generateToken;
 class AdminUserManagerController extends AdminController
 {
     /**
-     * @var UserController
+     * @var UserRepository
      */
-    private UserController $userController;
+    private UserRepository $userRepository;
 
     /**
      * AdminUserManagerController constructor.
@@ -32,9 +32,9 @@ class AdminUserManagerController extends AdminController
     {
         parent::__construct();
 
-        $this->userController = new UserController();
+        $this->userRepository = new UserRepository();
 
-        $user = $this->userController->getCurrentUser();
+        $user = $this->userRepository->getCurrentUser();
 
         $this->auth->checkSuperUser($user);
 
@@ -48,7 +48,7 @@ class AdminUserManagerController extends AdminController
     {
         $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
 
-        $users = $this->userController->getAllUsers('asc', $quantity);
+        $users = $this->userRepository->getAllUsers('asc', $quantity);
 
         if($users instanceof LengthAwarePaginator) {
             $query = (!empty($quantity)) ? '?quantity=' . $quantity : '';
@@ -61,8 +61,8 @@ class AdminUserManagerController extends AdminController
                 'title' => 'Список пользователей',
                 'users' => $users,
                 'token' => generateToken(),
-                'pathToAvatar' => $this->userController->getUserAvatarPath(),
-                'roles' => $this->userController->getUserRoles(),
+                'pathToAvatar' => $this->userRepository->getUserAvatarPath(),
+                'roles' => $this->userRepository->getUserRoles(),
                 'quantity' => $quantity,
                 'currentUser' => $this->session->get('userId')
             ],
@@ -78,7 +78,7 @@ class AdminUserManagerController extends AdminController
     public function userChangeData(): string
     {
         if(!checkToken() || empty($this->request->post('user'))) {
-            return ToastsController::getToast('warning', 'Ошибка токена, обновите страницу.');
+            return (new ToastsController())->getToast('warning', 'Ошибка токена, обновите страницу.');
         }
 
         if(!empty($this->request->post('active_status'))) {
@@ -89,12 +89,12 @@ class AdminUserManagerController extends AdminController
             $data['role_id'] = $this->request->post('role');
         }
 
-        $user = $this->userController->getUserById((int) $this->request->post('user'));
+        $user = $this->userRepository->getUserById((int) $this->request->post('user'));
 
-        if($this->userController->updateUser($user, $data)) {
-            return ToastsController::getToast('success', 'Данные пользователя изменены');
+        if($this->userRepository->updateUser($user, $data)) {
+            return (new ToastsController())->getToast('success', 'Данные пользователя изменены');
         } else {
-            return ToastsController::getToast('warning', 'Ошибка изменений в БД');
+            return (new ToastsController())->getToast('warning', 'Ошибка изменений в БД');
         }
     }
 }

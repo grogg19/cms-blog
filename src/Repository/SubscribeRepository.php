@@ -31,9 +31,9 @@ class SubscribeRepository extends Repository
         $subscriber = new Subscriber($data);
 
         if($subscriber->save()) {
-            return ToastsController::getToast('success', 'Вы успешно подписались на рассылку');
+            return (new ToastsController())->getToast('success', 'Вы успешно подписались на рассылку');
         }
-        return ToastsController::getToast('warning', 'Подписаться не получилось');
+        return (new ToastsController())->getToast('warning', 'Подписаться не получилось');
     }
 
     /**

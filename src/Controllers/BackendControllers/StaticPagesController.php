@@ -135,7 +135,7 @@ class StaticPagesController extends AdminController
     public function savePage(): string
     {
         if(!checkToken()) {
-            return ToastsController::getToast('warning', 'Сессия устарела, обновите страницу!');
+            return (new ToastsController())->getToast('warning', 'Сессия устарела, обновите страницу!');
         }
 
         if(!empty($this->request->post('edit_form'))) {
@@ -146,7 +146,7 @@ class StaticPagesController extends AdminController
             if($existPage !== null) {
                 $existPage->deletePage();
             } else {
-                return ToastsController::getToast('warning', 'Такой страницы не существует!');
+                return (new ToastsController())->getToast('warning', 'Такой страницы не существует!');
             }
 
         }
@@ -191,7 +191,7 @@ class StaticPagesController extends AdminController
     public function deletePage(): string
     {
         if(!checkToken() || empty($this->request->post('pageName'))) {
-            return ToastsController::getToast('warning', 'Не хватает данных для удаления попробуйте еще раз!');
+            return (new ToastsController())->getToast('warning', 'Не хватает данных для удаления попробуйте еще раз!');
         }
 
         $page = (new PageList(new FilesList()))->getPageByFileName( (string) $this->request->post('pageName'));
@@ -204,6 +204,6 @@ class StaticPagesController extends AdminController
                 'url' => '/admin/static-pages'
             ]);
         }
-        return ToastsController::getToast('warning', 'Невозможно удалить страницу!');
+        return (new ToastsController())->getToast('warning', 'Невозможно удалить страницу!');
     }
 }

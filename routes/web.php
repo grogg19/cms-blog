@@ -6,7 +6,7 @@ use App\Router;
 $router = new Router(); // создаем маршрутизатор
 
 /** Главная страница с лентой постов  */
-$router->get('get','/', 'Controllers\PublicControllers\PublicPostController@index');
+$router->get('get','/', 'Controllers\PublicControllers\PublicPostController@allPosts');
 
 /** Добавочная загрузка постов в ленте  */
 $router->get('post','/morePosts', 'Controllers\PublicControllers\PublicPostController@allPosts');
@@ -15,7 +15,7 @@ $router->get('post','/morePosts', 'Controllers\PublicControllers\PublicPostContr
 $router->get( 'get', '/post/*' , 'Controllers\PublicControllers\PublicPostController@getPost');
 
 /** Страница списка постов в паблике  */
-$router->get( 'get', '/posts' , 'Controllers\PublicControllers\PublicPostController@index');
+$router->get( 'get', '/posts' , 'Controllers\PublicControllers\PublicPostController@allPosts');
 
 /** Страница 404  */
 $router->get('get','/404', 'Exception\NotFoundException@render');

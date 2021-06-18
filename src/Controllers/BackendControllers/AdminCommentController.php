@@ -4,11 +4,7 @@
  */
 namespace App\Controllers\BackendControllers;
 
-use App\Controllers\CommentRepository;
-use App\Controllers\PostController;
-use App\Controllers\UserController;
-use App\Model\Comment;
-use App\Validate\Validator;
+use App\Repository\CommentRepository;
 use App\View;
 use App\Controllers\ToastsController;
 
@@ -68,13 +64,13 @@ class AdminCommentController extends AdminController
     public function toApproveComment(): string
     {
         if(empty($this->request->post('commentId')) || !checkToken()) {
-            return ToastsController::getToast('warning', 'Недостоверные данные, обновите страницу');
+            return (new ToastsController())->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
         $commentRepository = new CommentRepository();
         $comment = $commentRepository->setHasModeratedApprove((int) $this->request->post('commentId'));
         if($comment == null) {
-            return ToastsController::getToast('warning', 'Комментарий не найден');
+            return (new ToastsController())->getToast('warning', 'Комментарий не найден');
         }
 
         (new ToastsController())->setToast('success', 'Комментарий успешно одобрен');
@@ -91,14 +87,14 @@ class AdminCommentController extends AdminController
     public function toRejectComment(): string
     {
         if(empty($this->request->post('commentId')) || !checkToken()) {
-            return ToastsController::getToast('warning', 'Недостоверные данные, обновите страницу');
+            return (new ToastsController())->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
         $commentRepository = new CommentRepository();
         $comment = $commentRepository->setHasModeratedReject((int) $this->request->post('commentId'));
 
         if($comment == null) {
-            return ToastsController::getToast('warning', 'Комментарий не найден');
+            return (new ToastsController())->getToast('warning', 'Комментарий не найден');
         }
 
         (new ToastsController())->setToast('success', 'Комментарий успешно отклонён');

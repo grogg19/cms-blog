@@ -46,17 +46,10 @@ class PublicPostController extends PublicController implements Renderable
     }
 
     /**
-     * Выводит все посты на странице
-     */
-    public function index()
-    {
-        $this->allPosts();
-    }
-
-    /**
      * Вывод всех опубликованных постов
+     * @return Renderable
      */
-    public function allPosts()
+    public function allPosts(): Renderable
     {
         $page = !empty($this->request->post('page')) ? $this->request->post('page') : 1;
 
@@ -84,14 +77,15 @@ class PublicPostController extends PublicController implements Renderable
             $this->view = 'index';
         }
 
-        $this->render();
+        return $this;
     }
 
     /**
      * Вывод списка последних постов
      * @param string $view
+     * @return Renderable
      */
-    public function latestPosts(string $view = 'partials.latest_posts')
+    public function latestPosts(string $view = 'partials.latest_posts'): Renderable
     {
         $this->view = $view;
         $this->data['title'] = 'Блог';
@@ -100,13 +94,14 @@ class PublicPostController extends PublicController implements Renderable
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
         ];
 
-        $this->render();
+        return $this;
     }
 
     /**
      * Возвращает страницу с постом
+     * @return Renderable
      */
-    public function getPost()
+    public function getPost(): Renderable
     {
         list($module, $slug) = parseRequestUri(); // $module - каталог, $slug - название новости латиницей
 
@@ -135,8 +130,8 @@ class PublicPostController extends PublicController implements Renderable
             ];
 
             $this->view = 'index';
-            $this->render();
         }
+        return $this;
     }
 
     /**

@@ -225,7 +225,7 @@ class AdminPostController extends AdminController
     public function savePost(): string
     {
         if(!checkToken()) {
-            return ToastsController::getToast('warning', 'Неверный токен, обновите страницу');
+            return (new ToastsController())->getToast('warning', 'Неверный токен, обновите страницу');
         }
 
         // Валидируем данные формы
@@ -251,7 +251,7 @@ class AdminPostController extends AdminController
                 ]);
 
             } catch (QueryException $e) {
-                return ToastsController::getToast('warning', 'Ошибка сохранения в БД: '. $e->getMessage());
+                return (new ToastsController())->getToast('warning', 'Ошибка сохранения в БД: '. $e->getMessage());
             }
         }
 
@@ -280,7 +280,7 @@ class AdminPostController extends AdminController
             }
             $this->postRepository->deletePost($post);
         } catch (Exception $exception) {
-            return ToastsController::getToast('warning', 'Ошибка удаления поста! Сообщение: ' . $exception->getMessage());
+            return (new ToastsController())->getToast('warning', 'Ошибка удаления поста! Сообщение: ' . $exception->getMessage());
         }
 
         (new ToastsController())->setToast('success', 'Пост успешно удалён.');
@@ -307,7 +307,7 @@ class AdminPostController extends AdminController
 
             return json_decode($imageUploader->upload());
         }
-        return ToastsController::getToast('warning', 'Отсутствуют файлы для загрузки');
+        return (new ToastsController())->getToast('warning', 'Отсутствуют файлы для загрузки');
 
     }
 

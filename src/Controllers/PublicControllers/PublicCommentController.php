@@ -3,11 +3,14 @@
 namespace App\Controllers\PublicControllers;
 
 use App\Auth\Auth;
-use App\Controllers\PostController;
+use App\Jsonable;
+use App\Renderable;
+use App\Repository\PostRepository;
 use App\Controllers\ToastsController;
-use App\Controllers\UserController;
+use App\Repository\UserRepository;
 use App\Model\Comment;
 use App\Validate\Validator;
+use App\View;
 use Illuminate\Database\Eloquent\Collection;
 
 use function Helpers\checkToken;
@@ -16,15 +19,17 @@ use function Helpers\checkToken;
  * Class PublicCommentController
  * @package App\Controllers\PublicControllers
  */
-class PublicCommentController extends PublicController
+class PublicCommentController extends PublicController implements Renderable, Jsonable
 {
     /**
-     * PublicCommentController constructor.
+     * @var string
      */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    private $view;
+
+    /**
+     * @var array
+     */
+    private $data;
 
     /**
      * Возвращает комментарий по его id
@@ -87,11 +92,11 @@ class PublicCommentController extends PublicController
     {
 
         if(!(new Auth())->checkAuthorization()) {
-            return ToastsController::getToast('warning', 'Оставлять комментарии могут только зарегистрированные пользователи');
+            return (new ToastsController())->getToast('warning', 'Оставлять комментарии могут только зарегистрированные пользователи');
         }
 
         if(empty($this->request->post()) || !checkToken()) {
-            return ToastsController::getToast('warning', 'Нет входящих данных');
+            return (new ToastsController())->getToast('warning', 'Нет входящих данных');
         }
 
         $commentDataToSave = [
@@ -99,7 +104,7 @@ class PublicCommentController extends PublicController
             'content' => strip_tags((string) $this->request->post('commentContent')),
         ];
 
-        $commentDataToSave['has_moderated'] = (in_array((new UserController())
+        $commentDataToSave['has_moderated'] = (in_array((new UserRepository())
             ->getCurrentUser()
             ->role
             ->code, ['admin', 'content-manager'])) ?  1 : 0;
@@ -112,11 +117,11 @@ class PublicCommentController extends PublicController
 
         // если есть ошибки, возвращаем Тост с ошибкой
         if(!empty($resultValidateForms['error'])) {
-            return ToastsController::getToast('warning', 'Ошибка записи данных комментария');
+            return (new ToastsController())->getToast('warning', 'Ошибка записи данных комментария');
         }
 
         $comment = new Comment($commentDataToSave);
-        $post = (new PostController())->getPostById((int) $this->request->post('postId'));
+        $post = (new PostRepository())->getPostById((int) $this->request->post('postId'));
 
         if($post !== null) {
 
@@ -124,14 +129,31 @@ class PublicCommentController extends PublicController
 
             (new ToastsController())->setToast('success', 'Комментарий успешно сохранён.');
 
-            return json_encode([
+            $this->data = [
                 'url' => '/post/' . $post->slug
-                //'url' => '/post/' . $post->slug . '?#comments'
-            ]);
+            ];
+
+            return $this->json();
 
         }
 
-        return ToastsController::getToast('warning', 'Указанного поста не существует');
+        return (new ToastsController())->getToast('warning', 'Указанного поста не существует');
+    }
+
+    /**
+     * @return string
+     */
+    public function json(): string
+    {
+        return json_encode($this->data);
+    }
+
+    /**
+     * Вывод данных в шаблон и отрисовка
+     */
+    public function render(): void
+    {
+        (new View($this->view, $this->data))->render();
     }
 
 }

@@ -33,7 +33,7 @@ class Route
      * @param $callback
      * @return View|string|null
      */
-    private function prepareCallback($callback): View|string|null
+    private function prepareCallback($callback): Renderable|string|null
     {
         if (is_string($callback)) { // Если значение $callback строка, разделяем ее по разделителю "@"
             // Если ссылка на стандартный метод
@@ -99,7 +99,7 @@ class Route
      * Метод запускает и возвращает результат работы $callback
      * @return View|string|null
      */
-    public function run(): View|string|null
+    public function run(): Renderable|string|null
     {
         return $this->prepareCallback($this->callback);
     }

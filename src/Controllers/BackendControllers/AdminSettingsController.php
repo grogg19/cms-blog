@@ -6,11 +6,11 @@
 namespace App\Controllers\BackendControllers;
 
 use App\Controllers\ToastsController;
-use App\Controllers\UserController;
+use App\Repository\UserRepository;
 use App\Model\SystemSetting;
 use App\Validate\Validator;
 use App\View;
-use App\Controllers\SystemSettingsRepository;
+use App\Repository\SystemSettingsRepository;
 use function Helpers\checkToken;
 use function Helpers\generateToken;
 
@@ -27,7 +27,7 @@ class AdminSettingsController extends AdminController
     {
         parent::__construct();
 
-        $user = (new UserController())->getCurrentUser();
+        $user = (new UserRepository())->getCurrentUser();
 
         $this->auth->checkSuperUser($user);
     }
@@ -60,7 +60,7 @@ class AdminSettingsController extends AdminController
     public function saveSettings(): string
     {
         if(empty($this->request->post()) || !checkToken()) {
-            return ToastsController::getToast('warning', 'Недостоверные данные, обновите страницу');
+            return (new ToastsController())->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
         $data = $this->request->post();
@@ -73,7 +73,7 @@ class AdminSettingsController extends AdminController
         $resultValidation = (new Validator($data, SystemSetting::class, $rules))->makeValidation();
 
         if(!empty($resultValidation['error'])) {
-            return ToastsController::getToast('warning', $resultValidation['error']['per_page']['errorMessage']);
+            return (new ToastsController())->getToast('warning', $resultValidation['error']['per_page']['errorMessage']);
         }
 
         if((new SystemSettingsRepository())->updateSystemSettings('preferences', $data)) {
@@ -85,7 +85,7 @@ class AdminSettingsController extends AdminController
             ]);
 
         } else {
-            return ToastsController::getToast('warning', 'Ошибка сохранения в БД.');
+            return (new ToastsController())->getToast('warning', 'Ошибка сохранения в БД.');
         }
     }
 

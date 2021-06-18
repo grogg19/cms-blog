@@ -6,7 +6,7 @@
 namespace App\Controllers\PublicControllers;
 
 use App\Controllers\Controller;
-use App\Controllers\SubscribeRepository;
+use App\Repository\SubscribeRepository;
 use App\Controllers\ToastsController;
 use App\Model\Subscriber;
 use App\Redirect;
@@ -26,7 +26,7 @@ class PublicSubscribeController extends Controller
     public function subscribe(): string
     {
         if(empty($this->request->post('emailSubscribe')) && !checkToken()) {
-            return ToastsController::getToast('warning', 'Данные недействительны, обновите страницу');
+            return (new ToastsController())->getToast('warning', 'Данные недействительны, обновите страницу');
         }
 
         $email = (string) $this->request->post('emailSubscribe');
@@ -40,7 +40,7 @@ class PublicSubscribeController extends Controller
         if(empty($resultValidation['error'])) {
             return (new SubscribeRepository())->createSubscriber($email);
         }
-        return ToastsController::getToast('warning', $resultValidation['error']['email']['errorMessage']);
+        return (new ToastsController())->getToast('warning', $resultValidation['error']['email']['errorMessage']);
 
     }
 

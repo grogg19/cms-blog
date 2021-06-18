@@ -6,20 +6,29 @@
 namespace App\Controllers;
 
 use App\Cookie\Cookie;
+use App\Jsonable;
+use App\Renderable;
 use App\View;
+
 use function Helpers\checkToken;
 
 /**
  * Class ToastsController
  * @package App\Controllers
  */
-class ToastsController extends Controller
+class ToastsController extends Controller implements Jsonable
 {
+
+    /**
+     * @var array
+     */
+    private $data;
+
     /**
      * отрисовывает шаблон Тостов
-     * @return string
+     * @return Renderable|null
      */
-    public function index(): string
+    public function index(): ?Renderable
     {
         if(!empty($this->request->post('typeToast'))
             && !empty($this->request->post('dataToast'))
@@ -29,10 +38,9 @@ class ToastsController extends Controller
                 'typeToast' => $this->request->post('typeToast'),
                 'dataToast' => $this->request->post('dataToast')
             ]);
-
             $content->render();
         }
-        return '';
+        return null;
     }
 
     /**
@@ -41,16 +49,17 @@ class ToastsController extends Controller
      * @param string $message
      * @return string
      */
-    public static function getToast(string $type = 'info', string $message = ''): string
+    public function getToast(string $type = 'info', string $message = ''): string
     {
-        return json_encode([
+        $this->data = [
             'toast' => [
                 'typeToast' => $type,
                 'dataToast' => [
                     'message' => $message
                 ]
             ]
-        ]);
+        ];
+        return $this->json();
     }
 
     /**
@@ -112,5 +121,14 @@ class ToastsController extends Controller
 
             $this->destroyToast();
         }
+    }
+
+    /**
+     * Возвращает json
+     * @return string
+     */
+    public function json(): string
+    {
+        return json_encode($this->data);
     }
 }

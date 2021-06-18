@@ -11,7 +11,7 @@ use App\Controllers\ToastsController;
 use App\Model\User;
 use App\Uploader\Upload;
 use App\Validate\Validator;
-use App\Controllers\UserController;
+use App\Repository\UserRepository;
 use App\View;
 use App\Parse\Yaml;
 
@@ -24,12 +24,12 @@ use function Helpers\generateToken;
  */
 class AdminAccountController extends AdminController
 {
-    private UserController $userController;
+    private UserRepository $userRepository;
 
     public function __construct()
     {
         parent::__construct();
-        $this->userController = new UserController();
+        $this->userRepository = new UserRepository();
     }
 
     /**
@@ -39,7 +39,7 @@ class AdminAccountController extends AdminController
     public function editUserProfileForm(): View
     {
         if(!empty($this->session->get('userId'))) {
-            $user = $this->userController->getUserById($this->session->get('userId'));
+            $user = $this->userRepository->getUserById($this->session->get('userId'));
         }
 
         return new View('admin', [
@@ -48,7 +48,7 @@ class AdminAccountController extends AdminController
                 'form' => $this->getUserAccountFields(),
                 'user' => $user,
                 'token' => generateToken(),
-                'pathToAvatar' => $this->userController->getUserAvatarPath()
+                'pathToAvatar' => $this->userRepository->getUserAvatarPath()
             ],
             'title' => 'Редактирование профиля пользователя'
         ]);
@@ -61,7 +61,7 @@ class AdminAccountController extends AdminController
     public function getUserProfile(): View
     {
         if(!empty($this->session->get('userId'))) {
-            $user = $this->userController->getUserById($this->session->get('userId'));
+            $user = $this->userRepository->getUserById($this->session->get('userId'));
         } else {
             return new View('404');
         }
@@ -70,7 +70,7 @@ class AdminAccountController extends AdminController
             'view' => 'admin/account/view_account',
             'data' => [
                 'user' => $user,
-                'pathAvatar' => $this->userController->getUserAvatarPath(),
+                'pathAvatar' => $this->userRepository->getUserAvatarPath(),
                 'title' => 'Профиль пользователя',
                 'token' => generateToken()
 
@@ -97,11 +97,11 @@ class AdminAccountController extends AdminController
     {
         if(empty($this->request->post()) || !checkToken() || empty($this->session->get('userId'))) {
             //  возвращаем сообщение об ошибке записи в БД.
-            return ToastsController::getToast('warning', 'Невозможно обновить данные пользователя');
+            return (new ToastsController())->getToast('warning', 'Невозможно обновить данные пользователя');
         }
 
         // Если есть POST данные и токен соответствует,
-        $user = $this->userController->getUserById($this->session->get('userId'));
+        $user = $this->userRepository->getUserById($this->session->get('userId'));
 
         $data = $this->request->post();
 
@@ -143,7 +143,7 @@ class AdminAccountController extends AdminController
         // если получили сообщение об ошибке, то выведем его в блок аватара
         if(isset($uploadAvatar->error)) {
             $error = implode(', ', $uploadAvatar->error);
-            return ToastsController::getToast('warning', $error);
+            return (new ToastsController())->getToast('warning', $error);
 
         } else {
             // Если ошибок нет, то добавляем к пользователю атрибут $data['avatar']
@@ -151,7 +151,7 @@ class AdminAccountController extends AdminController
         }
 
         // записываем изменения в БД
-        if($this->userController->updateUser($user, $data)) {
+        if($this->userRepository->updateUser($user, $data)) {
 
             (new ToastsController())->setToast('success', 'Изменения успешно сохранены.');
 
@@ -162,7 +162,7 @@ class AdminAccountController extends AdminController
 
             // Если не удалось сохранить изменения, выводим сообщение об этом
         } else {
-            return ToastsController::getToast('warning', 'Невозможно обновить данные пользователя');
+            return (new ToastsController())->getToast('warning', 'Невозможно обновить данные пользователя');
         }
     }
 
@@ -193,8 +193,8 @@ class AdminAccountController extends AdminController
             $resultUpload = json_decode($uploader->upload('avatars'));
 
             // Удаляем старый аватар если он был
-            if(!empty($user->avatar) && file_exists($this->userController->getUserAvatarRootPath() . $user->avatar) && !isset($resultUpload->error)) {
-                unlink($this->userController->getUserAvatarRootPath() . $user->avatar);
+            if(!empty($user->avatar) && file_exists($this->userRepository->getUserAvatarRootPath() . $user->avatar) && !isset($resultUpload->error)) {
+                unlink($this->userRepository->getUserAvatarRootPath() . $user->avatar);
             }
 
             return $resultUpload;
