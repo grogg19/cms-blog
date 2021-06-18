@@ -24,4 +24,4 @@ $user = (!empty(Cookie::get('authUser')) && !empty(Cookie::get('PHPSESSID'))) ?
 /**
  * Блок Последние посты
  */
-(new PublicPostController())->latestPosts();
+(new PublicPostController())->latestPosts()->render();
