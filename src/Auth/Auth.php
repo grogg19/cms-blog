@@ -7,7 +7,7 @@ namespace App\Auth;
 
 use App\Controllers\ToastsController;
 use App\Model\User;
-use App\Controllers\UserController;
+use App\Repository\UserRepository;
 use App\Cookie\Cookie;
 use App\Config;
 use App\Redirect;
@@ -55,9 +55,9 @@ class Auth
         }
 
         if($this->session->get('userId') === null) {
-            $user = (new UserController())->getUserByHash($this->getHashUser());
+            $user = (new UserRepository())->getUserByHash($this->getHashUser());
         } else {
-            $user = (new UserController())->getUserById($this->session->get('userId'));
+            $user = (new UserRepository())->getUserById($this->session->get('userId'));
         }
         return !($user === null || $user->is_activated === 0 );
     }
@@ -98,7 +98,7 @@ class Auth
      */
     public function userByHash($hash): ?User
     {
-        return (new UserController())->getUserByHash($hash);
+        return (new UserRepository())->getUserByHash($hash);
     }
 
     /**
@@ -170,14 +170,11 @@ class Auth
             (new ToastsController())->setToast('warning', 'Ваша учетная запись недоступна');
             return false;
         } else {
-            $user = (new UserController())->getUserById($this->session->get('userId'));
+            $user = (new UserRepository())->getUserById($this->session->get('userId'));
             $this->setUserAttributes($user);
         }
 
-
         return true;
     }
-
-
 
 }

@@ -4,11 +4,11 @@
  */
 
 use App\View;
-use App\Controllers\UserController;
+use App\Repository\UserRepository;
 
     (new View('admin_header', [
         'title' => !empty($title) ? $title : "",
-        'user' => (new UserController())->getCurrentUser()
+        'user' => (new UserRepository())->getCurrentUser()
     ]))->render();
 
     ?>

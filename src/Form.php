@@ -5,9 +5,6 @@
 
 namespace App;
 
-use App\View;
-use App\Renderable;
-
 /**
  * Class Form
  * @package App
@@ -15,7 +12,7 @@ use App\Renderable;
 class Form implements Renderable
 {
     /**
-     * @var \App\View
+     * @var View
      */
     protected $view;
 
@@ -31,11 +28,10 @@ class Form implements Renderable
 
     /**
      * Возвращает View формы
-     * @return mixed|void
      */
-    public function render()
+    public function render(): void
     {
-        return $this->view->render();
+        $this->view->render();
     }
 
 }
