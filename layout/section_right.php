@@ -5,7 +5,7 @@
 
 use App\Controllers\PublicControllers\PublicPostController;
 use App\View;
-use App\Controllers\UserController;
+use App\Repository\UserRepository;
 use App\Cookie\Cookie;
 use function Helpers\session;
 /**
@@ -14,7 +14,7 @@ use function Helpers\session;
  * @var $token
  */
 $user = (!empty(Cookie::get('authUser')) && !empty(Cookie::get('PHPSESSID'))) ?
-    (new UserController())->getUserById(session()->get('userId')) : null;
+    (new UserRepository())->getUserById(session()->get('userId')) : null;
 
 (new View('partials.subscribe',[
     'token' => $token,
@@ -24,4 +24,4 @@ $user = (!empty(Cookie::get('authUser')) && !empty(Cookie::get('PHPSESSID'))) ?
 /**
  * Блок Последние посты
  */
-(new View('partials.latest_posts', (new PublicPostController())->latestPosts()))->render();
+(new PublicPostController())->latestPosts();

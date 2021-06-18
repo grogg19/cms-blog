@@ -33,7 +33,7 @@ use App\Controllers\PublicControllers\PublicPostController;
                     </div>
                     <div class="col-sm-12 col-lg-6">
                         <?php
-                        (new View('partials.footer.latest_posts', (new PublicPostController())->latestPosts()))->render();
+                        (new PublicPostController())->latestPosts('partials.footer.latest_posts');
                         ?>
                     </div>
                 </div>
