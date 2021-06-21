@@ -37,10 +37,10 @@ class Auth
      */
     public function isAuthorized(): bool
     {
-        if (!$this->session->get('authAuthorized')) {
-            return false;
+        if ($this->session->get('authAuthorized')) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -159,6 +159,7 @@ class Auth
         if($this->getHashUser() == null) {
             return false;
         }
+
         $this->setAuthorized($this->getHashUser());
 
         if(!$this->isAuthorized()) {
@@ -172,9 +173,9 @@ class Auth
         } else {
             $user = (new UserRepository())->getUserById($this->session->get('userId'));
             $this->setUserAttributes($user);
+            return true;
         }
 
-        return true;
     }
 
 }

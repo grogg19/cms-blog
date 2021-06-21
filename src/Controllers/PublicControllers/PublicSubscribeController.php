@@ -44,7 +44,12 @@ class PublicSubscribeController extends Controller
 
     }
 
-    private function getValidate(array $data)
+    /**
+     * @param array $data
+     * @return array
+     * @throws \App\Exception\ValidationException
+     */
+    private function getValidate(array $data): array
     {
         $validator = new Validator($data, Subscriber::class);
         return $validator->makeValidation();
@@ -56,7 +61,7 @@ class PublicSubscribeController extends Controller
      * @param string $hash
      * @return bool|null
      */
-    public function unsubscribe(string $email, string $hash)
+    public function unsubscribe(string $email, string $hash): ?bool
     {
         return (new SubscribeRepository())->deleteSubscriber($email, $hash);
     }

@@ -6,10 +6,10 @@
 namespace App\Controllers\BackendControllers;
 
 use App\Controllers\ToastsController;
+use App\Renderable;
 use App\Repository\UserRepository;
 use App\Model\SystemSetting;
 use App\Validate\Validator;
-use App\View;
 use App\Repository\SystemSettingsRepository;
 use function Helpers\checkToken;
 use function Helpers\generateToken;
@@ -34,13 +34,14 @@ class AdminSettingsController extends AdminController
 
     /**
      * метод выводит шаблон с настройками CMS
+     * @return Renderable
      */
-    public function index()
+    public function index(): Renderable
     {
         $title = 'Настройки системы';
         $settings = (new SystemSettingsRepository())->getSystemSettings('preferences');
 
-        (new View('admin', [
+        $this->data = [
             'view' => 'admin.settings.settings_admin',
             'data' => [
                 'title' => $title,
@@ -49,7 +50,10 @@ class AdminSettingsController extends AdminController
                 'parameters' => json_decode($settings->value)
             ],
             'title' => 'Администрирование | ' . $title
-        ]))->render();
+        ];
+
+        return $this;
+
     }
 
     /**
@@ -80,13 +84,13 @@ class AdminSettingsController extends AdminController
 
             (new ToastsController())->setToast('success', 'Настройки успешно сохранены');
 
-            return json_encode([
+            $this->data = [
                 'url' => '/admin/settings'
-            ]);
+            ];
+            return $this->json();
 
         } else {
             return (new ToastsController())->getToast('warning', 'Ошибка сохранения в БД.');
         }
     }
-
 }

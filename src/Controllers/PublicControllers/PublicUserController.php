@@ -22,6 +22,7 @@ class PublicUserController extends PublicController
         if(in_array($userRepository->getCurrentUser()->role->code, ['admin', 'content-manager'])) {
             return true;
         }
+
         return false;
     }
 

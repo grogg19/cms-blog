@@ -8,20 +8,35 @@ namespace App\Controllers\BackendControllers;
 use App\Controllers\Controller;
 use App\Cookie\Cookie;
 use App\Auth\Auth;
+use App\Image\ImageManager;
+use App\Jsonable;
 use App\Redirect;
-use App\Controllers\ListenerController;
+use App\Renderable;
+use App\View;
 
 /**
  * Class AdminController
  * @package App\Controllers\BackendControllers
  */
-class AdminController extends Controller
+class AdminController extends Controller implements Renderable, Jsonable
 {
 
     /**
      * @var Auth
      */
     protected $auth;
+
+    /**
+     * @var string;
+     */
+    protected $view = 'admin';
+
+    /**
+     * @var array
+     */
+    protected $data;
+
+
 
     /**
      * AdminController constructor.
@@ -32,7 +47,7 @@ class AdminController extends Controller
 
         $this->auth = new Auth();
 
-        $this->initListener();
+        $this->initCheckers();
 
         // Проверяем факт авторизации пользователя
         if(!$this->auth->checkAuthorization()) {
@@ -48,11 +63,28 @@ class AdminController extends Controller
 
 
     /**
-     * Инициализация слушателя
+     * Инициализация метода дополнительных проверок
      */
-    private function initListener()
+    private function initCheckers()
     {
-        (new ListenerController())->ImageListener(); // чистильщик списка изображений в куках
+        (new ImageManager())->checkImageUploadActuality();
+    }
+
+    /**
+     * Отрисовка контента
+     */
+    public function render(): void
+    {
+        (new View($this->view, $this->data))->render();
+    }
+
+    /**
+     * Возвращает Json
+     * @return string
+     */
+    public function json(): string
+    {
+        return json_encode($this->data);
     }
 
 }

@@ -9,10 +9,10 @@ namespace App\Controllers\BackendControllers;
 
 use App\Controllers\ToastsController;
 use App\Model\User;
+use App\Renderable;
 use App\Uploader\Upload;
 use App\Validate\Validator;
 use App\Repository\UserRepository;
-use App\View;
 use App\Parse\Yaml;
 
 use function Helpers\checkToken;
@@ -24,6 +24,9 @@ use function Helpers\generateToken;
  */
 class AdminAccountController extends AdminController
 {
+    /**
+     * @var UserRepository
+     */
     private UserRepository $userRepository;
 
     public function __construct()
@@ -33,17 +36,17 @@ class AdminAccountController extends AdminController
     }
 
     /**
-     * Возвращает представление формы редактирования пользователя
-     * @return View
+     * Рендерит представление формы редактирования пользователя
+     * @return Renderable
      */
-    public function editUserProfileForm(): View
+    public function editUserProfileForm(): Renderable
     {
         if(!empty($this->session->get('userId'))) {
             $user = $this->userRepository->getUserById($this->session->get('userId'));
         }
 
-        return new View('admin', [
-            'view' => 'admin/account/edit_account',
+        $this->data = [
+            'view' => 'admin.account.edit_account',
             'data' => [
                 'form' => $this->getUserAccountFields(),
                 'user' => $user,
@@ -51,32 +54,35 @@ class AdminAccountController extends AdminController
                 'pathToAvatar' => $this->userRepository->getUserAvatarPath()
             ],
             'title' => 'Редактирование профиля пользователя'
-        ]);
+        ];
+
+        return $this;
     }
 
     /**
-     * Возвращает представление профиля пользователя
-     * @return View
+     * Рендерит представление профиля пользователя
+     * @return Renderable
      */
-    public function getUserProfile(): View
+    public function getUserProfile(): Renderable
     {
         if(!empty($this->session->get('userId'))) {
             $user = $this->userRepository->getUserById($this->session->get('userId'));
         } else {
-            return new View('404');
+            $this->view = '404';
+            return $this;
         }
 
-        return new View('admin', [
-            'view' => 'admin/account/view_account',
+        $this->data = [
+            'view' => 'admin.account.view_account',
             'data' => [
                 'user' => $user,
                 'pathAvatar' => $this->userRepository->getUserAvatarPath(),
                 'title' => 'Профиль пользователя',
                 'token' => generateToken()
-
             ],
             'title' => 'Профиль пользователя'
-        ]);
+        ];
+        return $this;
     }
 
     /**
@@ -129,8 +135,9 @@ class AdminAccountController extends AdminController
         // если есть ошибки
         if(isset($resultValidateForms['error']))  {
 
+            $this->data = $resultValidateForms;
             // возвращаем результат валидации в json
-            return json_encode($resultValidateForms);
+            return $this->json();
         }
 
         // если ошибок в валидации не было
@@ -156,9 +163,11 @@ class AdminAccountController extends AdminController
             (new ToastsController())->setToast('success', 'Изменения успешно сохранены.');
 
             // Перенаправляем обратно в профиль
-            return json_encode([
+            $this->data = [
                 'url' => '/admin/account/'
-            ]);
+            ];
+
+            return $this->json();
 
             // Если не удалось сохранить изменения, выводим сообщение об этом
         } else {

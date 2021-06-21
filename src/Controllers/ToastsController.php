@@ -73,7 +73,6 @@ class ToastsController extends Controller implements Jsonable
         } else {
             return false;
         }
-
     }
 
     /**
@@ -83,14 +82,15 @@ class ToastsController extends Controller implements Jsonable
      */
     public function setToast(string $type = 'info', string $message = ''): void
     {
-        $data = [
+        $this->data = [
             'typeToast' => $type,
             'dataToast' => [
                 'message' => $message
             ]
         ];
 
-        Cookie::set('toast', serialize($data));
+        //Cookie::set('toast', serialize($data));
+        Cookie::set('toast', $this->json());
     }
 
     /**
@@ -109,8 +109,8 @@ class ToastsController extends Controller implements Jsonable
     {
         if($this->issetToast()) {
 
-            $type = unserialize(Cookie::get('toast'))['typeToast'];
-            $message = unserialize(Cookie::get('toast'))['dataToast']['message'];
+            $type = json_decode(Cookie::get('toast'))->typeToast;
+            $message = json_decode(Cookie::get('toast'))->dataToast->message;
 
             $content = new View('partials.toast_main', [
                 'typeToast' => $type,

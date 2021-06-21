@@ -7,8 +7,8 @@
 namespace App\Controllers\BackendControllers;
 
 use App\Controllers\ToastsController;
+use App\Renderable;
 use App\Repository\UserRepository;
-use App\View;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use function Helpers\checkToken;
@@ -41,10 +41,10 @@ class AdminUserManagerController extends AdminController
     }
 
     /**
-     * Выводит список пользователей
-     * @return View
+     * Рендер списка пользователей
+     * @return Renderable
      */
-    public function listUsers(): View
+    public function listUsers(): Renderable
     {
         $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
 
@@ -55,7 +55,7 @@ class AdminUserManagerController extends AdminController
             $users->setPath('user-manager' . $query);
         }
 
-        return new View('admin', [
+        $this->data = [
             'view' => 'admin.users_manager.list',
             'data' => [
                 'title' => 'Список пользователей',
@@ -67,7 +67,9 @@ class AdminUserManagerController extends AdminController
                 'currentUser' => $this->session->get('userId')
             ],
             'title' => 'Редактирование профиля пользователя'
-        ]);
+        ];
+
+        return $this;
     }
 
     /**

@@ -4,11 +4,11 @@
  */
 namespace App\Controllers\BackendControllers;
 
+use App\Renderable;
 use App\Repository\CommentRepository;
-use App\View;
 use App\Controllers\ToastsController;
-
 use Illuminate\Pagination\LengthAwarePaginator;
+
 use function Helpers\checkToken;
 use function Helpers\generateToken;
 
@@ -28,9 +28,10 @@ class AdminCommentController extends AdminController
     }
 
     /**
-     * @return View
+     * Рендер списка комментариев
+     * @return Renderable
      */
-    public function listComments(): View
+    public function listComments(): Renderable
     {
 
         $title = 'Модерация комментариев пользователей';
@@ -45,7 +46,7 @@ class AdminCommentController extends AdminController
             $comments->setPath('comments' . $query);
         }
 
-        return new View('admin', [
+        $this->data = [
             'view' => 'admin.comments.list',
             'data' => [
                 'title' => $title,
@@ -55,10 +56,13 @@ class AdminCommentController extends AdminController
                 'quantity' => $quantity
             ],
             'title' => 'Администрирование | ' . $title
-        ]);
+        ];
+
+        return  $this;
     }
 
     /**
+     * Одобрение комментария
      * @return string
      */
     public function toApproveComment(): string
@@ -75,13 +79,16 @@ class AdminCommentController extends AdminController
 
         (new ToastsController())->setToast('success', 'Комментарий успешно одобрен');
 
-        return json_encode([
+        $this->data = [
             'url' => '/admin/posts/comments'
-        ]);
+        ];
+
+        return $this->json();
 
     }
 
     /**
+     * Отменяет одобрение комментария
      * @return string
      */
     public function toRejectComment(): string
@@ -99,9 +106,10 @@ class AdminCommentController extends AdminController
 
         (new ToastsController())->setToast('success', 'Комментарий успешно отклонён');
 
-        return json_encode([
+        $this->data = [
             'url' => '/admin/posts/comments'
-        ]);
-    }
+        ];
 
+        return $this->json();
+    }
 }

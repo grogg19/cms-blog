@@ -3,84 +3,61 @@
 
 namespace App\Controllers\PublicControllers;
 
-use App\Config;
-use App\Exception\NotFoundException;
 use App\Redirect;
+use App\Renderable;
+use App\Repository\StaticPagesRepository;
 use App\Request\Request;
-use App\StaticPages\FilesList;
 use App\StaticPages\Page;
 use App\StaticPages\PageList;
-use App\StaticPages\PageListCompatible;
-use App\View;
-use Illuminate\Support\Collection;
+
 use function Helpers\cleanJSTags;
 
-class StaticPagesController extends PublicController
+class StaticPagesController extends PublicController implements Renderable
 {
-    private PageListCompatible $staticPages;
+
+    /**
+     * @var PageList
+     */
+    private PageList $staticPages;
 
     /**
      * StaticPagesController constructor.
-     * @throws NotFoundException
      */
     public function __construct()
     {
         parent::__construct();
-        $this->getStaticPagesUrl();
+        $this->staticPages = (new StaticPagesRepository())->getStaticPages();
     }
 
     /**
-     * @return View|null
+     * метод рендерит статические страницы
+     * @return Renderable|null
      */
-    public function index(): ?View
+    public function index(): ?Renderable
     {
-
         $url = (new Request())->server('REQUEST_URI');
-        $page = (new PageList($this->staticPages))->getPageByUrl($url);
 
-        if($page->getParameter('isHidden') !== 0 && $page instanceof Page) {
+        $page = $this->staticPages->getPageByUrl($url);
+
+        if($page->getParameter('isHidden') != 0 && $page instanceof Page) {
             $content = cleanJSTags($page->getHtmlContent());
             $pageParameters = $page->getParameters();
 
-            return new View('index', [
+            $this->data = [
                 'view' => 'static_pages',
-                'title' => 'Блог | ' . $pageParameters['title'],
                 'data' => [
                     'content' => $content,
                     'pageParameters' => $pageParameters
-                ]
-            ]);
+                ],
+                'title' => 'Блог | ' . $pageParameters['title'],
+            ];
+
+            return $this;
+
         } else {
             Redirect::to('/404');
         }
         return null;
     }
 
-    /**
-     * @throws NotFoundException
-     */
-    public function getStaticPagesUrl(): void
-    {
-        $config = Config::getInstance()->getConfig('cms');
-
-        if(!empty($config['staticPages'])) {
-
-            $pages = match ($config['staticPages']) {
-                'files' => new FilesList,
-                'db' => throw new NotFoundException('компонент статических страниц пока не работает с БД', 510)
-            };
-            $this->staticPages = $pages;
-        } else {
-            throw new NotFoundException('В файле конфигурации CMS не указан тип данных статических страниц');
-        }
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getStaticPages(): Collection
-    {
-        $pages = (new PageList($this->staticPages))->listPages();
-        return new Collection($pages);
-    }
 }

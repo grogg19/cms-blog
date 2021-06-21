@@ -16,9 +16,9 @@ class PublicSettingsController extends Controller
     /**
      * возвращает объект настроек
      * @param string $item
-     * @return mixed
+     * @return object
      */
-    public function getPreferencesByName(string $item)
+    public function getPreferencesByName(string $item): object
     {
         $preference = (new SystemSettingsRepository())->getSystemSettings($item);
         return json_decode($preference->value);

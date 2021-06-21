@@ -9,7 +9,6 @@ use App\Renderable;
 use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
-use App\View;
 use App\Config;
 use App\Redirect;
 
@@ -27,15 +26,6 @@ class PublicPostController extends PublicController implements Renderable
      */
     private mixed $configImages;
 
-    /**
-     * @var string;
-     */
-    private $view;
-
-    /**
-     * @var array
-     */
-    private $data;
 
     /**
      * PublicPostController constructor.
@@ -74,8 +64,6 @@ class PublicPostController extends PublicController implements Renderable
                 ],
                 'title' => 'Курсовая работа CMS для Блога'
             ];
-
-            $this->view = 'index';
         }
 
         return $this;
@@ -129,18 +117,8 @@ class PublicPostController extends PublicController implements Renderable
                 ],
                 'title' => 'Блог | ' . $post->title
             ];
-
-            $this->view = 'index';
         }
         return $this;
-    }
-
-    /**
-     * Вывод данных в шаблон и отрисовка
-     */
-    public function render(): void
-    {
-        (new View($this->view, $this->data))->render();
     }
 
 }

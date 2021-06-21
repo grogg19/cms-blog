@@ -4,7 +4,6 @@ namespace App\Controllers\PublicControllers;
 
 use App\Auth\Auth;
 use App\Jsonable;
-use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
 use App\Controllers\ToastsController;
 use App\Repository\UserRepository;
@@ -21,17 +20,11 @@ use function Helpers\checkToken;
 class PublicCommentController extends PublicController implements Jsonable
 {
     /**
-     * @var array
-     */
-    private $data;
-
-    /**
      * PublicCommentController constructor.
      */
     public function __construct()
     {
         parent::__construct();
-        $this->commentRepository = new CommentRepository();
     }
 
     /**
@@ -88,14 +81,6 @@ class PublicCommentController extends PublicController implements Jsonable
         }
 
         return (new ToastsController())->getToast('warning', 'Указанного поста не существует');
-    }
 
-    /**
-     * @return string
-     */
-    public function json(): string
-    {
-        return json_encode($this->data);
     }
-
 }
