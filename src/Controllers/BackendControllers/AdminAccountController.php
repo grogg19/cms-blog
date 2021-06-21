@@ -15,6 +15,7 @@ use App\Validate\Validator;
 use App\Repository\UserRepository;
 use App\Parse\Yaml;
 
+use App\View;
 use function Helpers\checkToken;
 use function Helpers\generateToken;
 
@@ -45,7 +46,7 @@ class AdminAccountController extends AdminController
             $user = $this->userRepository->getUserById($this->session->get('userId'));
         }
 
-        $this->data = [
+        $data = [
             'view' => 'admin.account.edit_account',
             'data' => [
                 'form' => $this->getUserAccountFields(),
@@ -56,7 +57,7 @@ class AdminAccountController extends AdminController
             'title' => 'Редактирование профиля пользователя'
         ];
 
-        return $this;
+        return (new View('admin', $data));
     }
 
     /**
@@ -68,11 +69,11 @@ class AdminAccountController extends AdminController
         if(!empty($this->session->get('userId'))) {
             $user = $this->userRepository->getUserById($this->session->get('userId'));
         } else {
-            $this->view = '404';
-            return $this;
+
+            return (new View('404'));
         }
 
-        $this->data = [
+        $data = [
             'view' => 'admin.account.view_account',
             'data' => [
                 'user' => $user,
@@ -82,7 +83,7 @@ class AdminAccountController extends AdminController
             ],
             'title' => 'Профиль пользователя'
         ];
-        return $this;
+        return (new View('admin', $data));
     }
 
     /**
@@ -135,9 +136,8 @@ class AdminAccountController extends AdminController
         // если есть ошибки
         if(isset($resultValidateForms['error']))  {
 
-            $this->data = $resultValidateForms;
             // возвращаем результат валидации в json
-            return $this->json();
+            return json_encode($resultValidateForms);
         }
 
         // если ошибок в валидации не было
@@ -163,11 +163,8 @@ class AdminAccountController extends AdminController
             (new ToastsController())->setToast('success', 'Изменения успешно сохранены.');
 
             // Перенаправляем обратно в профиль
-            $this->data = [
-                'url' => '/admin/account/'
-            ];
 
-            return $this->json();
+            return json_encode(['url' => '/admin/account/']);
 
             // Если не удалось сохранить изменения, выводим сообщение об этом
         } else {

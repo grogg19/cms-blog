@@ -9,10 +9,11 @@ use App\Repository\StaticPagesRepository;
 use App\Request\Request;
 use App\StaticPages\Page;
 use App\StaticPages\PageList;
+use App\View;
 
 use function Helpers\cleanJSTags;
 
-class StaticPagesController extends PublicController implements Renderable
+class StaticPagesController extends PublicController
 {
 
     /**
@@ -43,7 +44,7 @@ class StaticPagesController extends PublicController implements Renderable
             $content = cleanJSTags($page->getHtmlContent());
             $pageParameters = $page->getParameters();
 
-            $this->data = [
+            $data = [
                 'view' => 'static_pages',
                 'data' => [
                     'content' => $content,
@@ -52,7 +53,7 @@ class StaticPagesController extends PublicController implements Renderable
                 'title' => 'Блог | ' . $pageParameters['title'],
             ];
 
-            return $this;
+            return (new View('index', $data));
 
         } else {
             Redirect::to('/404');

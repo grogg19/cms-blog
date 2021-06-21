@@ -11,6 +11,7 @@ use App\Repository\UserRepository;
 use App\Model\SystemSetting;
 use App\Validate\Validator;
 use App\Repository\SystemSettingsRepository;
+use App\View;
 use function Helpers\checkToken;
 use function Helpers\generateToken;
 
@@ -41,7 +42,7 @@ class AdminSettingsController extends AdminController
         $title = 'Настройки системы';
         $settings = (new SystemSettingsRepository())->getSystemSettings('preferences');
 
-        $this->data = [
+        $data = [
             'view' => 'admin.settings.settings_admin',
             'data' => [
                 'title' => $title,
@@ -52,7 +53,7 @@ class AdminSettingsController extends AdminController
             'title' => 'Администрирование | ' . $title
         ];
 
-        return $this;
+        return (new View('admin', $data));
 
     }
 
@@ -84,10 +85,7 @@ class AdminSettingsController extends AdminController
 
             (new ToastsController())->setToast('success', 'Настройки успешно сохранены');
 
-            $this->data = [
-                'url' => '/admin/settings'
-            ];
-            return $this->json();
+            return json_encode(['url' => '/admin/settings']);
 
         } else {
             return (new ToastsController())->getToast('warning', 'Ошибка сохранения в БД.');

@@ -12,6 +12,7 @@ use App\Repository\UserRepository;
 use App\Config;
 use App\Redirect;
 
+use App\View;
 use function Helpers\generateToken;
 use function Helpers\parseRequestUri;
 
@@ -19,7 +20,7 @@ use function Helpers\parseRequestUri;
  * Class PublicPostController
  * @package App\Controllers\PublicControllers
  */
-class PublicPostController extends PublicController implements Renderable
+class PublicPostController extends PublicController
 {
     /**
      * @var mixed|null
@@ -46,16 +47,16 @@ class PublicPostController extends PublicController implements Renderable
 
         if(!empty($this->request->post('page'))) {
 
-            $this->view = 'partials.posts_items';
-
-            $this->data = [
+            $view = 'partials.posts_items';
+            $data = [
                 'posts' => (new PostRepository())->getAllPublishedPosts('desc', $page),
                 'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
                 'token' => generateToken(),
             ];
         } else {
 
-            $this->data = [
+            $view = 'index';
+            $data = [
                 'view' => 'posts',
                 'data' => [
                     'posts' => (new PostRepository())->getAllPublishedPosts('desc', $page),
@@ -66,7 +67,7 @@ class PublicPostController extends PublicController implements Renderable
             ];
         }
 
-        return $this;
+        return (new View($view, $data));
     }
 
     /**
@@ -76,14 +77,13 @@ class PublicPostController extends PublicController implements Renderable
      */
     public function latestPosts(string $view = 'partials.latest_posts'): Renderable
     {
-        $this->view = $view;
-        $this->data['title'] = 'Блог';
-        $this->data['latestPosts'] = [
+        $data['title'] = 'Блог';
+        $data['latestPosts'] = [
             'posts' => (new PostRepository())->getLatestPosts(),
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
         ];
 
-        return $this;
+        return (new View($view, $data));
     }
 
     /**
@@ -92,6 +92,7 @@ class PublicPostController extends PublicController implements Renderable
      */
     public function getPost(): Renderable
     {
+        $data = []; // Данные для View
         list($module, $slug) = parseRequestUri(); // $module - каталог, $slug - название новости латиницей
 
         $post = (new PostRepository())->getPostBySlug($slug);
@@ -106,7 +107,7 @@ class PublicPostController extends PublicController implements Renderable
 
             $comments = new CommentRepository();
 
-            $this->data = [
+            $data = [
                 'view' => 'post',
                 'data' => [
                     $module => $post,
@@ -118,7 +119,7 @@ class PublicPostController extends PublicController implements Renderable
                 'title' => 'Блог | ' . $post->title
             ];
         }
-        return $this;
+        return (new View('index', $data));
     }
 
 }

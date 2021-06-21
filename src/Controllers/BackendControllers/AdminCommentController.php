@@ -7,6 +7,7 @@ namespace App\Controllers\BackendControllers;
 use App\Renderable;
 use App\Repository\CommentRepository;
 use App\Controllers\ToastsController;
+use App\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 use function Helpers\checkToken;
@@ -46,7 +47,7 @@ class AdminCommentController extends AdminController
             $comments->setPath('comments' . $query);
         }
 
-        $this->data = [
+        $data = [
             'view' => 'admin.comments.list',
             'data' => [
                 'title' => $title,
@@ -58,7 +59,7 @@ class AdminCommentController extends AdminController
             'title' => 'Администрирование | ' . $title
         ];
 
-        return  $this;
+        return (new View('admin', $data));
     }
 
     /**
@@ -79,11 +80,7 @@ class AdminCommentController extends AdminController
 
         (new ToastsController())->setToast('success', 'Комментарий успешно одобрен');
 
-        $this->data = [
-            'url' => '/admin/posts/comments'
-        ];
-
-        return $this->json();
+        return json_encode(['url' => '/admin/posts/comments']);
 
     }
 
@@ -106,10 +103,6 @@ class AdminCommentController extends AdminController
 
         (new ToastsController())->setToast('success', 'Комментарий успешно отклонён');
 
-        $this->data = [
-            'url' => '/admin/posts/comments'
-        ];
-
-        return $this->json();
+        return json_encode(['url' => '/admin/posts/comments']);
     }
 }

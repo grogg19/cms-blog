@@ -20,6 +20,7 @@ use App\Validate\Validator;
 use App\Model\Image;
 use App\Image\ImageManager;
 use App\Controllers\ToastsController;
+use App\View;
 use Exception;
 use \Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\QueryException;
@@ -88,7 +89,7 @@ class AdminPostController extends AdminController
         }
         $title = 'Список статей блога';
 
-        $this->data = [
+        $data = [
             'view' => 'admin.posts.list_posts',
             'data' => [
                 'title' => $title,
@@ -99,7 +100,7 @@ class AdminPostController extends AdminController
             'title' => $title
         ];
 
-        return $this;
+        return (new View('admin', $data));
     }
 
     /**
@@ -113,7 +114,7 @@ class AdminPostController extends AdminController
             Cookie::delete('uploadImages');
         }
 
-        $this->data = [
+        $data = [
             'view' => 'admin.posts.create_post',
             'data' => [
                 'form' => $this->getFields(),
@@ -123,7 +124,7 @@ class AdminPostController extends AdminController
             'title' => 'Создание новой статьи'
         ];
 
-        return $this;
+        return (new View('admin', $data));
     }
 
     /**
@@ -152,7 +153,7 @@ class AdminPostController extends AdminController
 
         if($post->user_id == $this->session->get('userId') || $this->user->role->permissions == 1)
         {
-            $this->data = [
+            $data = [
                 'view' => 'admin.posts.edit_post',
                 'data' => [
                     'form' => $this->getFields(),
@@ -163,7 +164,7 @@ class AdminPostController extends AdminController
                 'title' => 'Редактирование статьи | ' . $post->title
             ];
 
-            return $this;
+            return (new View('admin', $data));
 
         } else {
             (new ToastsController())->setToast('info', 'Вам доступны для редкатирования только ваши статьи');
@@ -242,8 +243,7 @@ class AdminPostController extends AdminController
         if(!empty($validateResult)) {
 
             // то возвращаем этот массив обработчику в клиент в формате json
-            $this->data = $validateResult;
-            return $this->json();
+            return json_encode($validateResult);
 
             // Если валидация прошла успешно
         } else {
@@ -254,10 +254,7 @@ class AdminPostController extends AdminController
                 $this->saveToDb($this->request);
                 (new ToastsController())->setToast('success', 'Пост успешно сохранён');
 
-                $this->data = [
-                    'url' => '/admin/blog/posts'
-                ];
-                return $this->json();
+                return json_encode(['url' => '/admin/blog/posts']);
 
             } catch (QueryException $e) {
                 return (new ToastsController())->getToast('warning', 'Ошибка сохранения в БД: '. $e->getMessage());
@@ -294,11 +291,7 @@ class AdminPostController extends AdminController
 
         (new ToastsController())->setToast('success', 'Пост успешно удалён.');
 
-        $this->data = [
-            'url' => '/admin/blog/posts'
-        ];
-
-        return $this->json();
+        return json_encode(['url' => '/admin/blog/posts']);
     }
 
     /**
@@ -315,10 +308,7 @@ class AdminPostController extends AdminController
         if(!empty($this->request->files())) {
             $imageUploader = new Upload($this->request->files());
 
-            $this->data = [
-                $imageUploader->upload()
-            ];
-            return $this->json();
+            return json_encode([$imageUploader->upload()]);
         }
         return (new ToastsController())->getToast('warning', 'Отсутствуют файлы для загрузки');
 

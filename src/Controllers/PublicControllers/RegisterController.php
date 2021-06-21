@@ -11,7 +11,8 @@ use App\Repository\UserRepository;
 use App\Model\User;
 use App\Validate\Validator;
 use App\Parse\Yaml;
-use App\Auth\Auth as Auth;
+use App\Auth\Auth;
+use App\View;
 
 use function Helpers\checkToken;
 use function Helpers\generateToken;
@@ -67,12 +68,12 @@ class RegisterController extends PublicController
 
         $fields['token'] = generateToken();
 
-        $this->data = [
+        $data = [
             'view' => 'partials.signup',
             'data' => $fields
         ];
 
-        return $this;
+        return (new View('index', $data));
     }
 
     /**
@@ -102,9 +103,7 @@ class RegisterController extends PublicController
 
         // если есть ошибки валидации, возвращаем их
         if (isset($resultValidateForms['error'])) {
-            $this->data = $resultValidateForms;
-
-            return $this->json();
+            return json_encode($resultValidateForms);
         }
         // если ошибок в валидации не было
 
@@ -128,11 +127,7 @@ class RegisterController extends PublicController
             // возвращаем сообщение об успешной регистрации
             (new ToastsController())->setToast('success', 'Пользователь успешно создан!');
 
-            $this->data = [
-                'url' => $_SERVER['HTTP_REFERER']
-            ];
-
-            return $this->json();
+            return json_encode(['url' => $_SERVER['HTTP_REFERER']]);
         }
         // Если нет, то возвращаем сообщение об ошибке записи в БД.
         return (new ToastsController())->getToast('warning', 'Ошибка записи в БД!');

@@ -9,32 +9,19 @@ use App\Controllers\Controller;
 use App\Cookie\Cookie;
 use App\Auth\Auth;
 use App\Image\ImageManager;
-use App\Jsonable;
 use App\Redirect;
-use App\Renderable;
-use App\View;
 
 /**
  * Class AdminController
  * @package App\Controllers\BackendControllers
  */
-class AdminController extends Controller implements Renderable, Jsonable
+class AdminController extends Controller
 {
 
     /**
      * @var Auth
      */
     protected $auth;
-
-    /**
-     * @var string;
-     */
-    protected $view = 'admin';
-
-    /**
-     * @var array
-     */
-    protected $data;
 
 
 
@@ -68,23 +55,6 @@ class AdminController extends Controller implements Renderable, Jsonable
     private function initCheckers()
     {
         (new ImageManager())->checkImageUploadActuality();
-    }
-
-    /**
-     * Отрисовка контента
-     */
-    public function render(): void
-    {
-        (new View($this->view, $this->data))->render();
-    }
-
-    /**
-     * Возвращает Json
-     * @return string
-     */
-    public function json(): string
-    {
-        return json_encode($this->data);
     }
 
 }

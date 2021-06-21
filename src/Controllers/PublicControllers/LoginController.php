@@ -17,6 +17,7 @@ use App\Model\User;
 use App\Redirect;
 use App\Cookie\Cookie;
 
+use App\View;
 use function Helpers\checkToken;
 use function Helpers\generateToken;
 use function Helpers\hashPassword;
@@ -42,11 +43,11 @@ class LoginController extends PublicController
 
         $fields['token'] = generateToken();
 
-        $this->data = [
+        $data = [
             'view' => 'partials.login',
             'data' => $fields
         ];
-        return $this;
+        return (new View('index', $data));
     }
 
     /**
@@ -76,9 +77,7 @@ class LoginController extends PublicController
 
         if(isset($resultValidateForms['error'])) {
 
-            $this->data = $resultValidateForms;
-
-            return $this->json();
+            return json_encode($resultValidateForms);
         }
 
         // если ошибок в валидации не было,
@@ -106,10 +105,9 @@ class LoginController extends PublicController
 
         (new ToastsController())->setToast('success', 'Вы успешно вошли в систему управления.');
 
-        $this->data = [
+        return json_encode([
             'url' => (!empty(Cookie::get('targetUrl'))) ? Cookie::get('targetUrl') : $this->request->server('HTTP_REFERER')
-        ];
-        return $this->json();
+        ]);
     }
 
     /**

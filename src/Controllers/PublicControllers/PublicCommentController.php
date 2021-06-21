@@ -3,7 +3,6 @@
 namespace App\Controllers\PublicControllers;
 
 use App\Auth\Auth;
-use App\Jsonable;
 use App\Repository\PostRepository;
 use App\Controllers\ToastsController;
 use App\Repository\UserRepository;
@@ -17,16 +16,8 @@ use function Helpers\checkToken;
  * Class PublicCommentController
  * @package App\Controllers\PublicControllers
  */
-class PublicCommentController extends PublicController implements Jsonable
+class PublicCommentController extends PublicController
 {
-    /**
-     * PublicCommentController constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /**
      * @return string
      * @throws \App\Exception\ValidationException
@@ -72,11 +63,7 @@ class PublicCommentController extends PublicController implements Jsonable
 
             (new ToastsController())->setToast('success', 'Комментарий успешно сохранён.');
 
-            $this->data = [
-                'url' => '/post/' . $post->slug
-            ];
-
-            return $this->json();
+            return json_encode(['url' => '/post/' . $post->slug]);
 
         }
 

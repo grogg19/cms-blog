@@ -10,6 +10,7 @@ use App\Controllers\ToastsController;
 use App\Renderable;
 use App\Repository\UserRepository;
 
+use App\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use function Helpers\checkToken;
 use function Helpers\generateToken;
@@ -55,7 +56,7 @@ class AdminUserManagerController extends AdminController
             $users->setPath('user-manager' . $query);
         }
 
-        $this->data = [
+        $data = [
             'view' => 'admin.users_manager.list',
             'data' => [
                 'title' => 'Список пользователей',
@@ -69,7 +70,7 @@ class AdminUserManagerController extends AdminController
             'title' => 'Редактирование профиля пользователя'
         ];
 
-        return $this;
+        return (new View('admin', $data));
     }
 
     /**

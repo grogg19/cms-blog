@@ -11,6 +11,7 @@ use App\Repository\StaticPagesRepository;
 use App\StaticPages\File;
 use App\StaticPages\Page;
 use App\Validate\Validator;
+use App\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -65,7 +66,7 @@ class AdminStaticPagesController extends AdminController
             $pages->setPath('static-pages' . $query);
         }
 
-        $this->data = [
+        $data = [
             'view' => 'admin.static_pages.list_pages_template',
                 'data' => [
                     'token' => generateToken(),
@@ -76,7 +77,7 @@ class AdminStaticPagesController extends AdminController
             'title' => $title
         ];
 
-        return $this;
+        return (new View('admin', $data));
     }
 
     /**
@@ -87,7 +88,7 @@ class AdminStaticPagesController extends AdminController
     {
         $title = 'Создание новой страницы';
 
-        $this->data = [
+        $data = [
             'view' => 'admin.static_pages.create_page',
             'data' => [
                 'form' => $this->getFields(),
@@ -97,7 +98,7 @@ class AdminStaticPagesController extends AdminController
             'title' => $title
         ];
 
-        return $this;
+        return (new View('admin', $data));
     }
 
     /**
@@ -115,7 +116,7 @@ class AdminStaticPagesController extends AdminController
 
         $title = 'Редактирование страницы';
 
-        $this->data = [
+        $data = [
             'view' => 'admin.static_pages.edit_page',
             'data' => [
                 'form' => $this->getFields(),
@@ -126,7 +127,7 @@ class AdminStaticPagesController extends AdminController
             'title' => $title
         ];
 
-        return $this;
+        return (new View('admin', $data));
     }
 
     /**
@@ -157,8 +158,7 @@ class AdminStaticPagesController extends AdminController
         $resultValidation = $validation->makeValidation();
 
         if(!empty($resultValidation)) {
-            $this->data = $resultValidation;
-            return $this->json();
+            return json_encode($resultValidation);
         }
 
         $page = new Page;
@@ -173,11 +173,7 @@ class AdminStaticPagesController extends AdminController
 
         (new ToastsController())->setToast('success', 'Данные страницы успешно сохранены.');
 
-        $this->data = [
-            'url' => '/admin/static-pages'
-        ];
-
-        return $this->json();
+        return json_encode(['url' => '/admin/static-pages']);
     }
 
     /**
@@ -205,10 +201,7 @@ class AdminStaticPagesController extends AdminController
 
             (new ToastsController())->setToast('success', 'Страница успешно удалена.');
 
-            $this->data = [
-                'url' => '/admin/static-pages'
-            ];
-            return $this->json();
+            return json_encode(['url' => '/admin/static-pages']);
         }
         return (new ToastsController())->getToast('warning', 'Невозможно удалить страницу!');
     }
