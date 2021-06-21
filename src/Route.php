@@ -39,17 +39,15 @@ class Route
             // Если ссылка на стандартный метод
             if(str_contains($callback, "@"))
             {
-                list($controller, $action) = explode("@", $callback);
-                $controllerClassName = '\\'. __NAMESPACE__.'\\' . $controller; // Полная ссылка на Класс контроллера c Namespace
-                $method = $action; // Название метода
-                return (new $controllerClassName())->$method();
+                list($controller, $method) = explode("@", $callback);
+                return (new $controller())->$method();
             }
 
             // Если ссылка на статический метод
             if(str_contains($callback, "::"))
             {
-                $callback = '\\'. __NAMESPACE__.'\\'. $callback; // Полная ссылка на Класс c Namespace
-                return $callback();
+                list($controller, $method) = explode("::", $callback);
+                return $controller::$method();
             }
 
         } else if(is_object($callback)) { // Если значение $callback объект, то выводим значение методом __invoke()
