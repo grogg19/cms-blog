@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Auth\Auth;
 use App\Config;
 use App\Model\User;
-use App\Controllers\BackendControllers\UserRoleController;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -190,7 +189,7 @@ class UserRepository extends Repository
      */
     public function getUserRoles(): Collection
     {
-        return (new UserRoleController())->getUserRolesList();
+        return (new UserRoleRepository())->getUserRolesList();
 
     }
 }
