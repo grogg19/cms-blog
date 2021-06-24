@@ -6,7 +6,7 @@
 
 namespace App\Controllers\BackendControllers;
 
-use App\Toasts\Toast;
+use App\Redirect;
 use App\Renderable;
 use App\Repository\UserRepository;
 use App\View;
@@ -37,7 +37,10 @@ class AdminUserManagerController extends AdminController
 
         $user = $this->userRepository->getCurrentUser();
 
-        $this->auth->checkSuperUser($user);
+        if (!$this->auth->checkSuperUser($user)) {
+            $this->toast->setToast('info', 'У вас недостаточно прав для этого действия');
+            Redirect::to('/admin/account');
+        };
 
     }
 
@@ -81,7 +84,7 @@ class AdminUserManagerController extends AdminController
     public function userChangeData(): string
     {
         if(!checkToken() || empty($this->request->post('user'))) {
-            return (new Toast())->getToast('warning', 'Ошибка токена, обновите страницу.');
+            return $this->toast->getToast('warning', 'Ошибка токена, обновите страницу.');
         }
 
         if(!empty($this->request->post('active_status'))) {
@@ -95,9 +98,9 @@ class AdminUserManagerController extends AdminController
         $user = $this->userRepository->getUserById((int) $this->request->post('user'));
 
         if($this->userRepository->updateUser($user, $data)) {
-            return (new Toast())->getToast('success', 'Данные пользователя изменены');
+            return $this->toast->getToast('success', 'Данные пользователя изменены');
         } else {
-            return (new Toast())->getToast('warning', 'Ошибка изменений в БД');
+            return $this->toast->getToast('warning', 'Ошибка изменений в БД');
         }
     }
 }

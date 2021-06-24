@@ -2,8 +2,10 @@
 /**
  * Класс AdminCommentController
  */
+
 namespace App\Controllers\BackendControllers;
 
+use App\Redirect;
 use App\Renderable;
 use App\Repository\CommentRepository;
 use App\Toasts\Toast;
@@ -25,7 +27,13 @@ class AdminCommentController extends AdminController
     public function __construct()
     {
         parent::__construct();
-        $this->auth->checkPermissons(['admin', 'content-manager']);
+
+        if(!$this->auth->checkPermissons(['admin', 'content-manager'])) {
+
+            $this->toast->setToast('info', 'У вас недостаточно прав для этого действия');
+
+            Redirect::to('/');
+        }
     }
 
     /**
@@ -69,16 +77,16 @@ class AdminCommentController extends AdminController
     public function toApproveComment(): string
     {
         if(empty($this->request->post('commentId')) || !checkToken()) {
-            return (new Toast())->getToast('warning', 'Недостоверные данные, обновите страницу');
+            return $this->toast->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
         $commentRepository = new CommentRepository();
         $comment = $commentRepository->setHasModeratedApprove((int) $this->request->post('commentId'));
         if($comment == null) {
-            return (new Toast())->getToast('warning', 'Комментарий не найден');
+            return $this->toast->getToast('warning', 'Комментарий не найден');
         }
 
-        (new Toast())->setToast('success', 'Комментарий успешно одобрен');
+        $this->toast->setToast('success', 'Комментарий успешно одобрен');
 
         return json_encode(['url' => '/admin/posts/comments']);
 
@@ -91,17 +99,17 @@ class AdminCommentController extends AdminController
     public function toRejectComment(): string
     {
         if(empty($this->request->post('commentId')) || !checkToken()) {
-            return (new Toast())->getToast('warning', 'Недостоверные данные, обновите страницу');
+            return $this->toast->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
         $commentRepository = new CommentRepository();
         $comment = $commentRepository->setHasModeratedReject((int) $this->request->post('commentId'));
 
         if($comment == null) {
-            return (new Toast())->getToast('warning', 'Комментарий не найден');
+            return $this->toast->getToast('warning', 'Комментарий не найден');
         }
 
-        (new Toast())->setToast('success', 'Комментарий успешно отклонён');
+        $this->toast->setToast('success', 'Комментарий успешно отклонён');
 
         return json_encode(['url' => '/admin/posts/comments']);
     }

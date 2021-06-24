@@ -5,7 +5,7 @@
 
 namespace App\Controllers\BackendControllers;
 
-use App\Toasts\Toast;
+use App\Redirect;
 use App\Renderable;
 use App\Repository\UserRepository;
 use App\Model\SystemSetting;
@@ -31,7 +31,10 @@ class AdminSettingsController extends AdminController
 
         $user = (new UserRepository())->getCurrentUser();
 
-        $this->auth->checkSuperUser($user);
+        if (!$this->auth->checkSuperUser($user)) {
+            $this->toast->setToast('info', 'У вас недостаточно прав для этого действия');
+            Redirect::to('/admin/account');
+        };
     }
 
     /**
@@ -66,7 +69,7 @@ class AdminSettingsController extends AdminController
     public function saveSettings(): string
     {
         if(empty($this->request->post()) || !checkToken()) {
-            return (new Toast())->getToast('warning', 'Недостоверные данные, обновите страницу');
+            return $this->toast->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
         $data = $this->request->post();
@@ -79,17 +82,17 @@ class AdminSettingsController extends AdminController
         $resultValidation = (new Validator($data, SystemSetting::class, $rules))->makeValidation();
 
         if(!empty($resultValidation['error'])) {
-            return (new Toast())->getToast('warning', $resultValidation['error']['per_page']['errorMessage']);
+            return $this->toast->getToast('warning', $resultValidation['error']['per_page']['errorMessage']);
         }
 
         if((new SystemSettingsRepository())->updateSystemSettings('preferences', $data)) {
 
-            (new Toast())->setToast('success', 'Настройки успешно сохранены');
+            $this->toast->setToast('success', 'Настройки успешно сохранены');
 
             return json_encode(['url' => '/admin/settings']);
 
         } else {
-            return (new Toast())->getToast('warning', 'Ошибка сохранения в БД.');
+            return $this->toast->getToast('warning', 'Ошибка сохранения в БД.');
         }
     }
 }

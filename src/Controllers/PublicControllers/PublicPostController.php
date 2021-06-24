@@ -11,8 +11,8 @@ use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\Config;
 use App\Redirect;
-
 use App\View;
+
 use function Helpers\generateToken;
 use function Helpers\parseRequestUri;
 

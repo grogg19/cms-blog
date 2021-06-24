@@ -23,8 +23,6 @@ class AdminController extends Controller
      */
     protected $auth;
 
-
-
     /**
      * AdminController constructor.
      */
@@ -37,13 +35,17 @@ class AdminController extends Controller
         $this->initCheckers();
 
         // Проверяем факт авторизации пользователя
-        if(!$this->auth->checkAuthorization()) {
+        $check = $this->auth->checkAuthorization();
 
-            // если не авторизован, пользователь направляется на страницу авторизации
+        if($check['access'] !== 'allowed') {
+
+            $this->toast->setToast('warning', $check['message']);
+
+            // если не авторизован, его целевой адрес сохраняется и пользователь направляется на страницу авторизации
             Cookie::set('targetUrl', $this->request->server('REQUEST_URI'));
 
-            $this->session->clear();
-
+            // Чистка сессии
+            $this->session->invalidate();
             Redirect::to('/login');
         }
     }

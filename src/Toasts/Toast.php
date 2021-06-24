@@ -7,10 +7,10 @@ namespace App\Toasts;
 
 use App\Cookie\Cookie;
 use App\Renderable;
+use App\Request\Request;
 use App\View;
 
 use function Helpers\checkToken;
-use function Helpers\request;
 
 /**
  * Class Toast
@@ -20,13 +20,13 @@ class Toast
 {
 
     /**
-     * @var \App\Request\Request
+     * @var Request
      */
     private $request;
 
     public function __construct()
     {
-        $this->request = request();
+        $this->request = new Request();
     }
 
     /**
@@ -49,7 +49,7 @@ class Toast
     }
 
     /**
-     * выводит JSON данные тоста для ajax
+     * выводит JSON данные тоста
      * @param string $type
      * @param string $message
      * @return string

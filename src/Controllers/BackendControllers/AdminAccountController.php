@@ -7,7 +7,6 @@
 
 namespace App\Controllers\BackendControllers;
 
-use App\Toasts\Toast;
 use App\Model\User;
 use App\Renderable;
 use App\Uploader\Upload;
@@ -104,7 +103,7 @@ class AdminAccountController extends AdminController
     {
         if(empty($this->request->post()) || !checkToken() || empty($this->session->get('userId'))) {
             //  возвращаем сообщение об ошибке записи в БД.
-            return (new Toast())->getToast('warning', 'Невозможно обновить данные пользователя');
+            return $this->toast->getToast('warning', 'Невозможно обновить данные пользователя');
         }
 
         // Если есть POST данные и токен соответствует,
@@ -150,7 +149,7 @@ class AdminAccountController extends AdminController
         // если получили сообщение об ошибке, то выведем его в блок аватара
         if(isset($uploadAvatar->error)) {
             $error = implode(', ', $uploadAvatar->error);
-            return (new Toast())->getToast('warning', $error);
+            return $this->toast->getToast('warning', $error);
 
         } else {
             // Если ошибок нет, то добавляем к пользователю атрибут $data['avatar']
@@ -160,7 +159,7 @@ class AdminAccountController extends AdminController
         // записываем изменения в БД
         if($this->userRepository->updateUser($user, $data)) {
 
-            (new Toast())->setToast('success', 'Изменения успешно сохранены.');
+            $this->toast->setToast('success', 'Изменения успешно сохранены.');
 
             // Перенаправляем обратно в профиль
 
@@ -168,7 +167,7 @@ class AdminAccountController extends AdminController
 
             // Если не удалось сохранить изменения, выводим сообщение об этом
         } else {
-            return (new Toast())->getToast('warning', 'Невозможно обновить данные пользователя');
+            return $this->toast->getToast('warning', 'Невозможно обновить данные пользователя');
         }
     }
 

@@ -4,7 +4,6 @@ namespace App\Controllers\BackendControllers;
 
 use App\Controllers\PublicControllers\PublicSubscribeController;
 use App\Repository\SubscribeRepository;
-use App\Toasts\Toast;
 use function Helpers\checkToken;
 
 /**
@@ -39,14 +38,14 @@ class AdminSubscribeController extends AdminController
     public function unsubscribe(): string
     {
         if(empty($this->request->post('emailSubscribe')) || !checkToken()) {
-            return (new Toast())->getToast('warning', 'Данные недействительны, обновите страницу');
+            return $this->toast->getToast('warning', 'Данные недействительны, обновите страницу');
         }
 
         $email = (string) $this->request->post('emailSubscribe');
 
         if((new SubscribeRepository())->deleteSubscriberByEmail($email)) {
-            return (new Toast())->getToast('success', 'Вы успешно отписались от рассылки');
+            return $this->toast->getToast('success', 'Вы успешно отписались от рассылки');
         }
-        return (new Toast())->getToast('warning', 'Отписаться в данный момент невозможно');
+        return $this->toast->getToast('warning', 'Отписаться в данный момент невозможно');
     }
 }

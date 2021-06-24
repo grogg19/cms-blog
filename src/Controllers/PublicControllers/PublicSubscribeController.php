@@ -7,7 +7,6 @@ namespace App\Controllers\PublicControllers;
 
 use App\Controllers\Controller;
 use App\Repository\SubscribeRepository;
-use App\Toasts\Toast;
 use App\Model\Subscriber;
 use App\Redirect;
 use App\Validate\Validator;
@@ -20,13 +19,27 @@ use function Helpers\checkToken;
 class PublicSubscribeController extends Controller
 {
     /**
+     * @var SubscribeRepository
+     */
+    private $subscribeRepository;
+
+    /**
+     * PublicSubscribeController constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->subscribeRepository = new SubscribeRepository();
+    }
+
+    /**
      * @return string
      * @throws \App\Exception\ValidationException
      */
     public function subscribe(): string
     {
         if(empty($this->request->post('emailSubscribe')) && !checkToken()) {
-            return (new Toast())->getToast('warning', 'Данные недействительны, обновите страницу');
+            return $this->toast->getToast('warning', 'Данные недействительны, обновите страницу');
         }
 
         $email = (string) $this->request->post('emailSubscribe');
@@ -35,13 +48,18 @@ class PublicSubscribeController extends Controller
             'email' => $this->request->post('emailSubscribe')
         ];
 
+        // Проверка введеного email
         $resultValidation = $this->getValidate($data);
 
         if(empty($resultValidation['error'])) {
-            return (new SubscribeRepository())->createSubscriber($email);
-        }
-        return (new Toast())->getToast('warning', $resultValidation['error']['email']['errorMessage']);
 
+            $subscriber = $this->subscribeRepository->createSubscriber($email);
+            $subscriber->save();
+
+            return $this->toast->getToast('success', 'Вы успешно подписались на рассылку');
+        }
+
+        return $this->toast->getToast('warning', $resultValidation['error']['email']['errorMessage']);
     }
 
     /**
@@ -86,16 +104,16 @@ class PublicSubscribeController extends Controller
     public function unsubscribeByLink()
     {
         if(empty($this->request->get('email')) || empty($this->request->get('code'))) {
-            (new Toast())->setToast('warning', 'Не хватает данных, чтобы отписаться');
+            $this->toast->setToast('warning', 'Не хватает данных, чтобы отписаться');
             Redirect::to('/');
         }
         $email = (string) $this->request->get('email');
         $code = (string) $this->request->get('code');
 
         if($this->unsubscribe($email, $code)) {
-            (new Toast())->setToast('success', 'Вы успешно отписались');
+            $this->toast->setToast('success', 'Вы успешно отписались');
         } else {
-            (new Toast())->setToast('warning', 'В данный момент невозможно отписаться');
+            $this->toast->setToast('warning', 'В данный момент невозможно отписаться');
         }
         Redirect::to('/');
     }

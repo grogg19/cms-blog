@@ -5,12 +5,10 @@
 
 namespace App\Auth;
 
-use App\Toasts\Toast;
 use App\Model\User;
 use App\Repository\UserRepository;
 use App\Cookie\Cookie;
 use App\Config;
-use App\Redirect;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
@@ -22,7 +20,7 @@ class Auth
     /**
      * @var Session
      */
-    protected Session $session;
+    protected $session;
 
     /**
      * Auth constructor.
@@ -129,51 +127,61 @@ class Auth
     /**
      * Проверка доступа прав в раздел
      * @param array $roles
+     * @return bool
      */
-    public function checkPermissons(array $roles): void
+    public function checkPermissons(array $roles): bool
     {
-        if(!in_array($this->session->get('userRole'), $roles)) {
-            (new Toast())->setToast('info', 'У вас недостаточно прав для этого действия');
-            Redirect::to('/');
+        if(in_array($this->session->get('userRole'), $roles)) {
+           return true;
         }
+        return false;
     }
 
     /**
      * Проверка на роль суперпользователя
      * @param User $user
+     * @return bool
      */
-    public function checkSuperUser(User $user)
+    public function checkSuperUser(User $user): bool
     {
-        if($user->role->code !== 'admin' &&  $user->is_superuser !== 1) {
-
-            (new Toast())->setToast('info', 'У вас недостаточно прав для этого действия');
-            Redirect::to('/admin/account');
+        if($user->role->code === 'admin' &&  $user->is_superuser === 1) {
+            return true;
         }
+        return false;
     }
 
     /**
-     * @return bool
+     * @return array
      */
-    public function checkAuthorization(): bool
+    public function checkAuthorization(): array
     {
         if($this->getHashUser() == null) {
-            return false;
+            return [
+                'access' => 'denied',
+                'message' => 'Вы не авторизованы'
+            ];
         }
 
         $this->setAuthorized($this->getHashUser());
 
         if(!$this->isAuthorized()) {
-            (new Toast())->setToast('warning', 'Вы не авторизованы');
-            return false;
+            return [
+                'access' => 'denied',
+                'message' => 'Вы не авторизованы'
+            ];
         }
 
         if(!$this->isActivated()) {
-            (new Toast())->setToast('warning', 'Ваша учетная запись недоступна');
-            return false;
+            return [
+                'access' => 'denied',
+                'message' => 'Ваша учетная запись недоступна'
+            ];
         } else {
             $user = (new UserRepository())->getUserById($this->session->get('userId'));
             $this->setUserAttributes($user);
-            return true;
+            return [
+                'access' => 'allowed'
+            ];
         }
 
     }
