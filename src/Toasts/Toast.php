@@ -1,28 +1,33 @@
 <?php
 /**
- * Класс ToastsController
+ * Класс Toast
  */
 
-namespace App\Controllers;
+namespace App\Toasts;
 
 use App\Cookie\Cookie;
-use App\Jsonable;
 use App\Renderable;
 use App\View;
 
 use function Helpers\checkToken;
+use function Helpers\request;
 
 /**
- * Class ToastsController
- * @package App\Controllers
+ * Class Toast
+ * @package App\Toasts
  */
-class ToastsController extends Controller implements Jsonable
+class Toast
 {
 
     /**
-     * @var array
+     * @var \App\Request\Request
      */
-    private $data;
+    private $request;
+
+    public function __construct()
+    {
+        $this->request = request();
+    }
 
     /**
      * отрисовывает шаблон Тостов
@@ -51,7 +56,7 @@ class ToastsController extends Controller implements Jsonable
      */
     public function getToast(string $type = 'info', string $message = ''): string
     {
-        $this->data = [
+        $data = [
             'toast' => [
                 'typeToast' => $type,
                 'dataToast' => [
@@ -59,7 +64,7 @@ class ToastsController extends Controller implements Jsonable
                 ]
             ]
         ];
-        return $this->json();
+        return json_encode($data);
     }
 
     /**
@@ -82,15 +87,14 @@ class ToastsController extends Controller implements Jsonable
      */
     public function setToast(string $type = 'info', string $message = ''): void
     {
-        $this->data = [
+        $data = [
             'typeToast' => $type,
             'dataToast' => [
                 'message' => $message
             ]
         ];
 
-        //Cookie::set('toast', serialize($data));
-        Cookie::set('toast', $this->json());
+        Cookie::set('toast', json_encode($data));
     }
 
     /**
@@ -121,14 +125,5 @@ class ToastsController extends Controller implements Jsonable
 
             $this->destroyToast();
         }
-    }
-
-    /**
-     * Возвращает json
-     * @return string
-     */
-    public function json(): string
-    {
-        return json_encode($this->data);
     }
 }

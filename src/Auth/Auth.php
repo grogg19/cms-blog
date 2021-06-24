@@ -5,7 +5,7 @@
 
 namespace App\Auth;
 
-use App\Controllers\ToastsController;
+use App\Toasts\Toast;
 use App\Model\User;
 use App\Repository\UserRepository;
 use App\Cookie\Cookie;
@@ -133,7 +133,7 @@ class Auth
     public function checkPermissons(array $roles): void
     {
         if(!in_array($this->session->get('userRole'), $roles)) {
-            (new ToastsController())->setToast('info', 'У вас недостаточно прав для этого действия');
+            (new Toast())->setToast('info', 'У вас недостаточно прав для этого действия');
             Redirect::to('/');
         }
     }
@@ -146,7 +146,7 @@ class Auth
     {
         if($user->role->code !== 'admin' &&  $user->is_superuser !== 1) {
 
-            (new ToastsController())->setToast('info', 'У вас недостаточно прав для этого действия');
+            (new Toast())->setToast('info', 'У вас недостаточно прав для этого действия');
             Redirect::to('/admin/account');
         }
     }
@@ -163,12 +163,12 @@ class Auth
         $this->setAuthorized($this->getHashUser());
 
         if(!$this->isAuthorized()) {
-            (new ToastsController())->setToast('warning', 'Вы не авторизованы');
+            (new Toast())->setToast('warning', 'Вы не авторизованы');
             return false;
         }
 
         if(!$this->isActivated()) {
-            (new ToastsController())->setToast('warning', 'Ваша учетная запись недоступна');
+            (new Toast())->setToast('warning', 'Ваша учетная запись недоступна');
             return false;
         } else {
             $user = (new UserRepository())->getUserById($this->session->get('userId'));

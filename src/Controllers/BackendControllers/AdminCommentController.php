@@ -6,7 +6,7 @@ namespace App\Controllers\BackendControllers;
 
 use App\Renderable;
 use App\Repository\CommentRepository;
-use App\Controllers\ToastsController;
+use App\Toasts\Toast;
 use App\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -69,16 +69,16 @@ class AdminCommentController extends AdminController
     public function toApproveComment(): string
     {
         if(empty($this->request->post('commentId')) || !checkToken()) {
-            return (new ToastsController())->getToast('warning', 'Недостоверные данные, обновите страницу');
+            return (new Toast())->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
         $commentRepository = new CommentRepository();
         $comment = $commentRepository->setHasModeratedApprove((int) $this->request->post('commentId'));
         if($comment == null) {
-            return (new ToastsController())->getToast('warning', 'Комментарий не найден');
+            return (new Toast())->getToast('warning', 'Комментарий не найден');
         }
 
-        (new ToastsController())->setToast('success', 'Комментарий успешно одобрен');
+        (new Toast())->setToast('success', 'Комментарий успешно одобрен');
 
         return json_encode(['url' => '/admin/posts/comments']);
 
@@ -91,17 +91,17 @@ class AdminCommentController extends AdminController
     public function toRejectComment(): string
     {
         if(empty($this->request->post('commentId')) || !checkToken()) {
-            return (new ToastsController())->getToast('warning', 'Недостоверные данные, обновите страницу');
+            return (new Toast())->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
         $commentRepository = new CommentRepository();
         $comment = $commentRepository->setHasModeratedReject((int) $this->request->post('commentId'));
 
         if($comment == null) {
-            return (new ToastsController())->getToast('warning', 'Комментарий не найден');
+            return (new Toast())->getToast('warning', 'Комментарий не найден');
         }
 
-        (new ToastsController())->setToast('success', 'Комментарий успешно отклонён');
+        (new Toast())->setToast('success', 'Комментарий успешно отклонён');
 
         return json_encode(['url' => '/admin/posts/comments']);
     }

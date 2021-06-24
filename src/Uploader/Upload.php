@@ -7,7 +7,6 @@ namespace App\Uploader;
 
 use App\Config;
 use App\Controllers\BackendControllers\AdminController;
-use App\Controllers\ToastsController;
 use App\Cookie\Cookie;
 
 /**
@@ -59,7 +58,7 @@ class Upload extends AdminController
 
                 $message['error'][] = 'Файл "'.$file["name"].'" не удовлетворяет требованиям к загрузке.';
                 return json_encode($message);
-                //ToastsController::getToast('warning', 'Файл "'.$file["name"].'" не удовлетворяет требованиям к загрузке.');
+                //Toast::getToast('warning', 'Файл "'.$file["name"].'" не удовлетворяет требованиям к загрузке.');
 
             }
 

@@ -7,7 +7,7 @@ namespace App\Repository;
 
 use App\Model\Subscriber;
 use Illuminate\Support\Collection;
-use App\Controllers\ToastsController;
+use App\Toasts\Toast;
 
 use function Helpers\generateRandomHash;
 /**
@@ -31,9 +31,9 @@ class SubscribeRepository extends Repository
         $subscriber = new Subscriber($data);
 
         if($subscriber->save()) {
-            return (new ToastsController())->getToast('success', 'Вы успешно подписались на рассылку');
+            return (new Toast())->getToast('success', 'Вы успешно подписались на рассылку');
         }
-        return (new ToastsController())->getToast('warning', 'Подписаться не получилось');
+        return (new Toast())->getToast('warning', 'Подписаться не получилось');
     }
 
     /**

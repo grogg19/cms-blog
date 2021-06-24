@@ -6,7 +6,7 @@
 namespace App\Controllers\PublicControllers;
 
 
-use App\Controllers\ToastsController;
+use App\Toasts\Toast;
 use App\Image\ImageManager;
 use App\Renderable;
 use App\Repository\UserRepository;
@@ -58,7 +58,7 @@ class LoginController extends PublicController
     public function adminAuth(): string
     {
         if(empty($this->request->post()) || !checkToken()) {
-            return (new ToastsController())->getToast('warning', 'Нет хватает данных для входа, обновите страницу!');
+            return (new Toast())->getToast('warning', 'Нет хватает данных для входа, обновите страницу!');
         }
 
         // Если есть данные в request и токены совпадают,
@@ -86,12 +86,12 @@ class LoginController extends PublicController
 
         if($user === null) {
             // Если пользователя нет, возвращаем сообщение, что такого пользователя нет.
-            return (new ToastsController())->getToast('warning', 'Пользователь с такими данными не найден!');
+            return (new Toast())->getToast('warning', 'Пользователь с такими данными не найден!');
         }
 
         $auth = new Auth();
         if(!$auth->isActivated($user)) {
-            return (new ToastsController())->getToast('warning', 'Ваша учетная запись деактивирована');
+            return (new Toast())->getToast('warning', 'Ваша учетная запись деактивирована');
         }
         // Если есть такой юзер, то авторизуем его и возвращаем на страницу, с которой он логинился
         $persistCode = $this->makeUserHash($user);
@@ -103,7 +103,7 @@ class LoginController extends PublicController
         $auth->setAuthorized($persistCode);
         $auth->setUserAttributes($user);
 
-        (new ToastsController())->setToast('success', 'Вы успешно вошли в систему управления.');
+        (new Toast())->setToast('success', 'Вы успешно вошли в систему управления.');
 
         return json_encode([
             'url' => (!empty(Cookie::get('targetUrl'))) ? Cookie::get('targetUrl') : $this->request->server('HTTP_REFERER')

@@ -6,12 +6,12 @@
 
 namespace App\Controllers\BackendControllers;
 
-use App\Controllers\ToastsController;
+use App\Toasts\Toast;
 use App\Renderable;
 use App\Repository\UserRepository;
-
 use App\View;
 use Illuminate\Pagination\LengthAwarePaginator;
+
 use function Helpers\checkToken;
 use function Helpers\generateToken;
 
@@ -81,7 +81,7 @@ class AdminUserManagerController extends AdminController
     public function userChangeData(): string
     {
         if(!checkToken() || empty($this->request->post('user'))) {
-            return (new ToastsController())->getToast('warning', 'Ошибка токена, обновите страницу.');
+            return (new Toast())->getToast('warning', 'Ошибка токена, обновите страницу.');
         }
 
         if(!empty($this->request->post('active_status'))) {
@@ -95,9 +95,9 @@ class AdminUserManagerController extends AdminController
         $user = $this->userRepository->getUserById((int) $this->request->post('user'));
 
         if($this->userRepository->updateUser($user, $data)) {
-            return (new ToastsController())->getToast('success', 'Данные пользователя изменены');
+            return (new Toast())->getToast('success', 'Данные пользователя изменены');
         } else {
-            return (new ToastsController())->getToast('warning', 'Ошибка изменений в БД');
+            return (new Toast())->getToast('warning', 'Ошибка изменений в БД');
         }
     }
 }

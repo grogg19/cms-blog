@@ -19,7 +19,7 @@ use App\Request\Request;
 use App\Validate\Validator;
 use App\Model\Image;
 use App\Image\ImageManager;
-use App\Controllers\ToastsController;
+use App\Toasts\Toast;
 use App\View;
 use Exception;
 use \Illuminate\Pagination\LengthAwarePaginator;
@@ -167,7 +167,7 @@ class AdminPostController extends AdminController
             return (new View('admin', $data));
 
         } else {
-            (new ToastsController())->setToast('info', 'Вам доступны для редкатирования только ваши статьи');
+            (new Toast())->setToast('info', 'Вам доступны для редкатирования только ваши статьи');
             Redirect::to('/admin/blog/posts');
         }
         return null;
@@ -232,7 +232,7 @@ class AdminPostController extends AdminController
      public function savePost(): string
     {
         if(!checkToken()) {
-            return (new ToastsController())->getToast('warning', 'Неверный токен, обновите страницу');
+            return (new Toast())->getToast('warning', 'Неверный токен, обновите страницу');
         }
 
         // Валидируем данные формы
@@ -252,12 +252,12 @@ class AdminPostController extends AdminController
             try {
 
                 $this->saveToDb($this->request);
-                (new ToastsController())->setToast('success', 'Пост успешно сохранён');
+                (new Toast())->setToast('success', 'Пост успешно сохранён');
 
                 return json_encode(['url' => '/admin/blog/posts']);
 
             } catch (QueryException $e) {
-                return (new ToastsController())->getToast('warning', 'Ошибка сохранения в БД: '. $e->getMessage());
+                return (new Toast())->getToast('warning', 'Ошибка сохранения в БД: '. $e->getMessage());
             }
         }
 
@@ -286,10 +286,10 @@ class AdminPostController extends AdminController
             }
             $this->postRepository->deletePost($post);
         } catch (Exception $exception) {
-            return (new ToastsController())->getToast('warning', 'Ошибка удаления поста! Сообщение: ' . $exception->getMessage());
+            return (new Toast())->getToast('warning', 'Ошибка удаления поста! Сообщение: ' . $exception->getMessage());
         }
 
-        (new ToastsController())->setToast('success', 'Пост успешно удалён.');
+        (new Toast())->setToast('success', 'Пост успешно удалён.');
 
         return json_encode(['url' => '/admin/blog/posts']);
     }
@@ -310,7 +310,7 @@ class AdminPostController extends AdminController
 
             return json_encode([$imageUploader->upload()]);
         }
-        return (new ToastsController())->getToast('warning', 'Отсутствуют файлы для загрузки');
+        return (new Toast())->getToast('warning', 'Отсутствуют файлы для загрузки');
 
     }
 

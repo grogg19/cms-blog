@@ -7,15 +7,15 @@
 
 namespace App\Controllers\BackendControllers;
 
-use App\Controllers\ToastsController;
+use App\Toasts\Toast;
 use App\Model\User;
 use App\Renderable;
 use App\Uploader\Upload;
 use App\Validate\Validator;
 use App\Repository\UserRepository;
 use App\Parse\Yaml;
-
 use App\View;
+
 use function Helpers\checkToken;
 use function Helpers\generateToken;
 
@@ -104,7 +104,7 @@ class AdminAccountController extends AdminController
     {
         if(empty($this->request->post()) || !checkToken() || empty($this->session->get('userId'))) {
             //  возвращаем сообщение об ошибке записи в БД.
-            return (new ToastsController())->getToast('warning', 'Невозможно обновить данные пользователя');
+            return (new Toast())->getToast('warning', 'Невозможно обновить данные пользователя');
         }
 
         // Если есть POST данные и токен соответствует,
@@ -150,7 +150,7 @@ class AdminAccountController extends AdminController
         // если получили сообщение об ошибке, то выведем его в блок аватара
         if(isset($uploadAvatar->error)) {
             $error = implode(', ', $uploadAvatar->error);
-            return (new ToastsController())->getToast('warning', $error);
+            return (new Toast())->getToast('warning', $error);
 
         } else {
             // Если ошибок нет, то добавляем к пользователю атрибут $data['avatar']
@@ -160,7 +160,7 @@ class AdminAccountController extends AdminController
         // записываем изменения в БД
         if($this->userRepository->updateUser($user, $data)) {
 
-            (new ToastsController())->setToast('success', 'Изменения успешно сохранены.');
+            (new Toast())->setToast('success', 'Изменения успешно сохранены.');
 
             // Перенаправляем обратно в профиль
 
@@ -168,7 +168,7 @@ class AdminAccountController extends AdminController
 
             // Если не удалось сохранить изменения, выводим сообщение об этом
         } else {
-            return (new ToastsController())->getToast('warning', 'Невозможно обновить данные пользователя');
+            return (new Toast())->getToast('warning', 'Невозможно обновить данные пользователя');
         }
     }
 

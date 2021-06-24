@@ -7,7 +7,7 @@ namespace App\Controllers\PublicControllers;
 
 use App\Controllers\Controller;
 use App\Repository\SubscribeRepository;
-use App\Controllers\ToastsController;
+use App\Toasts\Toast;
 use App\Model\Subscriber;
 use App\Redirect;
 use App\Validate\Validator;
@@ -26,7 +26,7 @@ class PublicSubscribeController extends Controller
     public function subscribe(): string
     {
         if(empty($this->request->post('emailSubscribe')) && !checkToken()) {
-            return (new ToastsController())->getToast('warning', 'Данные недействительны, обновите страницу');
+            return (new Toast())->getToast('warning', 'Данные недействительны, обновите страницу');
         }
 
         $email = (string) $this->request->post('emailSubscribe');
@@ -40,7 +40,7 @@ class PublicSubscribeController extends Controller
         if(empty($resultValidation['error'])) {
             return (new SubscribeRepository())->createSubscriber($email);
         }
-        return (new ToastsController())->getToast('warning', $resultValidation['error']['email']['errorMessage']);
+        return (new Toast())->getToast('warning', $resultValidation['error']['email']['errorMessage']);
 
     }
 
@@ -86,16 +86,16 @@ class PublicSubscribeController extends Controller
     public function unsubscribeByLink()
     {
         if(empty($this->request->get('email')) || empty($this->request->get('code'))) {
-            (new ToastsController())->setToast('warning', 'Не хватает данных, чтобы отписаться');
+            (new Toast())->setToast('warning', 'Не хватает данных, чтобы отписаться');
             Redirect::to('/');
         }
         $email = (string) $this->request->get('email');
         $code = (string) $this->request->get('code');
 
         if($this->unsubscribe($email, $code)) {
-            (new ToastsController())->setToast('success', 'Вы успешно отписались');
+            (new Toast())->setToast('success', 'Вы успешно отписались');
         } else {
-            (new ToastsController())->setToast('warning', 'В данный момент невозможно отписаться');
+            (new Toast())->setToast('warning', 'В данный момент невозможно отписаться');
         }
         Redirect::to('/');
     }

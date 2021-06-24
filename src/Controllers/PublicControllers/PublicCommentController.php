@@ -4,7 +4,7 @@ namespace App\Controllers\PublicControllers;
 
 use App\Auth\Auth;
 use App\Repository\PostRepository;
-use App\Controllers\ToastsController;
+use App\Toasts\Toast;
 use App\Repository\UserRepository;
 use App\Model\Comment;
 use App\Validate\Validator;
@@ -26,11 +26,11 @@ class PublicCommentController extends PublicController
     {
 
         if(!(new Auth())->checkAuthorization()) {
-            return (new ToastsController())->getToast('warning', 'Оставлять комментарии могут только зарегистрированные пользователи');
+            return (new Toast())->getToast('warning', 'Оставлять комментарии могут только зарегистрированные пользователи');
         }
 
         if(empty($this->request->post()) || !checkToken()) {
-            return (new ToastsController())->getToast('warning', 'Нет входящих данных');
+            return (new Toast())->getToast('warning', 'Нет входящих данных');
         }
 
         $commentDataToSave = [
@@ -51,7 +51,7 @@ class PublicCommentController extends PublicController
 
         // если есть ошибки, возвращаем Тост с ошибкой
         if(!empty($resultValidateForms['error'])) {
-            return (new ToastsController())->getToast('warning', 'Ошибка записи данных комментария');
+            return (new Toast())->getToast('warning', 'Ошибка записи данных комментария');
         }
 
         $comment = new Comment($commentDataToSave);
@@ -61,13 +61,13 @@ class PublicCommentController extends PublicController
 
             $post->comments()->save($comment);
 
-            (new ToastsController())->setToast('success', 'Комментарий успешно сохранён.');
+            (new Toast())->setToast('success', 'Комментарий успешно сохранён.');
 
             return json_encode(['url' => '/post/' . $post->slug]);
 
         }
 
-        return (new ToastsController())->getToast('warning', 'Указанного поста не существует');
+        return (new Toast())->getToast('warning', 'Указанного поста не существует');
 
     }
 }

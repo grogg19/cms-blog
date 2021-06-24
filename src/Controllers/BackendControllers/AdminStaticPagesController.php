@@ -3,7 +3,7 @@
 namespace App\Controllers\BackendControllers;
 
 use App\Pagination\PaginateMaker;
-use App\Controllers\ToastsController;
+use App\Toasts\Toast;
 use App\Parse\Yaml;
 use App\Redirect;
 use App\Renderable;
@@ -138,7 +138,7 @@ class AdminStaticPagesController extends AdminController
     public function savePage(): string
     {
         if(!checkToken()) {
-            return (new ToastsController())->getToast('warning', 'Сессия устарела, обновите страницу!');
+            return (new Toast())->getToast('warning', 'Сессия устарела, обновите страницу!');
         }
 
         if(!empty($this->request->post('edit_form'))) {
@@ -149,7 +149,7 @@ class AdminStaticPagesController extends AdminController
             if($existPage !== null) {
                 $existPage->deletePage();
             } else {
-                return (new ToastsController())->getToast('warning', 'Такой страницы не существует!');
+                return (new Toast())->getToast('warning', 'Такой страницы не существует!');
             }
 
         }
@@ -171,7 +171,7 @@ class AdminStaticPagesController extends AdminController
         $page->setHtmlContent(cleanJSTags((string) $this->request->post('content')));
         $page->makePage(new File);
 
-        (new ToastsController())->setToast('success', 'Данные страницы успешно сохранены.');
+        (new Toast())->setToast('success', 'Данные страницы успешно сохранены.');
 
         return json_encode(['url' => '/admin/static-pages']);
     }
@@ -192,17 +192,17 @@ class AdminStaticPagesController extends AdminController
     public function deletePage(): string
     {
         if(!checkToken() || empty($this->request->post('pageName'))) {
-            return (new ToastsController())->getToast('warning', 'Не хватает данных для удаления попробуйте еще раз!');
+            return (new Toast())->getToast('warning', 'Не хватает данных для удаления попробуйте еще раз!');
         }
 
         $page = (new StaticPagesRepository())->getPageByFileName( (string) $this->request->post('pageName'));
 
         if($page->deletePage()) {
 
-            (new ToastsController())->setToast('success', 'Страница успешно удалена.');
+            (new Toast())->setToast('success', 'Страница успешно удалена.');
 
             return json_encode(['url' => '/admin/static-pages']);
         }
-        return (new ToastsController())->getToast('warning', 'Невозможно удалить страницу!');
+        return (new Toast())->getToast('warning', 'Невозможно удалить страницу!');
     }
 }

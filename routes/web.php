@@ -13,7 +13,7 @@ use App\Controllers\PublicControllers\PublicPostController;
 use App\Controllers\PublicControllers\PublicSubscribeController;
 use App\Controllers\PublicControllers\StaticPagesController;
 use App\Controllers\BackendControllers\AdminStaticPagesController;
-use App\Controllers\ToastsController;
+use App\Toasts\Toast;
 use App\Exception\NotFoundException;
 use App\Repository\StaticPagesRepository;
 use App\Router;
@@ -96,8 +96,8 @@ $router->get('get','/admin/settings', AdminSettingsController::class . '@index')
 $router->get('post','/admin/settings/save', AdminSettingsController::class . '@saveSettings');
 
 /** Маршрут Тостов */
-$router->get('post', '/toasts/index', ToastsController::class . '@index');
-$router->get('post','/checkToast', ToastsController::class . '@checkToast');
+$router->get('post', '/toasts/index', Toast::class . '@index');
+$router->get('post','/checkToast', Toast::class . '@checkToast');
 
 /** Маршруты статических страниц */
 foreach ((new StaticPagesRepository())->getStaticPagesCollection() as $url => $page) {

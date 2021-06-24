@@ -5,7 +5,7 @@
 
 namespace App\Controllers\PublicControllers;
 
-use App\Controllers\ToastsController;
+use App\Toasts\Toast;
 use App\Renderable;
 use App\Repository\UserRepository;
 use App\Model\User;
@@ -86,13 +86,13 @@ class RegisterController extends PublicController
 
         if (empty($parameters) || !checkToken()) {
             // Если нет post данных или токена, то возвращаем сообщение об ошибке создания пользователя.
-            return (new ToastsController())->getToast('warning', 'Невозможно создать пользователя');
+            return (new Toast())->getToast('warning', 'Невозможно создать пользователя');
         }
         // Если есть POST данные и токен соответствует,
 
         // Проверяем согласие с пользовательским соглашением
         if(empty($parameters['agreement']) || $parameters['agreement'] !== 'on') {
-            return (new ToastsController())->getToast('warning', 'Необходимо согласие с пользовательским соглашением');
+            return (new Toast())->getToast('warning', 'Необходимо согласие с пользовательским соглашением');
         }
         // Валидируем введеные данные с формы
         // Создаем экземпляр валидации
@@ -125,11 +125,11 @@ class RegisterController extends PublicController
             $this->auth->setUserAttributes($user);
 
             // возвращаем сообщение об успешной регистрации
-            (new ToastsController())->setToast('success', 'Пользователь успешно создан!');
+            (new Toast())->setToast('success', 'Пользователь успешно создан!');
 
             return json_encode(['url' => $_SERVER['HTTP_REFERER']]);
         }
         // Если нет, то возвращаем сообщение об ошибке записи в БД.
-        return (new ToastsController())->getToast('warning', 'Ошибка записи в БД!');
+        return (new Toast())->getToast('warning', 'Ошибка записи в БД!');
     }
 }
