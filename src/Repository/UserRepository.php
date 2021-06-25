@@ -31,9 +31,9 @@ class UserRepository extends Repository
      * Возвращаем модель данных текущего пользователя
      * @return User|null
      */
-    public function getCurrentUser(): ?User
+    public function getCurrentUser()
     {
-        if(session_status() == PHP_SESSION_NONE) {
+        if(session_status() == 1) {
             return null;
         }
         if(!empty($this->session->get('userId'))) {
@@ -50,7 +50,7 @@ class UserRepository extends Repository
      * @param string $quantity
      * @return LengthAwarePaginator|Collection
      */
-    public function getAllUsers(string $sortDirection = 'asc', string $quantity = '20'): LengthAwarePaginator|Collection
+    public function getAllUsers(string $sortDirection = 'asc', string $quantity = '20')
     {
         if($quantity !== 'all') {
 
@@ -74,7 +74,7 @@ class UserRepository extends Repository
      * @param $password
      * @return User|null
      */
-    public function findUser($email, $password): ?User
+    public function findUser($email, $password)
     {
         // Ищем пользователя с логином $login
         $userData = User::where('email', $email)
@@ -154,9 +154,9 @@ class UserRepository extends Repository
     /**
      * Метод генерирует и возвращает хэш
      * @param User $user
-     * @return bool|string
+     * @return string
      */
-    public function makeUserHash(User $user): bool|string
+    public function makeUserHash(User $user): string
     {
         return hashPassword($user->id . $user->email . $user->password);
     }

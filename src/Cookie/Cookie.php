@@ -36,14 +36,14 @@ class Cookie
     /**
      * Получаем куки по ключу
      * @param $key
-     * @return string|null
+     * @return string
      */
-    public static function get($key): string|null
+    public static function get($key)
     {
         if ( isset($_COOKIE[$key]) ) {
             return $_COOKIE[$key];
         }
-        return null;
+        return '';
     }
 
     /**

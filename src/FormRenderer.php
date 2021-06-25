@@ -26,7 +26,6 @@ class FormRenderer
     /**
      * Генератор элементов формы
      * @param null $data
-     * @return mixed|void
      */
     private function generateForms($data = null)
     {
@@ -37,7 +36,7 @@ class FormRenderer
 
             if($element['form'] == "input") {
 
-                $content = (new Input("forms/input",
+                (new Input("forms/input",
                     [
                         'element' => [$key => $element],
                         'valueAttribute' => $valueAttribute
@@ -47,30 +46,31 @@ class FormRenderer
             }
 
             if($element['form'] == "textarea") {
-                $content = (new Textarea("forms/textarea", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))->render();
+                (new Textarea("forms/textarea", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                    ->render();
             }
 
             if($element['form'] == "editor") {
-                $content = (new Editor("forms/editor", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))->render();
+                (new Editor("forms/editor", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                ->render();
             }
 
             if($element['form'] == "datetimepicker") {
-                $content = (new Input("forms/datetimepicker", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))->render();
+                (new Input("forms/datetimepicker", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                ->render();
             }
 
             if($element['form'] == "switch") {
-                $content = (new Input("forms/switch", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))->render();
+                (new Input("forms/switch", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                    ->render();
             }
         }
-        return $content;
     }
-
     /**
      * @param string $data
-     * @return mixed|string|void
      */
     public function render($data = '')
     {
-        return $this->generateForms($data);
+        $this->generateForms($data);
     }
 }

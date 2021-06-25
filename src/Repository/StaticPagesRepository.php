@@ -43,10 +43,16 @@ class StaticPagesRepository extends Repository
 
         if(!empty($config['staticPages'])) {
 
-            $pages = match ($config['staticPages']) {
-                'files' => new FilesList,
-                'db' => throw new NotFoundException('Компонент статических страниц пока не работает с БД', 510)
-            };
+            switch ($config['staticPages']) {
+                case 'files':
+                    $pages = new FilesList();
+                    break;
+                case 'db':
+                    throw new NotFoundException('Компонент статических страниц пока не работает с БД', 510);
+                default:
+                    $pages = new FilesList();
+            }
+
             $this->staticPages = (new PageList($pages));
         } else {
             throw new NotFoundException('В файле конфигурации CMS не указан тип данных статических страниц');

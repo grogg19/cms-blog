@@ -34,9 +34,10 @@ class LoginController extends PublicController
      */
     public function form(): Renderable
     {
-        if($this->session->get('authAuthorized') && !empty($this->session->get('userId'))) {
+        if(session_status() == 2) {
             Redirect::to('/admin/blog/posts');
         }
+
         $fields = (new Yaml())->parseFile(APP_DIR . '/src/Model/User/user_login_fields.yaml');
 
         $fields['token'] = generateToken();
@@ -122,9 +123,9 @@ class LoginController extends PublicController
     /**
      * создание хэша пользователя
      * @param User $user
-     * @return bool|string
+     * @return string
      */
-    public function makeUserHash(User $user): bool|string
+    public function makeUserHash(User $user): string
     {
         return hashPassword($user->id . $user->email . $user->password);
     }

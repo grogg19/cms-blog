@@ -96,10 +96,10 @@ class AdminAccountController extends AdminController
 
     /**
      * Метод обновляет информацию о пользователе и сообщает о результате работы
-     * @return false|string
+     * @return string
      * @throws \App\Exception\ValidationException
      */
-    public function updateUserProfile(): false|string
+    public function updateUserProfile(): string
     {
         if(empty($this->request->post()) || !checkToken() || empty($this->session->get('userId'))) {
             //  возвращаем сообщение об ошибке записи в БД.
@@ -186,7 +186,7 @@ class AdminAccountController extends AdminController
      * @param User $user
      * @return object|null
      */
-    protected function uploadAvatar(User $user): object|null
+    protected function uploadAvatar(User $user)
     {
         // Если есть файл на загрузку в массиве $_FILES
         if($this->request->files('avatar')['size'] !== 0) {

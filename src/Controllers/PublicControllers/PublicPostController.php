@@ -23,9 +23,9 @@ use function Helpers\parseRequestUri;
 class PublicPostController extends PublicController
 {
     /**
-     * @var mixed|null
+     * @var mixed
      */
-    private mixed $configImages;
+    private array $configImages;
 
 
     /**
@@ -53,6 +53,7 @@ class PublicPostController extends PublicController
                 'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
                 'token' => generateToken(),
             ];
+
         } else {
 
             $view = 'index';
@@ -103,7 +104,7 @@ class PublicPostController extends PublicController
 
         if(!empty($post)) {
 
-            $userRole = ($this->session->get('userId') !== null) ? (new UserRepository())->getCurrentUser()->role->code : 'none';
+            $userRole = (session_status() == 2) ? (new UserRepository())->getCurrentUser()->role->code : 'none';
 
             $comments = new CommentRepository();
 
@@ -118,6 +119,7 @@ class PublicPostController extends PublicController
                 ],
                 'title' => 'Блог | ' . $post->title
             ];
+
         }
         return (new View('index', $data));
     }

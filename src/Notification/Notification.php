@@ -1,9 +1,10 @@
 <?php
 
+
 namespace App\Notification;
 
 use App\Model\Post;
-use App\Controllers\SubscribeRepository;
+use App\Repository\SubscribeRepository;
 
 /**
  * Class Notification

@@ -35,7 +35,7 @@ class PostRepository extends Repository
      * @param string $quantity
      * @return LengthAwarePaginator|Collection
      */
-    public function getAllPosts(string $sortDirection = 'desc', string $quantity = '20'): LengthAwarePaginator|Collection
+    public function getAllPosts(string $sortDirection = 'desc', string $quantity = '20')
     {
         if($quantity !== 'all') {
             $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');

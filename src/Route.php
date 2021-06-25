@@ -31,9 +31,9 @@ class Route
     /**
      * Метод в зависимости от типа возвращает либо результат статического метода, метода объекта, либо как результат функции
      * @param $callback
-     * @return View|string|null
+     * @return Renderable|string|null
      */
-    private function prepareCallback($callback): Renderable|string|null
+    private function prepareCallback($callback)
     {
         if (is_string($callback)) { // Если значение $callback строка, разделяем ее по разделителю "@"
             // Если ссылка на стандартный метод
@@ -95,9 +95,9 @@ class Route
 
     /**
      * Метод запускает и возвращает результат работы $callback
-     * @return View|string|null
+     * @return Renderable|string|null
      */
-    public function run(): Renderable|string|null
+    public function run()
     {
         return $this->prepareCallback($this->callback);
     }

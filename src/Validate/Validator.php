@@ -75,7 +75,7 @@ class Validator extends AbstractValidator
      * @param array $messagesValidations
      * @return array
      */
-    private function hasError(string $key,  string|array $rule, array $messagesValidations = []): array
+    private function hasError(string $key, $rule, array $messagesValidations = []): array
     {
         if(is_array($rule)) {
             foreach ($rule as $r) {
@@ -120,16 +120,25 @@ class Validator extends AbstractValidator
             list($type, $parameters) = explode(':', $type, 2);
         }
 
-        return match ($type) {
-            'required' => new IsEmpty($this->data[$key]),
-            'regex' => new ByRegex($this->data[$key], $parameters),
-            'between' => new BetweenRange($this->data[$key], $parameters),
-            'uniquePage' => new IsUniquePage($this->data[$key]),
-            'unique' => new IsUniqueModel($this->model, $key, $this->data[$key]),
-            'identityWith' => new Identity($this->data[$key], $this->data[$parameters]),
-            'email' => new IsEmail($this->data[$key]),
-            'isNaturalNumeric' => new IsNaturalNumeric($this->data[$key]),
-            default => new UndefinedValidation($type)
-        };
+        switch ($type) {
+            case 'required':
+                return new IsEmpty($this->data[$key]);
+            case 'regex':
+                return new ByRegex($this->data[$key], $parameters);
+            case 'between':
+                return new BetweenRange($this->data[$key], $parameters);
+            case 'uniquePage':
+                return new IsUniquePage($this->data[$key]);
+            case 'unique':
+                return new IsUniqueModel($this->model, $key, $this->data[$key]);
+            case 'identityWith':
+                return new Identity($this->data[$key], $this->data[$parameters]);
+            case 'email':
+                return new IsEmail($this->data[$key]);
+            case 'isNaturalNumeric':
+                return new IsNaturalNumeric($this->data[$key]);
+            default:
+                return new UndefinedValidation($type);
+        }
     }
 }

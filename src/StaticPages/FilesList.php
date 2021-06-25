@@ -5,7 +5,6 @@ namespace App\StaticPages;
 use App\Exception\HttpException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use App\StaticPages\File as File;
 
 /**
  * Class FilesList
@@ -51,9 +50,6 @@ class FilesList implements PageListCompatible
         if(!file_exists(APP_DIR . $this->filesDirectory)) {
             mkdir(APP_DIR . $this->filesDirectory, 0775);
         }
-//        if(fileowner(APP_DIR . $this->filesDirectory) !== 33) {
-//            return chown(APP_DIR . $this->filesDirectory, 'www-data');
-//        }
         return true;
     }
 }

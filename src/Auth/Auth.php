@@ -62,9 +62,9 @@ class Auth
 
     /**
      * Возвращает хэш пользователя из куки
-     * @return string|null
+     * @return string
      */
-    public function getHashUser(): string|null
+    public function getHashUser(): string
     {
         return Cookie::get('authUser');
     }

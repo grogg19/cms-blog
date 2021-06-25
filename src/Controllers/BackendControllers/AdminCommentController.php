@@ -8,7 +8,6 @@ namespace App\Controllers\BackendControllers;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\CommentRepository;
-use App\Toasts\Toast;
 use App\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 

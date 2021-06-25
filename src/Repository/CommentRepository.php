@@ -23,7 +23,7 @@ class CommentRepository extends Repository
      * @param int $page
      * @return LengthAwarePaginator|Collection
      */
-    public function getAllComments(string $orderByDirection = 'asc', string $quantity = '20', int $page = 1): LengthAwarePaginator|Collection
+    public function getAllComments(string $orderByDirection = 'asc', string $quantity = '20', int $page = 1)
     {
         if($quantity == 'all') {
             return Comment::orderBy('has_moderated',$orderByDirection)->get();
@@ -86,7 +86,7 @@ class CommentRepository extends Repository
      */
     public function getAllModeratedCommentsByPostId(int $postId): Collection
     {
-        $userId = !empty($this->session->get('userId')) ? $this->session->get('userId') : 0;
+        $userId = session_status() === 2 ? $this->session->get('userId') : 0;
 
         return Comment::where(function ($query) use ($postId) {
             $query->where('has_moderated', 1)
@@ -106,6 +106,7 @@ class CommentRepository extends Repository
      */
     public function getAllowableCommentsByPostId($postId): Collection
     {
+
         if((new PublicUserController())->checkUserForComments()) {
 
             return $this->getAllCommentsByPostId($postId);

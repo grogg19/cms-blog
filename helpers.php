@@ -93,7 +93,7 @@ function getCurrentDate($format = 'Y-m-d H:i:s'): string {
 function generateToken() {
 
     // Если  токена не существует, то
-        if(Cookie::get('_token') === null) {
+        if(empty(Cookie::get('_token'))) {
             // генерируем токен и записываем его в куки
             $token = hash('sha1', uniqid(rand()));
             Cookie::set('_token', $token, 3600);

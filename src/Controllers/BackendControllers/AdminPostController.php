@@ -340,9 +340,9 @@ class AdminPostController extends AdminController
 
     /**
      * Возвращает картинки из хранилища
-     * @return false|string
+     * @return string
      */
-    public function getImages(): false|string
+    public function getImages(): string
     {
         return (new ImageManager())->getImageNameFromStorages();
     }

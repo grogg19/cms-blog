@@ -1,9 +1,9 @@
 <?php
 namespace App\Parse;
 
-use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Exception\ParseException;
+use Exception;
 
 /**
  * Yaml helper class
@@ -33,30 +33,9 @@ class Yaml
     {
         try {
             return $this->parse(file_get_contents($fileName));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ParseException("A syntax error was detected in $fileName. " . $e->getMessage(), __LINE__, __FILE__);
         }
     }
 
-    /**
-     * Renders a PHP array to YAML format.
-     * @param array $vars
-     * @param array $options
-     *
-     * Supported options:
-     * - inline: The level where you switch to inline YAML.
-     * - exceptionOnInvalidType: if an exception must be thrown on invalid types.
-     * - objectSupport: if object support is enabled.
-     */
-    public function render($vars = [], $options = [])
-    {
-        extract(array_merge([
-            'inline' => 20,
-            'exceptionOnInvalidType' => false,
-            'objectSupport' => true,
-        ], $options));
-
-        $yaml = new Dumper;
-        return $yaml->dump($vars, $inline, 0, $exceptionOnInvalidType, $objectSupport);
-    }
 }
