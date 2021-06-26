@@ -6,13 +6,18 @@
 use App\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use App\Model\User;
 use function Helpers\getDateTime;
 /**
  * @var Collection $comments
  * @var string $avatarPath
  * @var string $token
  * @var $quantity
+ * @var User $user
+ * @var $title
  */
+
+(new View('admin_header', ['user' => $user ?: null, 'title' => $title]))->render();
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -94,3 +99,6 @@ use function Helpers\getDateTime;
         </div>
     </div>
 </div>
+<?php
+(new View('footer'))->render();
+?>

@@ -3,6 +3,11 @@
  * Список пользователей
  */
 
+use App\View;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+use function Helpers\getDateTime;
+
 /**
  * @var $users
  * @var $pathToAvatar
@@ -12,11 +17,7 @@
  * @var $title
  * @var $currentUser;
  */
-
-use App\View;
-use Illuminate\Pagination\LengthAwarePaginator;
-use function Helpers\getDateTime;
-
+(new View('admin_header', ['user' => $currentUser ?: null, 'title' => $title]))->render();
 ?>
 <div class="dx-box-5 bg-grey-6 ">
     <div class="container">
@@ -55,7 +56,7 @@ use function Helpers\getDateTime;
 		                    <li>Комментарии: <?= count($user->comments) ?></li>
 		                    <li>
 		                        <span class="dx-form-group-inputs">
-		                            <select class="custom-select form-control-sm form-control-style-2" data-field="role" data-for-send="<?=$user->id?>" data-method="userChangeRole" <?= $user->id !== $currentUser ?: 'disabled' ?>>
+		                            <select class="custom-select form-control-sm form-control-style-2" data-field="role" data-for-send="<?=$user->id?>" data-method="userChangeRole" <?= $user->id !== $currentUser->id ?: 'disabled' ?>>
 		                            <?php foreach ($roles as $role) { ?>
 		                                <option value="<?=$role->id?>" <?=($user->role->code === $role->code) ? 'selected' : ''?> ><?=$role->name?></option>
 		                            <?php } ?>
@@ -73,7 +74,7 @@ use function Helpers\getDateTime;
 				                data-offstyle="success"
 				                data-for-send="<?=$user->id?>" data-method="userChangeActivate" data-field="active_status"
 					            <?= $user->is_activated != true ?: 'checked' ?>
-                                <?= $user->id !== $currentUser ?: 'disabled' ?>
+                                <?= $user->id !== $currentUser->id ?: 'disabled' ?>
 				        />
 				    </span>
 		        </div>
@@ -92,3 +93,6 @@ use function Helpers\getDateTime;
 	    <div id="messageToast"></div>
     </div>
 </div>
+<?php
+(new View('footer'))->render();
+?>

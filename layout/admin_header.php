@@ -8,9 +8,10 @@ use function Helpers\session;
 
 /**
  * @var User $user
+ * @var string $title
  */
 
-(new View('base.header', ['title' => !empty($title) ? $title : '']))->render();
+(new View('base.header', ['title' => 'Администрирование | ' . $title]))->render();
 
 ?>
 <!-- START: Navbar -->

@@ -46,17 +46,14 @@ class AdminAccountController extends AdminController
         }
 
         $data = [
-            'view' => 'admin.account.edit_account',
-            'data' => [
-                'form' => $this->getUserAccountFields(),
-                'user' => $user,
-                'token' => generateToken(),
-                'pathToAvatar' => $this->userRepository->getUserAvatarPath()
-            ],
+            'form' => $this->getUserAccountFields(),
+            'user' => $user,
+            'token' => generateToken(),
+            'pathToAvatar' => $this->userRepository->getUserAvatarPath(),
             'title' => 'Редактирование профиля пользователя'
         ];
 
-        return (new View('admin', $data));
+        return (new View('admin.account.edit_account', $data));
     }
 
     /**
@@ -73,16 +70,12 @@ class AdminAccountController extends AdminController
         }
 
         $data = [
-            'view' => 'admin.account.view_account',
-            'data' => [
-                'user' => $user,
-                'pathAvatar' => $this->userRepository->getUserAvatarPath(),
-                'title' => 'Профиль пользователя',
-                'token' => generateToken()
-            ],
-            'title' => 'Профиль пользователя'
+            'user' => $user,
+            'pathAvatar' => $this->userRepository->getUserAvatarPath(),
+            'title' => 'Профиль пользователя',
+            'token' => generateToken()
         ];
-        return (new View('admin', $data));
+        return (new View('admin.account.view_account', $data));
     }
 
     /**

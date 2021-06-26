@@ -23,9 +23,11 @@ use function \Helpers\session;
             <li>
                 <a href="/admin/blog/posts"><span class="icon pe-7s-news-paper"></span> Статьи блога</a>
             </li>
+            <?php if($user->role->code === 'admin') { ?>
 	        <li>
 		        <a href="/admin/static-pages"><span class="icon pe-7s-copy-file"></span> Статические страницы</a>
 	        </li>
+	        <?php } ?>
 	        <li>
 		        <a href="/admin/posts/comments"><span class="icon pe-7s-check"></span> Модерация комментариев</a>
 	        </li>
@@ -34,8 +36,6 @@ use function \Helpers\session;
             <li>
                 <a href="/admin/user-manager"><span class="icon pe-7s-users"></span> Управление пользователями</a>
             </li>
-	        <?php } ?>
-            <?php if(in_array($user->role->code, ['admin', 'content-manager'])) { ?>
             <li>
                 <a href="/admin/settings"><span class="icon pe-7s-config"></span> Настройки</a>
             </li>

@@ -42,11 +42,7 @@ class LoginController extends PublicController
 
         $fields['token'] = generateToken();
 
-        $data = [
-            'view' => 'partials.login',
-            'data' => $fields
-        ];
-        return (new View('index', $data));
+        return (new View('login', $fields));
     }
 
     /**

@@ -12,14 +12,9 @@ use function Helpers\session;
  * Блок подписки
  *
  * @var $token
+ * @var $user
  */
-$user = (!empty(Cookie::get('authUser')) && !empty(Cookie::get('PHPSESSID'))) ?
-    (new UserRepository())->getUserById(session()->get('userId')) : null;
-
-(new View('partials.subscribe',[
-    'token' => $token,
-    'user' => $user
-]))->render();
+(new View('partials.subscribe',['token' => $token, 'user' => $user]))->render();
 
 /**
  * Блок Последние посты

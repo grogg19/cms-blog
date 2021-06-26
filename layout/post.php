@@ -13,7 +13,11 @@ use function Helpers\getDateTime;
  * @var $comments
  * @var $userRole
  * @var $token
+ * @var $user
+ * @var $title
  */
+
+(new View('header', ['user' => $user ?: null, 'title' => $title]))->render();
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
@@ -78,7 +82,7 @@ use function Helpers\getDateTime;
                     /**
                      * Правый блок сайта
                      */
-                    (new View('section_right', ['token' => $token]))->render();
+                    (new View('section_right', ['token' => $token, 'user' => $user]))->render();
                     ?>
                 </div>
             </div>
@@ -86,3 +90,6 @@ use function Helpers\getDateTime;
 	    <div id="messageToast"></div>
     </div>
 </div>
+<?php
+(new View('footer'))->render();
+?>

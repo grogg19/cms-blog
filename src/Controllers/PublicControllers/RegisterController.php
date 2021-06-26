@@ -5,6 +5,7 @@
 
 namespace App\Controllers\PublicControllers;
 
+use App\Redirect;
 use App\Renderable;
 use App\Repository\UserRepository;
 use App\Model\User;
@@ -44,6 +45,9 @@ class RegisterController extends PublicController
      */
     public function signUp(): Renderable
     {
+        if(session_status() == 2) {
+            Redirect::to('/admin/blog/posts');
+        }
         return $this->form();
     }
 
@@ -67,12 +71,7 @@ class RegisterController extends PublicController
 
         $fields['token'] = generateToken();
 
-        $data = [
-            'view' => 'partials.signup',
-            'data' => $fields
-        ];
-
-        return (new View('index', $data));
+        return (new View('signup', $fields));
     }
 
     /**

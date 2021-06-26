@@ -10,6 +10,7 @@ use App\Cookie\Cookie;
 use App\Auth\Auth;
 use App\Image\ImageManager;
 use App\Redirect;
+use App\Repository\UserRepository;
 
 /**
  * Class AdminController
@@ -29,9 +30,8 @@ class AdminController extends Controller
     public function __construct()
     {
         parent::__construct();
-
+        $this->view = 'admin';
         $this->auth = new Auth();
-
         $this->initCheckers();
 
         // Проверяем факт авторизации пользователя
@@ -48,6 +48,8 @@ class AdminController extends Controller
             $this->session->invalidate();
             Redirect::to('/login');
         }
+
+        $this->parameters = ['user'=> (new UserRepository())->getCurrentUser()];
     }
 
 

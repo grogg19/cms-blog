@@ -8,6 +8,7 @@ namespace App\Controllers\BackendControllers;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\CommentRepository;
+use App\Repository\UserRepository;
 use App\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -55,18 +56,15 @@ class AdminCommentController extends AdminController
         }
 
         $data = [
-            'view' => 'admin.comments.list',
-            'data' => [
-                'title' => $title,
-                'comments' => $comments,
-                'token' => generateToken(),
-                'avatarPath' => $avatarPath,
-                'quantity' => $quantity
-            ],
-            'title' => 'Администрирование | ' . $title
+            'title' => $title,
+            'comments' => $comments,
+            'token' => generateToken(),
+            'avatarPath' => $avatarPath,
+            'quantity' => $quantity,
+            'user' => (new UserRepository())->getCurrentUser()
         ];
 
-        return (new View('admin', $data));
+        return (new View('admin.comments.list', $data));
     }
 
     /**

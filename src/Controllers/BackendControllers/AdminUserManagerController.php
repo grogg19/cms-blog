@@ -35,9 +35,7 @@ class AdminUserManagerController extends AdminController
 
         $this->userRepository = new UserRepository();
 
-        $user = $this->userRepository->getCurrentUser();
-
-        if (!$this->auth->checkSuperUser($user)) {
+        if (!$this->auth->checkPermissons(['admin'])) {
             $this->toast->setToast('info', 'У вас недостаточно прав для этого действия');
             Redirect::to('/admin/account');
         };
@@ -60,20 +58,16 @@ class AdminUserManagerController extends AdminController
         }
 
         $data = [
-            'view' => 'admin.users_manager.list',
-            'data' => [
-                'title' => 'Список пользователей',
-                'users' => $users,
-                'token' => generateToken(),
-                'pathToAvatar' => $this->userRepository->getUserAvatarPath(),
-                'roles' => $this->userRepository->getUserRoles(),
-                'quantity' => $quantity,
-                'currentUser' => $this->session->get('userId')
-            ],
-            'title' => 'Редактирование профиля пользователя'
+            'title' => 'Список пользователей',
+            'users' => $users,
+            'token' => generateToken(),
+            'pathToAvatar' => $this->userRepository->getUserAvatarPath(),
+            'roles' => $this->userRepository->getUserRoles(),
+            'quantity' => $quantity,
+            'currentUser' => (new UserRepository())->getCurrentUser()
         ];
 
-        return (new View('admin', $data));
+        return (new View('admin.users_manager.list', $data));
     }
 
     /**

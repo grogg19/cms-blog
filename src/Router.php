@@ -31,10 +31,10 @@ class Router
     }
 
     /**
-     * @return View|string|null
+     * @return Renderable|string|null
      * @throws NotFoundException
      */
-    public function dispatch(): Renderable|string|null
+    public function dispatch()
     {
         foreach ($this->routes as $route) {
             if($route->match(strtolower($_SERVER['REQUEST_METHOD']), $_SERVER['REQUEST_URI']) == true)

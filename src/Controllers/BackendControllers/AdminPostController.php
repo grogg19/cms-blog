@@ -15,9 +15,7 @@ use App\Redirect;
 use App\Renderable;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
-use App\Request\Request;
 use App\Validate\Validator;
-use App\Model\Image;
 use App\Image\ImageManager;
 use App\View;
 use Exception;
@@ -28,9 +26,7 @@ use App\Model\User;
 
 use function Helpers\checkToken;
 use function Helpers\generateToken;
-use function Helpers\cleanJSTags;
 use function Helpers\parseRequestUri;
-use function Helpers\getDateTimeForDb;
 
 /**
  * Class AdminPostController
@@ -41,12 +37,12 @@ class AdminPostController extends AdminController
     /**
      * @var PostRepository
      */
-    protected $postRepository;
+    private $postRepository;
 
     /**
      * @var User|null
      */
-    protected $user;
+    private $user;
 
     /**
      * AdminPostController constructor.
@@ -56,7 +52,6 @@ class AdminPostController extends AdminController
         parent::__construct();
 
         $this->postRepository = new PostRepository();
-        $this->user = (new UserRepository())->getUserById($this->session->get('userId'));
 
         if(!empty($this->session->get('postId'))) {
             $this->onCloseCleanImage();
@@ -68,6 +63,8 @@ class AdminPostController extends AdminController
 
             Redirect::to('/');
         }
+
+        $this->user = (new UserRepository())->getCurrentUser();
     }
 
     /**
@@ -80,7 +77,7 @@ class AdminPostController extends AdminController
 
         $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
 
-        if($this->user->role->code = 'admin') {
+        if($this->user->role->code == 'admin') {
             $posts = $this->postRepository->getAllPosts('desc', $quantity);
         } else {
             $posts = $this->postRepository
@@ -91,20 +88,16 @@ class AdminPostController extends AdminController
             $query = (!empty($quantity)) ? '?quantity=' . $quantity : '';
             $posts->setPath('posts' . $query);
         }
-        $title = 'Список статей блога';
 
         $data = [
-            'view' => 'admin.posts.list_posts',
-            'data' => [
-                'title' => $title,
-                'posts' => $posts,
-                'token' => generateToken(),
-                'quantity' => $quantity
-            ],
-            'title' => $title
+            'title' => 'Список статей блога',
+            'posts' => $posts,
+            'token' => generateToken(),
+            'quantity' => $quantity,
+            'user' => $this->user
         ];
 
-        return (new View('admin', $data));
+        return (new View('admin.posts.list_posts', $data));
     }
 
     /**
@@ -119,16 +112,14 @@ class AdminPostController extends AdminController
         }
 
         $data = [
-            'view' => 'admin.posts.create_post',
-            'data' => [
-                'form' => $this->getFields(),
-                'token' => generateToken(),
-                'imgConfig' => $this->session->get('config')->getConfig('images')
-            ],
-            'title' => 'Создание новой статьи'
+            'title' => 'Создание новой статьи',
+            'form' => $this->getFields(),
+            'token' => generateToken(),
+            'imgConfig' => $this->session->get('config')->getConfig('images'),
+            'user' => $this->user
         ];
 
-        return (new View('admin', $data));
+        return (new View('admin.posts.create_post', $data));
     }
 
     /**
@@ -157,75 +148,23 @@ class AdminPostController extends AdminController
 
         if($post->user_id == $this->session->get('userId') || $this->user->role->permissions == 1)
         {
+
             $data = [
-                'view' => 'admin.posts.edit_post',
-                'data' => [
-                    'form' => $this->getFields(),
-                    'post' => $post,
-                    'token' => generateToken(),
-                    'imgConfig' => $this->session->get('config')->getConfig('images')
-                ],
-                'title' => 'Редактирование статьи | ' . $post->title
+                'title' => 'Редактирование статьи | ' . $post->title,
+                'form' => $this->getFields(),
+                'post' => $post,
+                'token' => generateToken(),
+                'imgConfig' => $this->session->get('config')->getConfig('images'),
+                'user' => $this->user
             ];
 
-            return (new View('admin', $data));
+            return (new View('admin.posts.edit_post', $data));
 
         } else {
             $this->toast->setToast('info', 'Вам доступны для редкатирования только ваши статьи');
             Redirect::to('/admin/blog/posts');
         }
         return null;
-    }
-
-    /**
-     * Запись данных в модель
-     * @param Request $request
-     */
-    private function saveToDb(Request $request): void
-    {
-
-        if(!empty($request->post('idPost'))) {
-            $post = $this->postRepository->getPostById((int) $request->post('idPost'));
-        } else {
-            $post = $this->postRepository->createNewPost();
-            $post->user_id = $this->user->id;
-        }
-
-        $post->title = filter_var($request->post('title'), FILTER_SANITIZE_STRING);
-        $post->slug = filter_var(trim($request->post('slug'), '/'), FILTER_SANITIZE_STRING);
-        $post->excerpt = filter_var($request->post('excerpt'), FILTER_SANITIZE_STRING);
-        $post->content = cleanJSTags( (string) $request->post('content'));
-        $post->published = (!empty($request->post('published')) && $request->post('published') == 'on') ? 1 : 0;
-        $post->published_at = (!empty($request->post('published_at'))) ? getDateTimeForDb($request->post('published_at')) : "";
-
-        $post->save();
-
-        if(empty($request->post('idPost'))) {
-            $this->mailNotification($post);
-        }
-
-        if(!empty(Cookie::getArray('uploadImages')) && $this->session->get('postBusy') == true) {
-
-            $sort = 0;
-            $configImages = $this->session->get('config')->getConfig('images');
-
-            foreach (Cookie::getArray('uploadImages') as $imageFileName) {
-                $pathToFile = $_SERVER['DOCUMENT_ROOT'] . $configImages['pathToUpload'] . DIRECTORY_SEPARATOR . $imageFileName;
-
-                if(file_exists($pathToFile)) {
-                    $data[] = [
-                        'file_name' => $imageFileName,
-                        'post_id' => $post->id,
-                        'sort' => $sort++
-                    ];
-                }
-            }
-
-            Image::insert($data); // Добавляем изображения в БД
-
-            $this->session->set('postBusy', false); // снимаем метку блокировки поста
-            Cookie::delete('uploadImages'); // Чистим список загруженных изображений в куках
-        }
     }
 
     /**
@@ -255,7 +194,12 @@ class AdminPostController extends AdminController
             // и пробуем сохранить
             try {
 
-                $this->saveToDb($this->request);
+                $post = $this->postRepository->saveToDb($this->request, $this->user);
+
+                if(empty($this->request->post('idPost'))) {
+                    $this->mailNotification($post);
+                }
+
                 $this->toast->setToast('success', 'Пост успешно сохранён');
 
                 return json_encode(['url' => '/admin/blog/posts']);

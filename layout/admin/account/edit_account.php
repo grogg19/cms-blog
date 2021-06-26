@@ -5,14 +5,14 @@
 
 use App\FormRenderer;
 use App\Model\User;
+use App\View;
 /**
  * @var User $user
  * @var array $form
  * @var string $pathToAvatar
+ * @var $title
  */
-$user = !empty($user) ? $user : null;
-$pathToAvatar = !empty($pathToAvatar) ? $pathToAvatar : '';
-
+(new View('admin_header', ['user' => $user ?: null, 'title' => $title]))->render();
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -51,3 +51,6 @@ $pathToAvatar = !empty($pathToAvatar) ? $pathToAvatar : '';
         </div>
     </div>
 </div>
+<?php
+(new View('footer'))->render();
+?>

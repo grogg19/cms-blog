@@ -39,4 +39,5 @@ abstract class Controller
         $this->request = new Request();
         $this->toast = new Toast();
     }
+
 }

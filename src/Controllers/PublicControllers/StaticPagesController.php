@@ -6,6 +6,7 @@ namespace App\Controllers\PublicControllers;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\StaticPagesRepository;
+use App\Repository\UserRepository;
 use App\Request\Request;
 use App\StaticPages\Page;
 use App\StaticPages\PageList;
@@ -45,15 +46,14 @@ class StaticPagesController extends PublicController
             $pageParameters = $page->getParameters();
 
             $data = [
-                'view' => 'static_pages',
-                'data' => [
-                    'content' => $content,
-                    'pageParameters' => $pageParameters
-                ],
+                'content' => $content,
+                'pageParameters' => $pageParameters,
                 'title' => 'Блог | ' . $pageParameters['title'],
             ];
 
-            return (new View('index', $data));
+            $data['user'] = (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null;
+
+            return (new View('static_pages', $data));
 
         } else {
             Redirect::to('/404');

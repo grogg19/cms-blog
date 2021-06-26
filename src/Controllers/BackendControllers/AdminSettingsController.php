@@ -5,10 +5,11 @@
 
 namespace App\Controllers\BackendControllers;
 
+use App\Model\User;
 use App\Redirect;
 use App\Renderable;
-use App\Repository\UserRepository;
 use App\Model\SystemSetting;
+use App\Repository\UserRepository;
 use App\Validate\Validator;
 use App\Repository\SystemSettingsRepository;
 use App\View;
@@ -23,15 +24,20 @@ use function Helpers\generateToken;
 class AdminSettingsController extends AdminController
 {
     /**
+     * @var User
+     */
+    private $user;
+
+    /**
      * AdminSettingsController constructor.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $user = (new UserRepository())->getCurrentUser();
+        $this->user = (new UserRepository())->getCurrentUser();
 
-        if (!$this->auth->checkSuperUser($user)) {
+        if (!$this->auth->checkPermissons(['admin'])) {
             $this->toast->setToast('info', 'У вас недостаточно прав для этого действия');
             Redirect::to('/admin/account');
         };
@@ -47,17 +53,14 @@ class AdminSettingsController extends AdminController
         $settings = (new SystemSettingsRepository())->getSystemSettings('preferences');
 
         $data = [
-            'view' => 'admin.settings.settings_admin',
-            'data' => [
-                'title' => $title,
-                'token' => generateToken(),
-                'settings' => $settings,
-                'parameters' => json_decode($settings->value)
-            ],
-            'title' => 'Администрирование | ' . $title
+            'title' => $title,
+            'token' => generateToken(),
+            'settings' => $settings,
+            'parameters' => json_decode($settings->value),
+            'user' => $this->user
         ];
 
-        return (new View('admin', $data));
+        return (new View('admin.settings.settings_admin', $data));
 
     }
 

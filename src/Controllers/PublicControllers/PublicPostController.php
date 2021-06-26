@@ -48,25 +48,24 @@ class PublicPostController extends PublicController
         if(!empty($this->request->post('page'))) {
 
             $view = 'partials.posts_items';
-            $data = [
+            $data['data'] = [
                 'posts' => (new PostRepository())->getAllPublishedPosts('desc', $page),
                 'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
                 'token' => generateToken(),
             ];
 
         } else {
-
-            $view = 'index';
+            $view = 'posts';
             $data = [
-                'view' => 'posts',
-                'data' => [
-                    'posts' => (new PostRepository())->getAllPublishedPosts('desc', $page),
-                    'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
-                    'token' => generateToken(),
-                ],
-                'title' => 'Курсовая работа CMS для Блога'
+                'title' => 'Курсовая работа CMS для Блога',
+                'posts' => (new PostRepository())->getAllPublishedPosts('desc', $page),
+                'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+                'token' => generateToken(),
             ];
+
         }
+
+        $data['user'] = (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null;
 
         return (new View($view, $data));
     }
@@ -109,19 +108,17 @@ class PublicPostController extends PublicController
             $comments = new CommentRepository();
 
             $data = [
-                'view' => 'post',
-                'data' => [
-                    $module => $post,
-                    'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
-                    'token' => generateToken(),
-                    'userRole' => $userRole,
-                    'comments' => $comments->getAllowableCommentsByPostId($post->id)
-                ],
+                $module => $post,
+                'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+                'token' => generateToken(),
+                'userRole' => $userRole,
+                'comments' => $comments->getAllowableCommentsByPostId($post->id),
                 'title' => 'Блог | ' . $post->title
             ];
 
+            $data['user'] = (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null;
         }
-        return (new View('index', $data));
+        return (new View('post', $data));
     }
 
 }

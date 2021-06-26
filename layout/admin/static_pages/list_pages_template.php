@@ -2,16 +2,19 @@
 /**
  * Список статических страниц - шаблон
  */
+
+use App\View;
+use Illuminate\Pagination\LengthAwarePaginator;
+use App\Model\User;
 /**
  * @var string $title
  * @var $pages
  * @var $token
  * @var $quantity
+ * @var User $user
  */
 
-use App\View;
-use Illuminate\Pagination\LengthAwarePaginator;
-
+(new View('admin_header', ['user' => $user ?: null, 'title' => $title]))->render();
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -76,3 +79,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
         </div>
     </div>
 </div>
+<?php
+(new View('footer'))->render();
+?>

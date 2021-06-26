@@ -9,8 +9,11 @@ use App\View;
  * @var array $posts
  * @var $token
  * @var string $imgPath
+ * @var $user
+ * @var $title
  */
 
+(new View('header', ['user' => $user ?: null, 'title' => $title]))->render();
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
@@ -35,10 +38,13 @@ use App\View;
                     /**
                      * Правый блок сайта
                      */
-                    (new View('section_right', ['token' => $token]))->render();
+                    (new View('section_right', ['token' => $token, 'user' => $user]))->render();
                     ?>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<?php
+(new View('footer'))->render();
+?>

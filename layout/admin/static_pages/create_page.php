@@ -3,12 +3,17 @@
  * Шаблон
  * Создание страницы
  */
+use App\FormRenderer;
+use App\View;
+use App\Model\User;
 /**
  * @var $title
  * @var $token
+ * @var User $user
  */
 
-use App\FormRenderer;
+(new View('admin_header', ['user' => $user ?: null, 'title' => $title]))->render();
+
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -51,3 +56,6 @@ use App\FormRenderer;
         </div>
     </div>
 </div>
+<?php
+(new View('footer'))->render();
+?>

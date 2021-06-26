@@ -3,12 +3,17 @@
  * Настройки СMS - шаблон
  */
 
+use App\Model\User;
+use App\View;
 /**
  * @var array $settings
  * @var string $token
  * @var array $settings
  * @var object $parameters
+ * @var User $user
+ * @var $title
  */
+(new View('admin_header', ['user' => $user ?: null, 'title' => $title]))->render();
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -47,3 +52,6 @@
         </div>
     </div>
 </div>
+<?php
+(new View('footer'))->render();
+?>

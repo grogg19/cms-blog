@@ -3,12 +3,17 @@
 namespace App\Repository;
 
 
-use App\Model\Post;
+use App\Cookie\Cookie;
+use App\Model\Image;
+use App\Model\User;
 use App\Model\Post as ModelPost;
+use App\Request\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use App\Controllers\PublicControllers\PublicSettingsController;
+use function Helpers\cleanJSTags;
 use function Helpers\getCurrentDate;
+use function Helpers\getDateTimeForDb;
 
 /**
  * Class PostRepository
@@ -71,7 +76,7 @@ class PostRepository extends Repository
      * @param string $slug
      * @return ModelPost
      */
-    public function getPostBySlug(string $slug): Post
+    public function getPostBySlug(string $slug): ModelPost
     {
         return ModelPost::where('slug', $slug)->first();
     }
@@ -81,7 +86,7 @@ class PostRepository extends Repository
      * @param int $id
      * @return ModelPost
      */
-    public function getPostById(int $id): Post
+    public function getPostById(int $id): ModelPost
     {
         return ModelPost::find($id);
     }
@@ -124,5 +129,57 @@ class PostRepository extends Repository
     public function deletePost(ModelPost $post): void
     {
         $post->delete();
+    }
+
+    /**
+     * Запись данных в модель
+     * @param Request $request
+     * @param User|null $user
+     * @return ModelPost
+     */
+    public function saveToDb(Request $request, User $user = null): ModelPost
+    {
+
+        if(!empty($request->post('idPost'))) {
+            $post = $this->getPostById((int) $request->post('idPost'));
+        } else {
+            $post = $this->createNewPost();
+            $post->user_id = $user->id;
+        }
+
+        $post->title = filter_var($request->post('title'), FILTER_SANITIZE_STRING);
+        $post->slug = filter_var(trim($request->post('slug'), '/'), FILTER_SANITIZE_STRING);
+        $post->excerpt = filter_var($request->post('excerpt'), FILTER_SANITIZE_STRING);
+        $post->content = cleanJSTags( (string) $request->post('content'));
+        $post->published = (!empty($request->post('published')) && $request->post('published') == 'on') ? 1 : 0;
+        $post->published_at = (!empty($request->post('published_at'))) ? getDateTimeForDb($request->post('published_at')) : "";
+
+        $post->save();
+
+
+
+        if(!empty(Cookie::getArray('uploadImages')) && $this->session->get('postBusy') == true) {
+
+            $sort = 0;
+            $configImages = $this->session->get('config')->getConfig('images');
+
+            foreach (Cookie::getArray('uploadImages') as $imageFileName) {
+                $pathToFile = $_SERVER['DOCUMENT_ROOT'] . $configImages['pathToUpload'] . DIRECTORY_SEPARATOR . $imageFileName;
+
+                if(file_exists($pathToFile)) {
+                    $data[] = [
+                        'file_name' => $imageFileName,
+                        'post_id' => $post->id,
+                        'sort' => $sort++
+                    ];
+                }
+            }
+
+            Image::insert($data); // Добавляем изображения в БД
+
+            $this->session->set('postBusy', false); // снимаем метку блокировки поста
+            Cookie::delete('uploadImages'); // Чистим список загруженных изображений в куках
+        }
+        return $post;
     }
 }

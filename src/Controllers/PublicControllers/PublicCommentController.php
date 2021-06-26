@@ -23,12 +23,12 @@ class PublicCommentController extends PublicController
     public function addComment(): string
     {
 
-        if(!(new Auth())->checkAuthorization()) {
+        if((new Auth())->checkAuthorization()['access'] === 'denied') {
             return $this->toast->getToast('warning', 'Оставлять комментарии могут только зарегистрированные пользователи');
         }
 
         if(empty($this->request->post()) || !checkToken()) {
-            return $this->toast->getToast('warning', 'Нет входящих данных');
+            return $this->toast->getToast('warning', 'Нет входящих данных, обновите страницу');
         }
 
         $commentDataToSave = [

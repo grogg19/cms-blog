@@ -4,13 +4,18 @@
  */
 
 use App\FormRenderer;
+use App\Model\User;
+use App\View;
 
 /**
  * @var string $token
  * @var array $form
  * @var array $imgConfig
+ * @var User $user
+ * @var $title
  */
 
+(new View('admin_header', ['user' => $user ?: null, 'title' => 'Администрирование | ' . $title]))->render();
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -72,3 +77,6 @@ use App\FormRenderer;
         </div>
     </div>
 </div>
+<?php
+(new View('footer'))->render();
+?>

@@ -4,13 +4,16 @@
  */
 
 use App\Model\User;
+use App\View;
 use function Helpers\session;
 
 /**
  * @var string $pathAvatar
  * @var User $user
  * @var string $token
+ * @var $title
  */
+(new View('admin_header', ['user' => $user ?: null, 'title' => $title]))->render();
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -59,3 +62,6 @@ use function Helpers\session;
         </div>
     </div>
 </div>
+<?php
+(new View('footer'))->render();
+?>

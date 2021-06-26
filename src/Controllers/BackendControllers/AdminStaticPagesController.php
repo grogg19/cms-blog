@@ -2,11 +2,13 @@
 
 namespace App\Controllers\BackendControllers;
 
+use App\Model\User;
 use App\Pagination\PaginateMaker;
 use App\Parse\Yaml;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\StaticPagesRepository;
+use App\Repository\UserRepository;
 use App\StaticPages\File;
 use App\StaticPages\Page;
 use App\Validate\Validator;
@@ -25,6 +27,11 @@ use function Helpers\generateToken;
 class AdminStaticPagesController extends AdminController
 {
     /**
+     * @var User
+     */
+    private $user;
+
+    /**
      * @var array Правила валидации по дефолту
      */
     public array $rules = [
@@ -39,12 +46,13 @@ class AdminStaticPagesController extends AdminController
     {
         parent::__construct();
 
-        if(!$this->auth->checkPermissons(['admin', 'content-manager'])) {
+        if(!$this->auth->checkPermissons(['admin'])) {
 
             $this->toast->setToast('info', 'У вас недостаточно прав для этого действия');
 
             Redirect::to('/');
         }
+        $this->user = (new UserRepository())->getCurrentUser();
     }
 
     /**
@@ -71,17 +79,14 @@ class AdminStaticPagesController extends AdminController
         }
 
         $data = [
-            'view' => 'admin.static_pages.list_pages_template',
-                'data' => [
-                    'token' => generateToken(),
-                    'title' => $title,
-                    'pages' => $pages,
-                    'quantity' => $quantity
-                ],
-            'title' => $title
+            'token' => generateToken(),
+            'title' => $title,
+            'pages' => $pages,
+            'quantity' => $quantity,
+            'user' => $this->user
         ];
 
-        return (new View('admin', $data));
+        return (new View('admin.static_pages.list_pages_template', $data));
     }
 
     /**
@@ -93,16 +98,13 @@ class AdminStaticPagesController extends AdminController
         $title = 'Создание новой страницы';
 
         $data = [
-            'view' => 'admin.static_pages.create_page',
-            'data' => [
-                'form' => $this->getFields(),
-                'token' => generateToken(),
-                'title' => $title
-            ],
-            'title' => $title
+            'form' => $this->getFields(),
+            'token' => generateToken(),
+            'title' => $title,
+            'user' => $this->user
         ];
 
-        return (new View('admin', $data));
+        return (new View('admin.static_pages.create_page', $data));
     }
 
     /**
@@ -121,17 +123,14 @@ class AdminStaticPagesController extends AdminController
         $title = 'Редактирование страницы';
 
         $data = [
-            'view' => 'admin.static_pages.edit_page',
-            'data' => [
-                'form' => $this->getFields(),
-                'page' => (object) $page->getParameters(),
-                'token' => generateToken(),
-                'title' => $title
-            ],
-            'title' => $title
+            'form' => $this->getFields(),
+            'page' => (object) $page->getParameters(),
+            'token' => generateToken(),
+            'title' => $title,
+            'user' => $this->user
         ];
 
-        return (new View('admin', $data));
+        return (new View('admin.static_pages.edit_page', $data));
     }
 
     /**
