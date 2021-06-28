@@ -14,13 +14,13 @@ class PublicUserController extends PublicController
      */
     public function checkUserForComments(): bool
     {
-        $userRepository = new UserRepository();
+        $user = (new UserRepository())->getCurrentUser();
 
-        if(!$userRepository->getCurrentUser()) {
+        if($user === null) {
             return false;
         }
 
-        if(in_array($userRepository->getCurrentUser()->role->code, ['admin', 'content-manager'])) {
+        if(in_array($user->role->code, ['admin', 'content-manager'])) {
             return true;
         }
 
