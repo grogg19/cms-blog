@@ -64,7 +64,7 @@ class AdminCommentController extends AdminController
             'user' => (new UserRepository())->getCurrentUser()
         ];
 
-        return (new View('admin.comments.list', $data));
+        return new View('admin.comments.list', $data);
     }
 
     /**

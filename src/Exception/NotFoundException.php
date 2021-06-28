@@ -7,7 +7,7 @@ namespace App\Exception;
 
 use App\Exception\HttpException as HttpException;
 use App\Renderable as Renderable;
-use App\View as View;
+use App\View;
 use Throwable;
 
 /**

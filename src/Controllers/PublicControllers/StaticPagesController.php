@@ -53,7 +53,7 @@ class StaticPagesController extends PublicController
 
             $data['user'] = (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null;
 
-            return (new View('static_pages', $data));
+            return new View('static_pages', $data);
 
         } else {
             Redirect::to('/404');

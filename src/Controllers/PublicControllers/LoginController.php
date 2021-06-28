@@ -42,7 +42,7 @@ class LoginController extends PublicController
 
         $fields['token'] = generateToken();
 
-        return (new View('login', $fields));
+        return new View('login', $fields);
     }
 
     /**

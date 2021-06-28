@@ -67,7 +67,7 @@ class AdminUserManagerController extends AdminController
             'currentUser' => (new UserRepository())->getCurrentUser()
         ];
 
-        return (new View('admin.users_manager.list', $data));
+        return new View('admin.users_manager.list', $data);
     }
 
     /**

@@ -97,7 +97,7 @@ class AdminPostController extends AdminController
             'user' => $this->user
         ];
 
-        return (new View('admin.posts.list_posts', $data));
+        return new View('admin.posts.list_posts', $data);
     }
 
     /**
@@ -119,7 +119,7 @@ class AdminPostController extends AdminController
             'user' => $this->user
         ];
 
-        return (new View('admin.posts.create_post', $data));
+        return new View('admin.posts.create_post', $data);
     }
 
     /**
@@ -158,7 +158,7 @@ class AdminPostController extends AdminController
                 'user' => $this->user
             ];
 
-            return (new View('admin.posts.edit_post', $data));
+            return new View('admin.posts.edit_post', $data);
 
         } else {
             $this->toast->setToast('info', 'Вам доступны для редкатирования только ваши статьи');

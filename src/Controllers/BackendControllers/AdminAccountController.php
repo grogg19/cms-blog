@@ -53,7 +53,7 @@ class AdminAccountController extends AdminController
             'title' => 'Редактирование профиля пользователя'
         ];
 
-        return (new View('admin.account.edit_account', $data));
+        return new View('admin.account.edit_account', $data);
     }
 
     /**
@@ -66,7 +66,7 @@ class AdminAccountController extends AdminController
             $user = $this->userRepository->getUserById($this->session->get('userId'));
         } else {
 
-            return (new View('404'));
+            return new View('404');
         }
 
         $data = [
@@ -75,7 +75,7 @@ class AdminAccountController extends AdminController
             'title' => 'Профиль пользователя',
             'token' => generateToken()
         ];
-        return (new View('admin.account.view_account', $data));
+        return new View('admin.account.view_account', $data);
     }
 
     /**

@@ -86,7 +86,7 @@ class AdminStaticPagesController extends AdminController
             'user' => $this->user
         ];
 
-        return (new View('admin.static_pages.list_pages_template', $data));
+        return new View('admin.static_pages.list_pages_template', $data);
     }
 
     /**
@@ -104,7 +104,7 @@ class AdminStaticPagesController extends AdminController
             'user' => $this->user
         ];
 
-        return (new View('admin.static_pages.create_page', $data));
+        return new View('admin.static_pages.create_page', $data);
     }
 
     /**
@@ -130,7 +130,7 @@ class AdminStaticPagesController extends AdminController
             'user' => $this->user
         ];
 
-        return (new View('admin.static_pages.edit_page', $data));
+        return new View('admin.static_pages.edit_page', $data);
     }
 
     /**

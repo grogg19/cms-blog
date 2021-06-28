@@ -30,7 +30,7 @@ class AdminController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->view = 'admin';
+
         $this->auth = new Auth();
         $this->initCheckers();
 

@@ -67,7 +67,7 @@ class PublicPostController extends PublicController
 
         $data['user'] = (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null;
 
-        return (new View($view, $data));
+        return new View($view, $data);
     }
 
     /**
@@ -83,7 +83,7 @@ class PublicPostController extends PublicController
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
         ];
 
-        return (new View($view, $data));
+        return new View($view, $data);
     }
 
     /**
@@ -118,7 +118,7 @@ class PublicPostController extends PublicController
 
             $data['user'] = (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null;
         }
-        return (new View('post', $data));
+        return new View('post', $data);
     }
 
 }

@@ -60,7 +60,7 @@ class AdminSettingsController extends AdminController
             'user' => $this->user
         ];
 
-        return (new View('admin.settings.settings_admin', $data));
+        return new View('admin.settings.settings_admin', $data);
 
     }
 

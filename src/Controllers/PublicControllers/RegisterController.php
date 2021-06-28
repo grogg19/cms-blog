@@ -71,7 +71,7 @@ class RegisterController extends PublicController
 
         $fields['token'] = generateToken();
 
-        return (new View('signup', $fields));
+        return new View('signup', $fields);
     }
 
     /**
