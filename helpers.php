@@ -3,8 +3,6 @@
  *  Хелпер вывода
  */
 
-namespace Helpers;
-
 use App\Request\Request;
 use App\Cookie\Cookie;
 use Symfony\Component\HttpFoundation\Session\Session;
