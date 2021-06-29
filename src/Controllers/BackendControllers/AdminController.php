@@ -11,6 +11,7 @@ use App\Auth\Auth;
 use App\Image\ImageManager;
 use App\Redirect;
 use App\Repository\UserRepository;
+use App\Repository\PostRepository;
 
 /**
  * Class AdminController
@@ -49,7 +50,11 @@ class AdminController extends Controller
             Redirect::to('/login');
         }
 
-        $this->parameters = ['user'=> (new UserRepository())->getCurrentUser()];
+        $this->data['latestPosts'] = (new PostRepository())->getLatestPosts(); // свежие посты
+
+        $this->data['user'] = (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null; // текущий пользователь
+
+        $this->data['quantityItems'] = $this->session->get('config')->getConfig('cms')['dropdown']; // список вариантов количества элементов
     }
 
 
