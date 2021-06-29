@@ -1,12 +1,14 @@
 <?php
-use App\View;
 
-if (!empty($typeToast) && !empty($dataToast)) { ?>
+/**
+ * @var $pathToast
+ * @var $toastMessage
+ */
+
+if (!empty($pathToast) && !empty($toastMessage)) { ?>
 <section class="toast__container">
     <?php
-    (new View('partials.toasts.' . $typeToast, [
-        'data' => $dataToast
-    ]))->render();
+    require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/' . $pathToast . '.php');
     ?>
 </section>
 <?php } ?>

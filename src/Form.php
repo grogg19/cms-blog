@@ -29,9 +29,9 @@ class Form implements Renderable
     /**
      * Возвращает View формы
      */
-    public function render(): void
+    public function render()
     {
-        $this->view->render();
+        return $this->view->render();
     }
 
 }

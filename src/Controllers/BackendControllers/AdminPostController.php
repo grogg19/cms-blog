@@ -7,6 +7,7 @@ namespace App\Controllers\BackendControllers;
 
 use App\Cookie\Cookie;
 use App\Exception\NotFoundException;
+use App\FormRenderer;
 use App\Model\Post;
 use App\Notification\Notification;
 use App\Notification\Type\NotificationToLog;
@@ -14,7 +15,6 @@ use App\Parse\Yaml;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\PostRepository;
-use App\Repository\UserRepository;
 use App\Validate\Validator;
 use App\Image\ImageManager;
 use App\View;
@@ -23,10 +23,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\QueryException;
 use App\Uploader\Upload;
 use App\Model\User;
-
-use function Helpers\checkToken;
-use function Helpers\generateToken;
-use function Helpers\parseRequestUri;
 
 /**
  * Class AdminPostController
@@ -64,7 +60,7 @@ class AdminPostController extends AdminController
             Redirect::to('/');
         }
 
-        $this->user = (new UserRepository())->getCurrentUser();
+        $this->user = $this->data['user'];
     }
 
     /**
@@ -89,15 +85,21 @@ class AdminPostController extends AdminController
             $posts->setPath('posts' . $query);
         }
 
-        $data = [
+        $dataListPosts = [
             'title' => 'Список статей блога',
             'posts' => $posts,
             'token' => generateToken(),
-            'quantity' => $quantity,
-            'user' => $this->user
+            'quantity' => $quantity
         ];
 
-        return new View('admin.posts.list_posts', $data);
+        if($quantity !== 'all') {
+            $dataListPosts['paginator'] = $posts;
+        }
+
+        $this->view = 'admin.posts.list_posts';
+        $this->data = array_merge($this->data, $dataListPosts);
+
+        return new View($this->view, $this->data);
     }
 
     /**
@@ -111,15 +113,22 @@ class AdminPostController extends AdminController
             Cookie::delete('uploadImages');
         }
 
-        $data = [
+        $form = $this->getFields();
+
+        $formFields = (new FormRenderer($form['fields']))->render();
+
+        $dataPost = [
             'title' => 'Создание новой статьи',
-            'form' => $this->getFields(),
+            'form' => $form,
             'token' => generateToken(),
             'imgConfig' => $this->session->get('config')->getConfig('images'),
-            'user' => $this->user
+            'formFields' => $formFields
         ];
 
-        return new View('admin.posts.create_post', $data);
+        $this->view = 'admin.posts.create_post';
+        $this->data = array_merge($this->data, $dataPost);
+
+        return new View($this->view, $this->data);
     }
 
     /**
@@ -148,20 +157,26 @@ class AdminPostController extends AdminController
 
         if($post->user_id == $this->session->get('userId') || $this->user->role->permissions == 1)
         {
+            $form = $this->getFields();
 
-            $data = [
+            $formFields = (new FormRenderer($form['fields']))->render($post);
+
+            $dataPost = [
                 'title' => 'Редактирование статьи | ' . $post->title,
-                'form' => $this->getFields(),
+                'form' => $form,
                 'post' => $post,
                 'token' => generateToken(),
                 'imgConfig' => $this->session->get('config')->getConfig('images'),
-                'user' => $this->user
+                'formFields' => $formFields
             ];
 
-            return new View('admin.posts.edit_post', $data);
+            $this->view = 'admin.posts.edit_post';
+            $this->data = array_merge($this->data, $dataPost);
+
+            return new View($this->view, $this->data);
 
         } else {
-            $this->toast->setToast('info', 'Вам доступны для редкатирования только ваши статьи');
+            $this->toast->setToast('info', 'Вам доступны для редактирования только ваши статьи');
             Redirect::to('/admin/blog/posts');
         }
         return null;

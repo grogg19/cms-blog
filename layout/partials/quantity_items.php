@@ -1,8 +1,8 @@
 <?php
 /** Шаблон выпадающего списка "Количество записей" */
 /**
- * @var array $items
  * @var $quantity
+ * @var $quantityItems
  */
 ?>
 <form method="get" action="">
@@ -10,7 +10,7 @@
         <span class="col-auto dx-form-group-inputs text-left">
             <label for="quantity" class="h6 mb-10 mt-0 ml-0">Количество записей на странице</label>
             <select name="quantity" id="quantity" class="col-10 custom-select form-control-sm form-control-style-2" data-field="perPage" data-method="changePerPage" onchange="submit()">
-                <?php foreach ($items as $item) { ?>
+                <?php foreach ($quantityItems as $item) { ?>
                 	<option value="<?= $item ?>" <?= $item == $quantity ? 'selected' : ''?>><?= $item == 'all' ? 'Все' : $item ?></option>
                 <?php } ?>
             </select>

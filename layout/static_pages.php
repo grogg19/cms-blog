@@ -2,21 +2,19 @@
 /**
  * Шаблон Статической страницы
  */
-use App\View;
-
 /**
  * @var $pageParameters
  * @var $content
  * @var $user
  * @var $title
  */
-(new View('header', ['user' => $user ?: null, 'title' => $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/header.php');
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
         <div class="row vertical-gap md-gap">
             <div class="col-lg-12">
-                <?php if(!empty($pageParameters) && $pageParameters['isHidden'] !== 0) { ?>
+                <?php if(!empty($pageParameters)) { ?>
                 <?= !empty($content) ? $content : '' ?>
                 <?php } ?>
             </div>
@@ -24,5 +22,5 @@ use App\View;
     </div>
 </div>
 <?php
-(new View('footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
 ?>

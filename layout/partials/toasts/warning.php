@@ -6,6 +6,6 @@
     </div>
     <div class="toast__content">
 	    <h2>Ошибка:</h2>
-	    <p><?= !empty($data) ? $data : '' ?></p>
+	    <p><?= !empty($toastMessage) ? $toastMessage : '' ?></p>
     </div>
 </div>

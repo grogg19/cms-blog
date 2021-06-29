@@ -11,9 +11,6 @@ use App\Request\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use App\Controllers\PublicControllers\PublicSettingsController;
-use function Helpers\cleanJSTags;
-use function Helpers\getCurrentDate;
-use function Helpers\getDateTimeForDb;
 
 /**
  * Class PostRepository
@@ -95,13 +92,22 @@ class PostRepository extends Repository
      * Возвращает посты пользователя с userId с пагинацией
      * @param int $userId
      * @param string $quantity
-     * @return LengthAwarePaginator
+     * @param string $sortDirection
+     * @return LengthAwarePaginator|Collection
      */
-    public function getPostsByUserId(int $userId, string $quantity): LengthAwarePaginator
+    public function getPostsByUserId(int $userId, string $quantity, string $sortDirection = 'desc')
     {
-        $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
+        if($quantity !== 'all') {
+            $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
 
-        return ModelPost::where('user_id', $userId)->paginate($quantity, '*', 'page', $page);
+            return ModelPost::where('user_id', $userId)
+                ->orderBy('published_at',$sortDirection)
+                ->paginate($quantity, '*', 'page', $page);
+        }
+
+        return ModelPost::where('user_id', $userId)
+            ->orderBy('published_at',$sortDirection)
+            ->get();
     }
 
     /**

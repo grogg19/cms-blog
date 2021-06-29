@@ -7,6 +7,7 @@
 
 namespace App\Controllers\BackendControllers;
 
+use App\FormRenderer;
 use App\Model\User;
 use App\Renderable;
 use App\Uploader\Upload;
@@ -14,9 +15,6 @@ use App\Validate\Validator;
 use App\Repository\UserRepository;
 use App\Parse\Yaml;
 use App\View;
-
-use function Helpers\checkToken;
-use function Helpers\generateToken;
 
 /**
  * Class AdminAccountController
@@ -41,19 +39,22 @@ class AdminAccountController extends AdminController
      */
     public function editUserProfileForm(): Renderable
     {
-        if(!empty($this->session->get('userId'))) {
-            $user = $this->userRepository->getUserById($this->session->get('userId'));
-        }
+        $form = $this->getUserAccountFields();
 
-        $data = [
-            'form' => $this->getUserAccountFields(),
-            'user' => $user,
+        $formFields = (new FormRenderer($form['fields']))->render($this->data['user']);
+
+        $dataUser = [
+            'form' => $form,
             'token' => generateToken(),
             'pathToAvatar' => $this->userRepository->getUserAvatarPath(),
-            'title' => 'Редактирование профиля пользователя'
+            'title' => 'Редактирование профиля пользователя',
+            'formFields' => htmlspecialchars($formFields)
         ];
 
-        return new View('admin.account.edit_account', $data);
+        $this->view = 'admin.account.edit_account';
+        $this->data = array_merge($this->data, $dataUser);
+
+        return new View($this->view, $this->data);
     }
 
     /**
@@ -62,20 +63,17 @@ class AdminAccountController extends AdminController
      */
     public function getUserProfile(): Renderable
     {
-        if(!empty($this->session->get('userId'))) {
-            $user = $this->userRepository->getUserById($this->session->get('userId'));
-        } else {
-
-            return new View('404');
-        }
-
-        $data = [
-            'user' => $user,
+        $dataUser = [
+            'user' => $this->data['user'],
             'pathAvatar' => $this->userRepository->getUserAvatarPath(),
             'title' => 'Профиль пользователя',
             'token' => generateToken()
         ];
-        return new View('admin.account.view_account', $data);
+
+        $this->view = 'admin.account.view_account';
+        $this->data = array_merge($this->data, $dataUser);
+
+        return new View($this->view, $this->data);
     }
 
     /**
@@ -100,7 +98,7 @@ class AdminAccountController extends AdminController
         }
 
         // Если есть POST данные и токен соответствует,
-        $user = $this->userRepository->getUserById($this->session->get('userId'));
+        $user = $this->data['user'];
 
         $data = $this->request->post();
 
@@ -155,7 +153,6 @@ class AdminAccountController extends AdminController
             $this->toast->setToast('success', 'Изменения успешно сохранены.');
 
             // Перенаправляем обратно в профиль
-
             return json_encode(['url' => '/admin/account/']);
 
             // Если не удалось сохранить изменения, выводим сообщение об этом
@@ -170,8 +167,17 @@ class AdminAccountController extends AdminController
      */
     protected function prepareDataToUpdate(): array
     {
+        $postData = $this->request->post();
+
         // Очищаем post - массив от пустых элементов
-        return array_diff(($this->request->post()), array(''));
+        foreach ($this->request->post() as $key => $field) {
+            if($key === 'self_description') // исключение, это поле может быть пустым
+                continue;
+            if(empty($field)) {
+                unset($postData[$key]);
+            }
+        }
+        return $postData;
     }
 
     /**

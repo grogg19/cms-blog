@@ -3,16 +3,13 @@
  * Редактирование аккаунта пользователя
  */
 
-use App\FormRenderer;
-use App\Model\User;
-use App\View;
 /**
- * @var User $user
- * @var array $form
- * @var string $pathToAvatar
+ * @var $user
+ * @var $form
+ * @var $pathToAvatar
  * @var $title
  */
-(new View('admin_header', ['user' => $user ?: null, 'title' => $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -26,9 +23,9 @@ use App\View;
                     <form class="dx-form" name="form_edit_user_profile" id="form_edit_user_profile" action="<?= (isset($form['action'])) ? $form['action'] : ""?>">
                         <input type="hidden" name="_token" value="<?= !empty($token) ? $token : ''?>">
                         <div class="dx-box-content">
-                            <?php
-                            (new FormRenderer($form['fields']))->render($user);
-                            ?>
+                            <?php if(!empty($formFields)) {?>
+                                <?= htmlspecialchars_decode($formFields) ?>
+                            <?php } ?>
                             <div class="dx-form-group-md div-avatar form-element mt-20">
                                 <label for="avatar">Аватар:</label>
 
@@ -52,5 +49,5 @@ use App\View;
     </div>
 </div>
 <?php
-(new View('footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
 ?>

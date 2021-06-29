@@ -8,12 +8,8 @@ namespace App\Controllers\BackendControllers;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\CommentRepository;
-use App\Repository\UserRepository;
 use App\View;
 use Illuminate\Pagination\LengthAwarePaginator;
-
-use function Helpers\checkToken;
-use function Helpers\generateToken;
 
 /**
  * Class AdminCommentController
@@ -55,16 +51,22 @@ class AdminCommentController extends AdminController
             $comments->setPath('comments' . $query);
         }
 
-        $data = [
+        $dataListComments = [
             'title' => $title,
             'comments' => $comments,
             'token' => generateToken(),
             'avatarPath' => $avatarPath,
-            'quantity' => $quantity,
-            'user' => (new UserRepository())->getCurrentUser()
+            'quantity' => $quantity
         ];
 
-        return new View('admin.comments.list', $data);
+        if($quantity !== 'all') {
+            $dataListComments['paginator'] = $comments;
+        }
+
+        $this->view = 'admin.comments.list';
+        $this->data = array_merge($this->data, $dataListComments);
+
+        return new View($this->view, $this->data);
     }
 
     /**

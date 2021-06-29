@@ -5,8 +5,6 @@
 
 namespace App;
 
-use function  Helpers\array_get;
-
 final class Config
 {
     /**

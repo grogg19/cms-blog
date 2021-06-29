@@ -3,11 +3,6 @@
  * Список пользователей
  */
 
-use App\View;
-use Illuminate\Pagination\LengthAwarePaginator;
-
-use function Helpers\getDateTime;
-
 /**
  * @var $users
  * @var $pathToAvatar
@@ -17,7 +12,7 @@ use function Helpers\getDateTime;
  * @var $title
  * @var $currentUser;
  */
-(new View('admin_header', ['user' => $currentUser ?: null, 'title' => $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
 ?>
 <div class="dx-box-5 bg-grey-6 ">
     <div class="container">
@@ -32,10 +27,7 @@ use function Helpers\getDateTime;
 	    <input type="hidden" name="_token" value="<?=$token?>">
         <?php
         // количество элементов на странице
-        (new View('partials.quantity_items', [
-            'quantity' => $quantity,
-            'items' => [10, 20, 50, 200, 'all']
-        ]))->render();
+        require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/quantity_items.php');
         ?>
 		<?php if($users->count() > 0) { ?>
 		    <?php foreach ($users as $user) { ?>
@@ -81,10 +73,8 @@ use function Helpers\getDateTime;
 		    <?php }?>
         <?php
 		// Пагинация
-        if($users instanceof LengthAwarePaginator) {
-            (new View('partials.pagination', [
-                'paginator' => $users
-            ]))->render();
+        if(!empty($paginator)) {
+            require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/pagination.php');
         }
         ?>
         <?php } else { ?>
@@ -94,5 +84,5 @@ use function Helpers\getDateTime;
     </div>
 </div>
 <?php
-(new View('footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
 ?>

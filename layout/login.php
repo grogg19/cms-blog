@@ -2,16 +2,12 @@
 /**
  * Форма Login
  */
-
-use App\FormRenderer;
-use App\View;
-
 /**
  * @var $user
- * @var $fields;
+ * @var $fieldsForms;
  * @var $title
  */
-(new View('header',['title' => $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/header.php');
 ?>
 <!-- Start Login Form -->
 <div class="dx-popup dx-popup-signin" id="block_login" >
@@ -20,11 +16,9 @@ use App\View;
         <h1 class="h3 text-white mb-30">Вход</h1>
         <form method="post" action="<?= (isset($action)) ? $action : ""?>" class="dx-form" name="form_login" id="form_login" >
             <input type="hidden" name="_token" value="<?=(isset($token)) ? $token : '' ?>">
-            <?php
-            if(!empty($fields)) {
-                (new FormRenderer($fields))->render();
-            }
-            ?>
+            <?php if(!empty($fieldsForms)) { ?>
+                <?= $fieldsForms ?>
+            <?php } ?>
             <div class="dx-form-group-md">
 	            <button class="dx-btn dx-btn-block dx-btn-popup" type="submit" name="button" id="save_button" data-form="form_login">Войти</button>
             </div>
@@ -39,5 +33,5 @@ use App\View;
 </div>
 <!-- End Login Form -->
 <?php
-(new View('footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
 ?>

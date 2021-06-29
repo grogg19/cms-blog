@@ -8,9 +8,6 @@ use App\Model\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-use function Helpers\checkToken;
-use function Helpers\hashPassword;
-
 /**
  * Class UserRepository
  * @package App\Repository
@@ -142,6 +139,7 @@ class UserRepository extends Repository
         }
 
         unset($data['_token']);
+
         $user->update($data);
 
         if($this->session->get('userId') === $user->id) {

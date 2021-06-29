@@ -12,8 +12,7 @@ use App\View;
  * @var $user
  * @var $title
  */
-
-(new View('header', ['user' => $user ?: null, 'title' => $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/header.php');
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
@@ -24,7 +23,7 @@ use App\View;
                     /**
                      * Блок постов
                      */
-                    (new View('partials.posts_items', ['posts' => $posts , 'imgPath' => $imgPath ]))->render();
+                    require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/posts_items.php');
                     ?>
 	            </div>
                 <div class="dx-blog-item pt-0 mt-30">
@@ -38,7 +37,7 @@ use App\View;
                     /**
                      * Правый блок сайта
                      */
-                    (new View('section_right', ['token' => $token, 'user' => $user]))->render();
+                    require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/section_right.php');
                     ?>
                 </div>
             </div>
@@ -46,5 +45,5 @@ use App\View;
     </div>
 </div>
 <?php
-(new View('footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
 ?>

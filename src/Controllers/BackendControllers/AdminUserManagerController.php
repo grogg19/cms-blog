@@ -12,9 +12,6 @@ use App\Repository\UserRepository;
 use App\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-use function Helpers\checkToken;
-use function Helpers\generateToken;
-
 /**
  * Class AdminUserManagerController
  * @package App\Controllers\BackendControllers
@@ -57,17 +54,24 @@ class AdminUserManagerController extends AdminController
             $users->setPath('user-manager' . $query);
         }
 
-        $data = [
+        $dataUsersList = [
             'title' => 'Список пользователей',
             'users' => $users,
             'token' => generateToken(),
             'pathToAvatar' => $this->userRepository->getUserAvatarPath(),
             'roles' => $this->userRepository->getUserRoles(),
             'quantity' => $quantity,
-            'currentUser' => (new UserRepository())->getCurrentUser()
+            'currentUser' => $this->data['user'],
         ];
 
-        return new View('admin.users_manager.list', $data);
+        if($quantity !== 'all') {
+            $dataUsersList['paginator'] = $users;
+        }
+
+        $this->view = 'admin.users_manager.list';
+        $this->data = array_merge($this->data, $dataUsersList);
+
+        return new View($this->view, $this->data);
     }
 
     /**

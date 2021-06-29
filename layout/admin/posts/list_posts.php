@@ -3,20 +3,15 @@
  * Список постов в админке
  */
 
-use App\View;
-use Illuminate\Pagination\LengthAwarePaginator;
-use App\Model\User;
-use function Helpers\getDateTime;
-
 /**
- * @var LengthAwarePaginator $posts
- * @var string $token
+ * @var $posts
+ * @var $token
  * @var $quantity
- * @var User $user
+ * @var $user
  * @var $title
  */
 
-(new View('admin_header', ['user' => $user ?: null, 'title' => $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
@@ -33,10 +28,7 @@ use function Helpers\getDateTime;
 	            </div>
                 <?php
                 // Форма количества элементов на странице
-                (new View('partials.quantity_items', [
-                    'quantity' => $quantity,
-	                'items' => [10, 20, 50, 200, 'all']
-                ]))->render();
+                require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/quantity_items.php');
                 ?>
 	            <?php if($posts->count() > 0 ) { ?>
                 <?php
@@ -62,10 +54,8 @@ use function Helpers\getDateTime;
                 <?php } ?>
                 <?php
 		            // Пагинация
-		            if($posts instanceof LengthAwarePaginator) {
-                        (new View('partials.pagination', [
-                            'paginator' => $posts
-                        ]))->render();
+		            if(!empty($paginator)) {
+                        require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/pagination.php');
 		            }
                 ?>
 	            <?php } else { ?>
@@ -77,5 +67,5 @@ use function Helpers\getDateTime;
     </div>
 </div>
 <?php
-(new View('footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
 ?>

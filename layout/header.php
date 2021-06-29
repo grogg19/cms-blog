@@ -2,18 +2,12 @@
 /**
  * User header
  */
-
-use App\View;
-use App\Model\User;
-
-use function Helpers\session;
-use function Helpers\request;
-
 /**
- * @var User $user
+ * @var $user
+ * @var $title
  */
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/base/header.php');
 
-(new View('base.header', ['title' => (!empty($title)) ? $title : '']))->render();
 ?>
 <!-- START: Navbar -->
 <nav class="dx-navbar dx-navbar-top dx-navbar-collapse dx-navbar-sticky dx-navbar-expand-lg dx-navbar-dropdown-triangle dx-navbar-autohide">
@@ -25,10 +19,10 @@ use function Helpers\request;
             <span></span><span></span><span></span>
         </button>
         <div class="dx-navbar-content">
-            <?php (new View('partials.header.main_public_menu'))->render(); ?>
+	        <?php require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/header/main_public_menu.php'); ?>
             <ul class="dx-nav dx-nav-align-right">
                 <?php if(!empty($user)) {
-                (new View('partials.header.admin_menu',['user' => !empty($user) ? $user : '']))->render();
+                	require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/header/admin_menu.php');
             } else { ?>
 	            <?php if(!in_array(request()->server('REQUEST_URI'), ['/login', '/signup'])) { ?>
 	            <li>
@@ -49,14 +43,10 @@ use function Helpers\request;
             <span></span><span></span><span></span>
         </button>
         <div class="dx-navbar-content" >
-	        <?php if(!empty($user) && in_array($user->role->code, ['admin', 'content-manager'])) {
-                (new View('partials.header.main_admin_menu'))->render();
-            } else {
-	            (new View('partials.header.main_public_menu'))->render();
-	        } ?>
+            <?php require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/header/main_public_menu.php'); ?>
 	        <ul class="dx-nav dx-nav-align-right">
 		        <?php if(!empty($user)) {
-                    (new View('partials.header.admin_menu',['user' => $user]))->render();
+                    require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/header/admin_menu.php');
                 } else { ?>
                     <?php if(!in_array(request()->server('REQUEST_URI'), ['/login', '/signup'])) { ?>
 				        <li>

@@ -8,8 +8,6 @@ use App\Repository\UserRepository;
 use App\Model\Comment;
 use App\Validate\Validator;
 
-use function Helpers\checkToken;
-
 /**
  * Class PublicCommentController
  * @package App\Controllers\PublicControllers

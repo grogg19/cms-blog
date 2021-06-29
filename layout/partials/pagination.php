@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \Illuminate\Pagination\Paginator $paginator
+ * @var $paginator
  */
 ?>
 <div class="dx-blog-post-box pt-30 pb-30">

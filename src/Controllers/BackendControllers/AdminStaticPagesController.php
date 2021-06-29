@@ -2,13 +2,12 @@
 
 namespace App\Controllers\BackendControllers;
 
-use App\Model\User;
+use App\FormRenderer;
 use App\Pagination\PaginateMaker;
 use App\Parse\Yaml;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\StaticPagesRepository;
-use App\Repository\UserRepository;
 use App\StaticPages\File;
 use App\StaticPages\Page;
 use App\Validate\Validator;
@@ -16,21 +15,12 @@ use App\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-use function Helpers\checkToken;
-use function Helpers\cleanJSTags;
-use function Helpers\generateToken;
-
 /**
  * Class StaticPagesController
  * @package App\Controllers\BackendControllers
  */
 class AdminStaticPagesController extends AdminController
 {
-    /**
-     * @var User
-     */
-    private $user;
-
     /**
      * @var array Правила валидации по дефолту
      */
@@ -52,7 +42,6 @@ class AdminStaticPagesController extends AdminController
 
             Redirect::to('/');
         }
-        $this->user = (new UserRepository())->getCurrentUser();
     }
 
     /**
@@ -78,15 +67,17 @@ class AdminStaticPagesController extends AdminController
             $pages->setPath('static-pages' . $query);
         }
 
-        $data = [
+        $dataListStaticPages = [
             'token' => generateToken(),
             'title' => $title,
             'pages' => $pages,
             'quantity' => $quantity,
-            'user' => $this->user
         ];
 
-        return new View('admin.static_pages.list_pages_template', $data);
+        $this->view = 'admin.static_pages.list_pages_template';
+        $this->data = array_merge($this->data, $dataListStaticPages);
+
+        return new View($this->view, $this->data);
     }
 
     /**
@@ -95,16 +86,21 @@ class AdminStaticPagesController extends AdminController
      */
     public function createPage(): Renderable
     {
-        $title = 'Создание новой страницы';
+        $form = $this->getFields();
 
-        $data = [
-            'form' => $this->getFields(),
+        $formFields = (new FormRenderer($form['fields']))->render();
+
+        $dataPage = [
+            'form' => $form,
             'token' => generateToken(),
-            'title' => $title,
-            'user' => $this->user
+            'title' => 'Создание новой страницы',
+            'formFields' => $formFields
         ];
 
-        return new View('admin.static_pages.create_page', $data);
+        $this->view = 'admin.static_pages.create_page';
+        $this->data = array_merge($this->data, $dataPage);
+
+        return new View($this->view, $this->data);
     }
 
     /**
@@ -120,17 +116,23 @@ class AdminStaticPagesController extends AdminController
 
         $page = (new StaticPagesRepository())->getPageByFileName( (string) $this->request->post('pageName'));
 
-        $title = 'Редактирование страницы';
+        $form = $this->getFields();
 
-        $data = [
-            'form' => $this->getFields(),
-            'page' => (object) $page->getParameters(),
+        $pageParameters = (object) $page->getParameters();
+
+        $formFields = (new FormRenderer($form['fields']))->render($pageParameters);
+
+        $dataPage = [
+            'form' => $form,
             'token' => generateToken(),
-            'title' => $title,
-            'user' => $this->user
+            'title' => 'Редактирование страницы',
+            'formFields' => $formFields
         ];
 
-        return new View('admin.static_pages.edit_page', $data);
+        $this->view = 'admin.static_pages.edit_page';
+        $this->data = array_merge($this->data, $dataPage);
+
+        return new View($this->view, $this->data);
     }
 
     /**

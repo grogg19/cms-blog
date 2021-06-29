@@ -10,7 +10,6 @@ use App\Repository\SubscribeRepository;
 use App\Model\Subscriber;
 use App\Redirect;
 use App\Validate\Validator;
-use function Helpers\checkToken;
 
 /**
  * Class PublicSubscribeController

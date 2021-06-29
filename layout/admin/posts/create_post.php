@@ -3,19 +3,15 @@
  * Шаблон "Создание поста"
  */
 
-use App\FormRenderer;
-use App\Model\User;
-use App\View;
-
 /**
  * @var string $token
  * @var array $form
  * @var array $imgConfig
- * @var User $user
+ * @var  $user
  * @var $title
  */
 
-(new View('admin_header', ['user' => $user ?: null, 'title' => 'Администрирование | ' . $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -34,11 +30,10 @@ use App\View;
                     <div class="dx-separator"></div>
                     <form class="dx-form" name="form_create_post" id="form_create_post" action="<?= (isset($form['action'])) ? $form['action'] : ""?>">
                         <input type="hidden" name="_token" value="<?=(!empty($token) ? $token : '')?>">
-
                         <div class="dx-box-content">
-                            <?php
-                            (new FormRenderer($form['fields']))->render();
-                            ?>
+                        <?php if(!empty($formFields)) {?>
+                            <?= htmlspecialchars_decode($formFields) ?>
+                        <?php } ?>
                         </div>
                     </form>
                     <div class="dx-box-content pt-0">
@@ -78,5 +73,5 @@ use App\View;
     </div>
 </div>
 <?php
-(new View('footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
 ?>

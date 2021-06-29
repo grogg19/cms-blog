@@ -3,12 +3,8 @@
  * Шаблон вывода одной статьи
  */
 
-use App\View;
-use App\Model\Post;
-use function Helpers\getDateTime;
-
 /**
- * @var Post $post
+ * @var $post
  * @var $imgPath
  * @var $comments
  * @var $userRole
@@ -16,8 +12,7 @@ use function Helpers\getDateTime;
  * @var $user
  * @var $title
  */
-
-(new View('header', ['user' => $user ?: null, 'title' => $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/header.php');
 ?>
 <div class="dx-box-1 pb-100 bg-grey-6">
     <div class="container">
@@ -66,14 +61,8 @@ use function Helpers\getDateTime;
                     <?php } ?>
                 </div>
 	            <?php
-	            	/** Блок комментариев к посту*/
-                    (new View('partials.comments_list', [
-                    		'comments' => $comments,
-	                        'user' => $post->user,
-	                        'userRole' => $userRole,
-	                        'token' => $token,
-	                        'postId' => $post->id
-                    ]))->render();
+                /** Блок комментариев к посту*/
+                require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/comments_list.php');
 	            ?>
             </div>
             <div class="col-lg-4">
@@ -82,7 +71,7 @@ use function Helpers\getDateTime;
                     /**
                      * Правый блок сайта
                      */
-                    (new View('section_right', ['token' => $token, 'user' => $user]))->render();
+                    require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/section_right.php');
                     ?>
                 </div>
             </div>
@@ -91,5 +80,5 @@ use function Helpers\getDateTime;
     </div>
 </div>
 <?php
-(new View('footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
 ?>

@@ -12,11 +12,14 @@ use App\Form\Editor;
 
 class FormRenderer
 {
+    /**
+     * @var array
+     */
     public $elements;
 
     /**
      * FormRenderer constructor.
-     * @param $data
+     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -26,17 +29,18 @@ class FormRenderer
     /**
      * Генератор элементов формы
      * @param null $data
+     * @return string
      */
     private function generateForms($data = null)
     {
-
+        $content = '';
         foreach ($this->elements as $key => $element) {
 
             $valueAttribute = (!empty($data)) ?  $data->$key : '';
 
             if($element['form'] == "input") {
 
-                (new Input("forms/input",
+                $content .= (new Input("forms/input",
                     [
                         'element' => [$key => $element],
                         'valueAttribute' => $valueAttribute
@@ -46,31 +50,34 @@ class FormRenderer
             }
 
             if($element['form'] == "textarea") {
-                (new Textarea("forms/textarea", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                $content .= (new Textarea("forms/textarea", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                     ->render();
             }
 
             if($element['form'] == "editor") {
-                (new Editor("forms/editor", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                $content .= (new Editor("forms/editor", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                 ->render();
             }
 
             if($element['form'] == "datetimepicker") {
-                (new Input("forms/datetimepicker", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                $content .= (new Input("forms/datetimepicker", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                 ->render();
             }
 
             if($element['form'] == "switch") {
-                (new Input("forms/switch", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                $content .= (new Input("forms/switch", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                     ->render();
             }
         }
+        return $content;
     }
+
     /**
-     * @param string $data
+     * @param object|null $data
+     * @return string
      */
-    public function render($data = '')
+    public function render(object $data = null): string
     {
-        $this->generateForms($data);
+        return $this->generateForms($data);
     }
 }

@@ -2,15 +2,12 @@
 /**
  * Форма Регистрации нового пользователя
  */
-use App\View;
-use App\FormRenderer;
-
 /**
- * @var $fields
+ * @var $fieldsForms
  * @var $title
  */
 
-(new View('header',['title' => $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/header.php');
 ?>
 <!-- Start SignUp Form -->
 <div class="dx-popup dx-popup-signin" id="block_signup" >
@@ -19,9 +16,9 @@ use App\FormRenderer;
         <h1 class="h3 text-white mb-30"><?= !empty($title) ? $title : '' ?></h1>
         <form action="<?= !empty($action) ? $action : ""?>" class="dx-form" id="form_signup" name="form_signup" method="post">
             <input type="hidden" name="_token" value="<?=!empty($token) ? $token : '' ?>">
-            <?php
-            (new FormRenderer($fields))->render();
-            ?>
+            <?php if(!empty($fieldsForms)) { ?>
+            	<?= $fieldsForms ?>
+            <?php } ?>
 	        <div class="custom-control custom-switch mt-20 mb-20">
 		        <input type="checkbox" class="custom-control-input" name="agreement" id="agreement">
 		        <label class="custom-control-label text-white text-left pl-10 pt-2" for="agreement">
@@ -42,5 +39,5 @@ use App\FormRenderer;
 </div>
 <!-- End Login Form -->
 <?php
-(new View('footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
 ?>

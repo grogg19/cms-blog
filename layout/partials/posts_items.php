@@ -1,10 +1,8 @@
 <?php
 
-use Illuminate\Database\Eloquent\Collection;
-use function Helpers\getDateTime;
 /**
- * @var Collection $posts
- * @var string $imgPath
+ * @var $posts
+ * @var $imgPath
  */
 
 if($posts->count() > 0) {

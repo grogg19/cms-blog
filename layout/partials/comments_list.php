@@ -1,15 +1,10 @@
 <?php
-
-use App\Repository\UserRepository;
-use App\View;
-
-/** Перетащить это все в PublicCommentsController */
-
-$avatarPath = (new UserRepository())->getUserAvatarPath();
-$token = !empty($token) ? $token : '';
-$userRole = !empty($userRole) ? $userRole : 'none';
-$comments = !empty($comments) ? $comments : [];
-$postId = !empty($postId) ? $postId : 0;
+/**
+ * @var $comments
+ * @var $token
+ * @var $postId
+ *
+ */
 ?>
 <div class="dx-box mt-55 comments-block" id="comments">
     <?php
@@ -18,13 +13,8 @@ $postId = !empty($postId) ? $postId : 0;
     <h2 class="h4 mb-45">Комментарии:</h2>
 		<?php foreach ($comments as $comment) { ?>
             <?php
-            /**
-             * шаблон комментария
-             */
-            (new View('partials.comment', [
-                'comment' => $comment,
-	            'avatarPath' => $avatarPath
-            ]))->render();
+            /** шаблон комментария */
+            include (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/comment.php');
             ?>
 		<?php }?>
     <?php }	else { ?>

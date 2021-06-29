@@ -5,6 +5,7 @@
 
 namespace App\Controllers\PublicControllers;
 
+use App\FormRenderer;
 use App\Image\ImageManager;
 use App\Renderable;
 use App\Repository\UserRepository;
@@ -15,11 +16,6 @@ use App\Model\User;
 use App\Redirect;
 use App\Cookie\Cookie;
 use App\View;
-
-use function Helpers\checkToken;
-use function Helpers\generateToken;
-use function Helpers\hashPassword;
-use function Helpers\getCurrentDate;
 
 /**
  * Class LoginController
@@ -34,7 +30,7 @@ class LoginController extends PublicController
      */
     public function form(): Renderable
     {
-        if(session_status() == 2) {
+        if(!empty($this->data['user'])) {
             Redirect::to('/admin/blog/posts');
         }
 
@@ -42,7 +38,13 @@ class LoginController extends PublicController
 
         $fields['token'] = generateToken();
 
-        return new View('login', $fields);
+        $fields['fieldsForms'] = (new FormRenderer($fields['fields']))->render();
+
+        $this->view = 'login';
+
+        $this->data = array_merge($this->data, $fields);
+
+        return new View($this->view, $this->data);
     }
 
     /**

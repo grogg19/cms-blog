@@ -4,7 +4,6 @@ namespace App\Controllers\BackendControllers;
 
 use App\Controllers\PublicControllers\PublicSubscribeController;
 use App\Repository\SubscribeRepository;
-use function Helpers\checkToken;
 
 /**
  * Class AdminSubscribeController

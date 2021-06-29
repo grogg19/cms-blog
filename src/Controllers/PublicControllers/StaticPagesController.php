@@ -6,13 +6,10 @@ namespace App\Controllers\PublicControllers;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\StaticPagesRepository;
-use App\Repository\UserRepository;
 use App\Request\Request;
 use App\StaticPages\Page;
 use App\StaticPages\PageList;
 use App\View;
-
-use function Helpers\cleanJSTags;
 
 class StaticPagesController extends PublicController
 {
@@ -45,15 +42,16 @@ class StaticPagesController extends PublicController
             $content = cleanJSTags($page->getHtmlContent());
             $pageParameters = $page->getParameters();
 
-            $data = [
+            $pageData = [
                 'content' => $content,
                 'pageParameters' => $pageParameters,
                 'title' => 'Блог | ' . $pageParameters['title'],
             ];
 
-            $data['user'] = (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null;
+            $this->view = 'static_pages';
+            $this->data = array_merge($this->data, $pageData);
 
-            return new View('static_pages', $data);
+            return new View($this->view, $this->data);
 
         } else {
             Redirect::to('/404');

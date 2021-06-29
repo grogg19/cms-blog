@@ -5,17 +5,12 @@
 
 namespace App\Controllers\BackendControllers;
 
-use App\Model\User;
 use App\Redirect;
 use App\Renderable;
 use App\Model\SystemSetting;
-use App\Repository\UserRepository;
 use App\Validate\Validator;
 use App\Repository\SystemSettingsRepository;
 use App\View;
-
-use function Helpers\checkToken;
-use function Helpers\generateToken;
 
 /**
  * Class AdminSettingsController
@@ -24,18 +19,11 @@ use function Helpers\generateToken;
 class AdminSettingsController extends AdminController
 {
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
      * AdminSettingsController constructor.
      */
     public function __construct()
     {
         parent::__construct();
-
-        $this->user = (new UserRepository())->getCurrentUser();
 
         if (!$this->auth->checkPermissons(['admin'])) {
             $this->toast->setToast('info', 'У вас недостаточно прав для этого действия');
@@ -49,18 +37,19 @@ class AdminSettingsController extends AdminController
      */
     public function index(): Renderable
     {
-        $title = 'Настройки системы';
         $settings = (new SystemSettingsRepository())->getSystemSettings('preferences');
 
-        $data = [
-            'title' => $title,
+        $dataSettings = [
+            'title' => 'Настройки системы',
             'token' => generateToken(),
             'settings' => $settings,
             'parameters' => json_decode($settings->value),
-            'user' => $this->user
         ];
 
-        return new View('admin.settings.settings_admin', $data);
+        $this->view = 'admin.settings.settings_admin';
+        $this->data = array_merge($this->data, $dataSettings);
+
+        return new View($this->view, $this->data);
 
     }
 

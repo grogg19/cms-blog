@@ -13,9 +13,6 @@ use App\Config;
 use App\Redirect;
 use App\View;
 
-use function Helpers\generateToken;
-use function Helpers\parseRequestUri;
-
 /**
  * Class PublicPostController
  * @package App\Controllers\PublicControllers
@@ -25,8 +22,12 @@ class PublicPostController extends PublicController
     /**
      * @var mixed
      */
-    private array $configImages;
+    private $configImages;
 
+    /**
+     * @var PostRepository
+     */
+    private $postRepository;
 
     /**
      * PublicPostController constructor.
@@ -34,7 +35,10 @@ class PublicPostController extends PublicController
     public function __construct()
     {
         parent::__construct();
+
         $this->configImages = Config::getInstance()->getConfig('images');
+        $this->postRepository = new PostRepository();
+
     }
 
     /**
@@ -47,27 +51,25 @@ class PublicPostController extends PublicController
 
         if(!empty($this->request->post('page'))) {
 
-            $view = 'partials.posts_items';
-            $data['data'] = [
-                'posts' => (new PostRepository())->getAllPublishedPosts('desc', $page),
-                'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
-                'token' => generateToken(),
-            ];
-
+            $this->view = 'partials.posts_items';
+            $postsData = [
+                    'posts' => $this->postRepository->getAllPublishedPosts('desc', $page),
+                    'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+                    'token' => generateToken()
+                ];
         } else {
-            $view = 'posts';
-            $data = [
+            $this->view = 'posts';
+            $postsData = [
                 'title' => 'Курсовая работа CMS для Блога',
-                'posts' => (new PostRepository())->getAllPublishedPosts('desc', $page),
+                'posts' => $this->postRepository->getAllPublishedPosts('desc', $page),
                 'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
                 'token' => generateToken(),
             ];
-
         }
 
-        $data['user'] = (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null;
+        $this->data = array_merge($this->data, $postsData);
 
-        return new View($view, $data);
+        return new View($this->view, $this->data);
     }
 
     /**
@@ -79,7 +81,7 @@ class PublicPostController extends PublicController
     {
         $data['title'] = 'Блог';
         $data['latestPosts'] = [
-            'posts' => (new PostRepository())->getLatestPosts(),
+            'posts' => $this->postRepository->getLatestPosts(),
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
         ];
 
@@ -92,33 +94,39 @@ class PublicPostController extends PublicController
      */
     public function getPost(): Renderable
     {
-        $data = []; // Данные для View
         list($module, $slug) = parseRequestUri(); // $module - каталог, $slug - название новости латиницей
 
-        $post = (new PostRepository())->getPostBySlug($slug);
+        $post = $this->postRepository->getPostBySlug($slug);
+
+        $userRepository = new UserRepository();
+        $avatarPath = $userRepository->getUserAvatarPath();
 
         if(empty($post)) {
             Redirect::to('/404');
         }
 
-        if(!empty($post)) {
-
-            $userRole = (session_status() == 2) ? (new UserRepository())->getCurrentUser()->role->code : 'none';
-
-            $comments = new CommentRepository();
-
-            $data = [
-                $module => $post,
-                'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
-                'token' => generateToken(),
-                'userRole' => $userRole,
-                'comments' => $comments->getAllowableCommentsByPostId($post->id),
-                'title' => 'Блог | ' . $post->title
-            ];
-
-            $data['user'] = (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null;
+        if(session_status() == 2) {
+            $user = $this->data['user'];
+            $userRole = $user->role->code;
         }
-        return new View('post', $data);
+
+        $comments = new CommentRepository();
+
+        $postData = [
+            $module => $post,
+            'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+            'token' => generateToken(),
+            'userRole' => (!empty($userRole)) ? $userRole: 'none',
+            'comments' => $comments->getAllowableCommentsByPostId($post->id),
+            'title' => 'Блог | ' . $post->title,
+            'postId' => $post->id,
+            'avatarPath' => $avatarPath
+        ];
+
+        $this->view = 'post';
+        $this->data = array_merge($this->data, $postData);
+
+        return new View($this->view, $this->data);
     }
 
 }

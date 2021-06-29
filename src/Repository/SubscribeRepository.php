@@ -7,8 +7,6 @@ namespace App\Repository;
 
 use App\Model\Subscriber;
 use Illuminate\Support\Collection;
-
-use function Helpers\generateRandomHash;
 /**
  * Class SubscribeRepository
  * @package App\Controllers

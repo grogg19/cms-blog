@@ -35,7 +35,7 @@ class NotificationToLog implements NotificationType
     public function make(Post $post, Subscriber $subscriber)
     {
         ob_start();
-        (new View('mails.text_template', [
+        echo (new View('mails.text_template', [
             'post' => $post,
             'subscriber' => $subscriber,
             'timeToSend' => $post->published_at

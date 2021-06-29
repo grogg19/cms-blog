@@ -7,6 +7,7 @@ namespace App;
 
 use App\Auth\Auth;
 use App\Controllers\System\MigrationController;
+use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\Cookie\Cookie;
 use App\Router as Router;
@@ -45,7 +46,7 @@ class Application
             // проверяем, является ли экземпляр потомком Renderable
             if(is_object($result) && $result instanceof Renderable) {
                 // Если да, то выводим его методом render()
-                $result->render();
+                echo $result->render();
             } else {
                 // Если нет, то просто выводим с помощью echo
                 echo $result;
@@ -124,7 +125,6 @@ class Application
                 (new Auth())->unAuthorize();
             }
         }
-
     }
 
     /**

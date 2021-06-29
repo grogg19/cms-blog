@@ -3,20 +3,16 @@
  * Правая секция сайта
  */
 
-use App\Controllers\PublicControllers\PublicPostController;
-use App\View;
-use App\Repository\UserRepository;
-use App\Cookie\Cookie;
-use function Helpers\session;
 /**
  * Блок подписки
  *
  * @var $token
  * @var $user
  */
-(new View('partials.subscribe',['token' => $token, 'user' => $user]))->render();
+
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/subscribe.php');
 
 /**
  * Блок Последние посты
  */
-(new PublicPostController())->latestPosts()->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/latest_posts.php');

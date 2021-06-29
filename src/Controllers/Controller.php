@@ -31,6 +31,16 @@ abstract class Controller
     protected $toast;
 
     /**
+     * @var
+     */
+    public $view;
+
+    /**
+     * @var
+     */
+    public $data;
+
+    /**
      * Controller constructor.
      */
     public function __construct()

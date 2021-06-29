@@ -23,17 +23,17 @@ use App\Controllers\PublicControllers\PublicPostController;
                             <div class="dx-widget-text">
                                 <p class="mb-0">&copy; <?=date('Y')?> <span class="dib">All rights reserved.</span> <span class="dib">Skillbox &amp; Co.</span></p>
                             </div>
-							<?php (new View('partials.footer.social_buttons'))->render(); ?>
+	                        <?php require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/footer/social_buttons.php'); ?>
                         </div>
                     </div>
                     <div class="col-sm-6 col-lg-3">
 	                <?php
-                    (new View('partials.footer.footer_menu'))->render();
+                    require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/footer/footer_menu.php');
 	                ?>
                     </div>
                     <div class="col-sm-12 col-lg-6">
                         <?php
-                        (new PublicPostController())->latestPosts('partials.footer.latest_posts')->render();
+                        require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/footer/latest_posts.php');
                         ?>
                     </div>
                 </div>
@@ -43,5 +43,4 @@ use App\Controllers\PublicControllers\PublicPostController;
     <!-- END: Footer -->
 </div>
 <?php
-
-(new View('base.footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/base/footer.php');

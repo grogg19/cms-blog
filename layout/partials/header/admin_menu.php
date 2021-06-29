@@ -3,10 +3,8 @@
  * Админское меню
  */
 
-use App\Model\User;
-use function \Helpers\session;
 /**
- * @var User $user;
+ * @var $user;
  */
 ?>
 <li>

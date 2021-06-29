@@ -3,10 +3,9 @@
  * Subscribe Partial
  */
 
-use App\Model\User;
 /**
  * @var $token;
- * @var User $user
+ * @var $user
  */
 
 ?>

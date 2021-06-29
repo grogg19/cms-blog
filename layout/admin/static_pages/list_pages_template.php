@@ -3,18 +3,15 @@
  * Список статических страниц - шаблон
  */
 
-use App\View;
-use Illuminate\Pagination\LengthAwarePaginator;
-use App\Model\User;
 /**
- * @var string $title
+ * @var $title
  * @var $pages
  * @var $token
  * @var $quantity
- * @var User $user
+ * @var $user
  */
 
-(new View('admin_header', ['user' => $user ?: null, 'title' => $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -35,10 +32,7 @@ use App\Model\User;
 	                    </div>
                         <?php
                         // количество элементов на странице
-                        (new View('partials.quantity_items', [
-                            'quantity' => $quantity,
-                            'items' => [10, 20, 50, 200, 'all']
-                        ]))->render();
+                        require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/quantity_items.php');
                         ?>
                         <?php if($pages->count() > 0) { ?>
 		                    <div class="dx-separator"></div>
@@ -63,10 +57,8 @@ use App\Model\User;
 		                    </form>
                             <?php
 	                        // Пагинация
-                            if($pages instanceof LengthAwarePaginator) {
-                                (new View('partials.pagination', [
-                                    'paginator' => $pages
-                                ]))->render();
+                            if(!empty($paginator)) {
+                                require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/pagination.php');
                             }
                             ?>
                         <?php } else { ?>
@@ -80,5 +72,5 @@ use App\Model\User;
     </div>
 </div>
 <?php
-(new View('footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
 ?>

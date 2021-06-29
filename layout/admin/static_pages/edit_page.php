@@ -2,14 +2,12 @@
 /**
  * Шаблон редактирования статической страницы
  */
-use App\FormRenderer;
-use App\View;
-use App\Model\User;
+
 /**
  * @var $title
- * @var User $user
+ * @var $user
  */
-(new View('admin_header', ['user' => $user ?: null, 'title' => $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -37,11 +35,9 @@ use App\Model\User;
                         <input type="hidden" name="_token" value="<?=(!empty($token) ? $token : '')?>">
 	                    <input type="hidden" name="edit_form" value="1">
                         <div class="dx-box-content">
-                            <?php
-                            if(!empty($page)) {
-                                (new FormRenderer($form['fields']))->render($page);
-                            }
-                            ?>
+                            <?php if(!empty($formFields)) {?>
+                                <?= htmlspecialchars_decode($formFields) ?>
+                            <?php } ?>
                         </div>
                     </form>
 	                <div class="dx-box-content">
@@ -54,5 +50,5 @@ use App\Model\User;
     </div>
 </div>
 <?php
-(new View('footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
 ?>

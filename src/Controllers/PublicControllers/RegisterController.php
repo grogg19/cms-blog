@@ -5,6 +5,7 @@
 
 namespace App\Controllers\PublicControllers;
 
+use App\FormRenderer;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\UserRepository;
@@ -13,11 +14,6 @@ use App\Validate\Validator;
 use App\Parse\Yaml;
 use App\Auth\Auth;
 use App\View;
-
-use function Helpers\checkToken;
-use function Helpers\generateToken;
-use function Helpers\hashPassword;
-use function Helpers\generateRandomHash;
 
 /**
  * Class RegisterController
@@ -45,7 +41,7 @@ class RegisterController extends PublicController
      */
     public function signUp(): Renderable
     {
-        if(session_status() == 2) {
+        if(!empty($this->data['user'])) {
             Redirect::to('/admin/blog/posts');
         }
         return $this->form();
@@ -69,9 +65,13 @@ class RegisterController extends PublicController
     {
         $fields = (new Yaml())->parseFile(APP_DIR . '/src/Model/User/user_fields.yaml');
 
-        $fields['token'] = generateToken();
+        $fields['fieldsForms'] = (new FormRenderer($fields['fields']))->render();
 
-        return new View('signup', $fields);
+        $this->view = 'signup';
+
+        $this->data = array_merge($this->data, $fields);
+
+        return new View('signup', $this->data);
     }
 
     /**

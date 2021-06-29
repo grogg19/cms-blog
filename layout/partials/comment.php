@@ -1,9 +1,7 @@
 <?php
-use function Helpers\getDateTime;
-use App\Model\Comment;
 /**
- * @var string $avatarPath;
- * @var Comment $comment;
+ * @var $avatarPath;
+ * @var $comment;
  */
 ?>
 <div class="dx-comment">

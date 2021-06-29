@@ -11,13 +11,21 @@ namespace App;
  */
 class View implements Renderable
 {
+    /**
+     * @var string
+     */
     private $view;
+
+    /**
+     * @var array
+     */
     private $parameters;
 
     /**
      * View constructor.
      * @param string $view
      * @param array $parameters
+     *
      */
     public function __construct(string $view, array $parameters = [])
     {
@@ -30,15 +38,18 @@ class View implements Renderable
      * Метод проверяет существование шаблона $this->view и делает require при его наличии
      * Параметры для вывода находятся в массиве $parameters
      */
-    public function render(): void
+    public function render()
     {
         extract($this->parameters);
 
         if(file_exists($this->view)) {
+            ob_start();
             require $this->view;
-        } else {
-            echo "Данного шаблона не существует";
+            $out = ob_get_contents();
+            ob_end_clean();
+            return $out;
         }
+        return "Данного шаблона не существует";
     }
 
     /**

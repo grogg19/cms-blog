@@ -2,16 +2,13 @@
 /**
  * User header
  */
-use App\View;
-use App\Model\User;
-use function Helpers\session;
 
 /**
- * @var User $user
- * @var string $title
+ * @var $user
+ * @var $title
  */
 
-(new View('base.header', ['title' => 'Администрирование | ' . $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/base/admin_header.php');
 
 ?>
 <!-- START: Navbar -->
@@ -27,14 +24,14 @@ use function Helpers\session;
         </button>
 
         <div class="dx-navbar-content">
-            <?php if(!empty($user) && in_array($user->role->code, ['admin', 'content-manager'])) {
-                (new View('partials.header.main_admin_menu'))->render();
+            <?php if(!empty($user) && in_array($user->role->code, ['admin','content-manager'])) {
+                require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/header/main_admin_menu.php');
             } else {
-                (new View('partials.header.main_public_menu'))->render();
+                require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/header/main_public_menu.php');
             } ?>
             <ul class="dx-nav dx-nav-align-right">
                 <?php if(!empty($user)) {
-                    (new View('partials.header.admin_menu', ['user' => $user]))->render();
+                    require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/header/admin_menu.php');
                 } else { ?>
                     <li>
                         <a data-fancybox data-type="ajax" data-options='{"ajax" : {"settings" : {"type" : "post"}}  }' data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>
@@ -53,14 +50,14 @@ use function Helpers\session;
             <span></span><span></span><span></span>
         </button>
         <div class="dx-navbar-content">
-            <?php if(!empty($user) && in_array($user->role->code, ['admin', 'content-manager'])) {
-                (new View('partials.header.main_admin_menu'))->render();
+            <?php if(!empty($user) && in_array($user->role->code, ['admin'])) {
+                require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/header/main_admin_menu.php');
             } else {
-                (new View('partials.header.main_public_menu'))->render();
+                require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/header/main_public_menu.php');
             } ?>
             <ul class="dx-nav dx-nav-align-right">
                 <?php if(!empty($user)) {
-                    (new View('partials.header.admin_menu', ['user' => $user]))->render();
+                    require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/header/admin_menu.php');
                 } else { ?>
                     <li>
                         <a data-fancybox data-type="ajax" data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>

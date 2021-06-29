@@ -1,10 +1,8 @@
 <?php
-use App\Model\Subscriber;
-use App\Model\Post;
 /**
  * @var $timeToSend
- * @var Post $post
- * @var Subscriber $subscriber;
+ * @var $post
+ * @var $subscriber;
  */
 ?>
 ######################## Начало письма ###########################

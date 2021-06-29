@@ -1,7 +1,6 @@
 <?php
-use App\Model\User;
 /**
- * @var User $user
+ * @var $user
  */
 ?>
 <ul class="dx-nav dx-nav-align-left">
@@ -16,6 +15,7 @@ use App\Model\User;
             </li>
         </ul>
     </li>
+    <?php if($user->role->code === 'admin') { ?>
     <li class="dx-drop-item">
         <a href="/admin/static-pages">Страницы</a>
 	    <ul class="dx-navbar-dropdown">
@@ -27,6 +27,7 @@ use App\Model\User;
             </li>
         </ul>
     </li>
+	<?php } ?>
 	<li class="dx-drop-item">
 		<a href="/pravila-polzovaniya-sajtom">Пользовательское соглашение</a>
 	</li>

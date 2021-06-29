@@ -10,8 +10,6 @@ use App\Config;
 use App\Cookie\Cookie;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-use function Helpers\checkToken;
-use function Helpers\request;
 
 /**
  * Class ImageManager

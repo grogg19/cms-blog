@@ -10,8 +10,6 @@ use App\Renderable;
 use App\Request\Request;
 use App\View;
 
-use function Helpers\checkToken;
-
 /**
  * Class Toast
  * @package App\Toasts
@@ -33,17 +31,19 @@ class Toast
      * отрисовывает шаблон Тостов
      * @return Renderable|null
      */
-    public function index(): ?Renderable
+    public function index()
     {
         if(!empty($this->request->post('typeToast'))
             && !empty($this->request->post('dataToast'))
             && checkToken()
         ) {
+
             $content = new View('partials.toast_main', [
-                'typeToast' => $this->request->post('typeToast'),
-                'dataToast' => $this->request->post('dataToast')
+                'toastMessage' => $this->request->post('dataToast'),
+                'pathToast' => 'partials/toasts/' . $this->request->post('typeToast')
+
             ]);
-            $content->render();
+            echo $content->render();
         }
         return null;
     }
@@ -117,11 +117,11 @@ class Toast
             $message = json_decode(Cookie::get('toast'))->dataToast->message;
 
             $content = new View('partials.toast_main', [
-                'typeToast' => $type,
-                'dataToast' => $message
+                'pathToast' => 'partials/toasts/' . $type,
+                'toastMessage' => $message
             ]);
 
-            $content->render();
+            echo $content->render();
 
             $this->destroyToast();
         }

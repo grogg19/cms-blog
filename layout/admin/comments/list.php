@@ -3,11 +3,6 @@
  * Список комментариев - шаблон
  */
 
-use App\View;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
-use App\Model\User;
-use function Helpers\getDateTime;
 /**
  * @var Collection $comments
  * @var string $avatarPath
@@ -17,7 +12,7 @@ use function Helpers\getDateTime;
  * @var $title
  */
 
-(new View('admin_header', ['user' => $user ?: null, 'title' => $title]))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
 ?>
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
@@ -38,10 +33,7 @@ use function Helpers\getDateTime;
 			                    </div>
                                 <?php
                                 // Форма "Количество элементов на странице"
-                                (new View('partials.quantity_items', [
-                                    'quantity' => $quantity,
-                                    'items' => [10, 20, 50, 200, 'all']
-                                ]))->render();
+                                require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/quantity_items.php');
                                 ?>
                                 <?php if($comments->count() > 0 ) { ?>
 			                        <?php foreach ($comments as $comment) { ?>
@@ -81,10 +73,8 @@ use function Helpers\getDateTime;
 			                        <?php } ?>
                                     <?php
 	                                //  Пагинация
-                                    if($comments instanceof LengthAwarePaginator) {
-                                        (new View('partials.pagination', [
-                                            'paginator' => $comments
-                                        ]))->render();
+                                    if(!empty($paginator)) {
+                                        require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/pagination.php');
                                     }
                                     ?>
                                 <?php } else { ?>
@@ -100,5 +90,5 @@ use function Helpers\getDateTime;
     </div>
 </div>
 <?php
-(new View('footer'))->render();
+require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
 ?>
