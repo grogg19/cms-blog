@@ -14,24 +14,24 @@ RUN apt-get upgrade -y
 
 RUN apt-get install -y zip unzip
 
-RUN apt install php8.0-common -y
-RUN apt install php8.0-cli -y
+RUN apt install php7.4-common -y
+RUN apt install php7.4-cli -y
 
 RUN apt-get install -y \
-    php8.0-curl \
-    php8.0-intl \
-    php8.0-mysql \
-    php8.0-readline \
-    php8.0-xml \
-    php8.0-mbstring
+    php7.4-curl \
+    php7.4-intl \
+    php7.4-mysql \
+    php7.4-readline \
+    php7.4-xml \
+    php7.4-mbstring
 
-RUN apt-get install php8.0-xdebug # Xdebug debugger
+RUN apt-get install php7.4-xdebug # Xdebug debugger
 
 RUN apt install apache2 -y
 
 RUN mkdir /var/run/mysqld
 
-RUN apt install libapache2-mod-php8.0 -y
+RUN apt install libapache2-mod-php7.4 -y
 #RUN apt-get install mariadb-server -y
 RUN apt-get install mysql-server -y
 RUN apt-get install git nodejs npm nano tree vim curl wget ftp -y
