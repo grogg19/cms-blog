@@ -4,7 +4,6 @@
  */
 
 namespace App;
-
 /**
  * Class View
  * @package App
@@ -19,19 +18,25 @@ class View implements Renderable
     /**
      * @var array
      */
-    private $parameters;
+    private $data;
+
+    /**
+     * @var array
+     */
+    private $mergeData;
 
     /**
      * View constructor.
      * @param string $view
-     * @param array $parameters
+     * @param array $data
      *
      */
-    public function __construct(string $view, array $parameters = [])
+    public function __construct(string $view, array $data = [], array $mergeData = [])
     {
         // Преобразуем параметр $view в путь до нужного шаблона
         $this->view = VIEW_DIR . strtolower(str_replace('.','/',$view)) . ".php";
-        $this->parameters = $parameters;
+        $this->data = $data;
+        $this->mergeData = $mergeData;
     }
 
     /**
@@ -40,24 +45,73 @@ class View implements Renderable
      */
     public function render()
     {
-        extract($this->parameters);
+        $template = !isset($this->data['ajax']) ? 'main_template' : '';
 
-        if(file_exists($this->view)) {
+        return $this->renderLayout($template, $this->renderView($this->view, $this->data), $this->mergeData);
+    }
+
+    /**
+     * отрисовывает View
+     * @param $view
+     * @param $data
+     * @return false|string
+     */
+    private function renderView($view, $data) {
+
+        if (file_exists($view)) {
             ob_start();
-            require $this->view;
+
+            extract($data);    // массив в переменные
+            include $view; // подключаем файл с представлением
             $out = ob_get_contents();
-            ob_end_clean();
+            ob_get_clean();
             return $out;
         }
         return "Данного шаблона не существует";
+    }
+
+    /** Отрисовывает основной шаблон
+     * @param string $template
+     * @param string $content
+     * @param array $mergeData
+     * @return false|mixed|string
+     */
+    private function renderLayout(string $template = '', string $content = '', array $mergeData = []) {
+
+        $layoutPath = VIEW_DIR . $template . '.php';
+
+        if (file_exists($layoutPath)) {
+            ob_start();
+
+            extract($mergeData);
+
+            include $layoutPath; // тут будут доступны переменные $title и $content
+            $out = ob_get_contents();
+            ob_get_clean();
+            return $out;
+        }
+        if(empty($template)) {
+            return $content;
+        }
     }
 
     /**
      * Возвращает параметры для вывода
      * @return array
      */
-    public function getParameters(): array
+    public function getData(): array
     {
-        return $this->parameters;
+        return $this->data;
     }
+
+//    public function with($key, $value = null)
+//    {
+//        if (is_array($key)) {
+//            $this->data = array_merge($this->data, $key);
+//        } else {
+//            $this->data[$key] = $value;
+//        }
+//
+//        return $this;
+//    }
 }

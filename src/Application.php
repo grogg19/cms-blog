@@ -7,7 +7,6 @@ namespace App;
 
 use App\Auth\Auth;
 use App\Controllers\System\MigrationController;
-use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\Cookie\Cookie;
 use App\Router as Router;
@@ -108,11 +107,11 @@ class Application
      */
     public function initSession()
     {
-        $this->session = new Session();
+        $session = new Session();
 
         // Если существует кука авторизации, стартуем сессию
         if(!empty(Cookie::get('authUser'))) {
-            $this->session->start();
+            $session->start();
             $currentUser = (new UserRepository())->getCurrentUser();
 
             // если текущего пользователя не существует, то уничтожаем авторизацию
@@ -121,7 +120,7 @@ class Application
             }
 
             // если нет userId в куки, то уничтожаем авторизацию
-            if($this->session->get('userId') === null) {
+            if($session->get('userId') === null) {
                 (new Auth())->unAuthorize();
             }
         }

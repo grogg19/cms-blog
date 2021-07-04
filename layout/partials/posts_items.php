@@ -5,9 +5,9 @@
  * @var $imgPath
  */
 
-if($posts->count() > 0) {
-foreach ($posts as $post) {
-    ?>
+if($posts->count() > 0) { ?>
+<div id="list-posts">
+<?php foreach ($posts as $post) { ?>
     <div class="dx-blog-item dx-box dx-box-decorated">
         <a href="/post/<?= $post->slug ?>" class="dx-blog-item-img">
             <?php if(!empty($post->images[0]->file_name)) { ?>
@@ -26,7 +26,6 @@ foreach ($posts as $post) {
             <a href="/post/<?= $post->slug ?>" class="dx-btn dx-btn-lg">Подробнее</a>
         </div>
     </div>
-<?php }
-}
-?>
-
+<?php } ?>
+</div>
+<?php } ?>

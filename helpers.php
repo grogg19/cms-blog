@@ -3,6 +3,7 @@
  *  Хелпер вывода
  */
 
+use App\Config;
 use App\Request\Request;
 use App\Cookie\Cookie;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -159,4 +160,21 @@ function session()
  */
 function cleanJSTags(string $data): string {
     return preg_replace('#<script[^>]*>.*?</script>#is', '', $data);
+}
+
+/**
+ * путь к каталогу с изображениями
+ * @return string
+ */
+function getImagesWebPath() {
+    $configImages = Config::getInstance()->getConfig('images');
+    return $configImages['pathToUpload'] . DIRECTORY_SEPARATOR;
+}
+
+/**
+ * Элементы формы "количество элементов на странице"
+ * @return array
+ */
+function quantityElements(): array {
+    return Config::getInstance()->getConfig('cms')['dropdown']; // список вариантов количества элементов
 }

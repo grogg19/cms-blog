@@ -22,7 +22,7 @@ class PublicPostController extends PublicController
     /**
      * @var mixed
      */
-    private $configImages;
+    private static $configImages;
 
     /**
      * @var PostRepository
@@ -36,7 +36,7 @@ class PublicPostController extends PublicController
     {
         parent::__construct();
 
-        $this->configImages = Config::getInstance()->getConfig('images');
+        self::$configImages = Config::getInstance()->getConfig('images');
         $this->postRepository = new PostRepository();
 
     }
@@ -49,43 +49,32 @@ class PublicPostController extends PublicController
     {
         $page = !empty($this->request->post('page')) ? $this->request->post('page') : 1;
 
-        if(!empty($this->request->post('page'))) {
+        $imgPath = self::$configImages['pathToUpload'] . DIRECTORY_SEPARATOR;
 
-            $this->view = 'partials.posts_items';
+        if(!empty($this->request->post('page'))) {
+            $view = 'partials.posts_items';
             $postsData = [
                     'posts' => $this->postRepository->getAllPublishedPosts('desc', $page),
-                    'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
-                    'token' => generateToken()
+                    'imgPath' => $imgPath,
+                    'ajax' => true
                 ];
         } else {
-            $this->view = 'posts';
+            $view = 'posts';
             $postsData = [
-                'title' => 'Курсовая работа CMS для Блога',
                 'posts' => $this->postRepository->getAllPublishedPosts('desc', $page),
-                'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
-                'token' => generateToken(),
+                'imgPath' => $imgPath,
             ];
         }
 
-        $this->data = array_merge($this->data, $postsData);
-
-        return new View($this->view, $this->data);
-    }
-
-    /**
-     * Вывод списка последних постов
-     * @param string $view
-     * @return Renderable
-     */
-    public function latestPosts(string $view = 'partials.latest_posts'): Renderable
-    {
-        $data['title'] = 'Блог';
-        $data['latestPosts'] = [
-            'posts' => $this->postRepository->getLatestPosts(),
-            'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+        $mergeData = [
+            'title' => 'Курсовая работа CMS для Блога',
+            'imgPath' => $imgPath,
+            'token' => generateToken(),
+            'latestPosts' => (new PostRepository())->getLatestPosts(),
+            'user' => (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null // текущий пользователь
         ];
 
-        return new View($view, $data);
+        return new View($view, $postsData, $mergeData);
     }
 
     /**
@@ -100,33 +89,41 @@ class PublicPostController extends PublicController
 
         $userRepository = new UserRepository();
         $avatarPath = $userRepository->getUserAvatarPath();
+        $imgPath = getImagesWebPath();
 
         if(empty($post)) {
             Redirect::to('/404');
         }
 
         if(session_status() == 2) {
-            $user = $this->data['user'];
+            $user = $userRepository->getCurrentUser();
             $userRole = $user->role->code;
         }
 
         $comments = new CommentRepository();
 
+
         $postData = [
             $module => $post,
-            'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
-            'token' => generateToken(),
+            'imgPath' => $imgPath,
             'userRole' => (!empty($userRole)) ? $userRole: 'none',
             'comments' => $comments->getAllowableCommentsByPostId($post->id),
-            'title' => 'Блог | ' . $post->title,
             'postId' => $post->id,
-            'avatarPath' => $avatarPath
+            'avatarPath' => $avatarPath,
+            'token' => generateToken()
         ];
 
-        $this->view = 'post';
-        $this->data = array_merge($this->data, $postData);
+        $mergeData = [
+            'title' => 'Блог | ' . $post->title,
+            'imgPath' => $imgPath,
+            'token' => generateToken(),
+            'latestPosts' => (new PostRepository())->getLatestPosts(),
+            'user' => (!empty($user)) ? $user : null
+        ];
 
-        return new View($this->view, $this->data);
+        $view = 'post';
+
+        return new View($view, $postData, $mergeData);
     }
 
 }

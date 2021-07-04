@@ -7,7 +7,6 @@
  * @var $fieldsForms;
  * @var $title
  */
-require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/header.php');
 ?>
 <!-- Start Login Form -->
 <div class="dx-popup dx-popup-signin" id="block_login" >
@@ -29,9 +28,5 @@ require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/header.php');
             </div>
         </form>
     </div>
-	<div id="messageToast"></div>
 </div>
 <!-- End Login Form -->
-<?php
-require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
-?>
