@@ -18,7 +18,7 @@ class PublicController extends Controller
     {
         parent::__construct();
 
-        $this->data['latestPosts'] = (new PostRepository())->getLatestPosts(); // свежие посты
+        //$this->data['latestPosts'] = (new PostRepository())->getLatestPosts(); // свежие посты
 
         $this->data['user'] = (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null; // текущий пользователь
     }

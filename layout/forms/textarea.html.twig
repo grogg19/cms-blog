@@ -1,20 +1,18 @@
-<?php
-/**
- * Шаблон элемента TEXTAREA
- */
-
-/**
- * @var $element
- * @var $valueAttribute
- */
-?>
-<div class="dx-form-group div-<?=key($element)?> form-element mt-20 mb-20">
-    <?php if($element[key($element)]['label']) { ?>
-        <label for="<?=key($element)?>" ><?=$element[key($element)]['label']?>:</label>
-    <?php } ?>
-        <textarea  name="<?=key($element)?>" <?php if (isset($element[key($element)]['options'])) {
-            foreach ($element[key($element)]['options'] as $key => $value) {
-                echo ' ' .$key . '="' . $value . '" ';
-            }
-        } ?> ><?php if (!empty($valueAttribute)) { ?><?=$valueAttribute?><?php } ?></textarea>
-</div>
+{% for key in element|keys %}
+    {% set elementKey = key %}
+    <div class="dx-form-group div-{{ elementKey }} form-element mt-20 mb-20">
+    {% if not element[elementKey]['label'] is empty %}
+        <label for="{{ elementKey }}" >{{ element[elementKey]['label'] }}:</label>
+    {% endif %}
+        <textarea  name="{{ elementKey }}"
+            {% if not element[elementKey]['options'] is empty %}
+            {% for key, value in element[elementKey]['options'] %}
+                {{ key }}="{{ value }}"
+            {% endfor %}
+            {% endif %}>
+            {% if not valueAttribute is empty %}
+                value="{{ valueAttribute }}"
+            {% endif %}
+        </textarea>
+    </div>
+{% endfor %}

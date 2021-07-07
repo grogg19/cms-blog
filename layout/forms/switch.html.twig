@@ -1,22 +1,18 @@
-<?php
-/**
- * Шаблон элемента SWITCH
- */
-?>
-<?php
-$element = !empty($element) ? $element : '';
-?>
-<div class="dx-form-group div-<?=key($element)?> form-element">
-    <?php if($element[key($element)]['label']) { ?>
-        <label for="<?=key($element)?>"><?=$element[key($element)]['label']?>:</label>
-    <?php } ?>
-    <input name="<?=key($element)?>" <?php if (isset($element[key($element)]['options'])) {
-        foreach ($element[key($element)]['options'] as $key => $value) {
-            echo ' ' .$key . '="' . $value . '" ';
-        }
-    }
-    if (!empty($valueAttribute) && $valueAttribute == 1) { ?>
+{% for key in element|keys %}
+    {% set elementKey = key %}
+<div class="dx-form-group div-{{ elementKey }} form-element">
+    {% if not element[elementKey]['label'] is empty %}
+        <label for="{{ elementKey }}" >{{ element[elementKey]['label'] }}:</label>
+    {% endif %}
+    <input name="{{ elementKey }}"
+    {% if not element[elementKey]['options'] is empty %}
+    {% for key, value in element[elementKey]['options'] %}
+        {{ key }}="{{ value }}"
+    {% endfor %}
+    {% endif %}
+    {% if not valueAttribute is empty and valueAttribute == 1 %}
         checked
-    <?php } ?> />
+    {% endif %}
+    />
 </div>
-
+{% endfor %}

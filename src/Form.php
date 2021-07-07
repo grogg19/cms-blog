@@ -31,7 +31,7 @@ class Form implements Renderable
      */
     public function render()
     {
-        return $this->view->render();
+         $this->view->render();
     }
 
 }

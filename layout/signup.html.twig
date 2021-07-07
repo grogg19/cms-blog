@@ -1,24 +1,12 @@
-<?php
-/**
- * Форма Регистрации нового пользователя
- */
-/**
- * @var $fieldsForms
- * @var $title
- */
-
-require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/header.php');
-?>
+{% include('header.html.twig') %}
 <!-- Start SignUp Form -->
 <div class="dx-popup dx-popup-signin" id="block_signup" >
     <button type="button" data-fancybox-close class="fancybox-button fancybox-close-small" title="Close"><svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"><path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"></path></svg></button>
     <div class="dx-signin-content dx-signin text-center">
-        <h1 class="h3 text-white mb-30"><?= !empty($title) ? $title : '' ?></h1>
-        <form action="<?= !empty($action) ? $action : ""?>" class="dx-form" id="form_signup" name="form_signup" method="post">
-            <input type="hidden" name="_token" value="<?=!empty($token) ? $token : '' ?>">
-            <?php if(!empty($fieldsForms)) { ?>
-            	<?= $fieldsForms ?>
-            <?php } ?>
+        <h1 class="h3 text-white mb-30">{{ title }}</h1>
+        <form action="{{ action }}" class="dx-form" id="form_signup" name="form_signup" method="post">
+            <input type="hidden" name="_token" value="{{ token }}">
+            {{ fieldsForms|raw }}
 	        <div class="custom-control custom-switch mt-20 mb-20">
 		        <input type="checkbox" class="custom-control-input" name="agreement" id="agreement">
 		        <label class="custom-control-label text-white text-left pl-10 pt-2" for="agreement">
@@ -38,6 +26,4 @@ require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/header.php');
 	<div id="messageToast"></div>
 </div>
 <!-- End Login Form -->
-<?php
-require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
-?>
+{% include('footer.html.twig') %}
