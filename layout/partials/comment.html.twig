@@ -1,0 +1,21 @@
+<div class="dx-comment">
+    <div>
+        <div class="dx-comment-img">
+            {% if comment.user.avatar is empty %}
+            <img src="/layout/assets/images/avatar-1.png" alt="">
+            {% else %}
+            <img src="{{ avatarPath }}{{ comment.user.avatar }}">
+            {% endif %}
+        </div>
+        <div class="dx-comment-cont">
+            <a href="#" class="dx-comment-name">{{ comment.user.first_name }} {{ comment.user.last_name }}</a>
+            {% if not comment.has_moderated %}
+                <div class="small op-5">Не проверено модератором</div>
+            {% endif %}
+            <div class="dx-comment-text">
+                <p class="mb-0">{{ comment.content }}</p>
+            </div>
+            <div class="dx-comment-date"><i class="far fa-clock"></i> {{ comment.created_at|date("d-m-Y") }}</div>
+        </div>
+    </div>
+</div>

@@ -43,7 +43,7 @@ class Toast
                 'pathToast' => 'partials/toasts/' . $this->request->post('typeToast')
 
             ]);
-            echo $content->render();
+            $content->render();
         }
         return null;
     }
@@ -121,7 +121,7 @@ class Toast
                 'toastMessage' => $message
             ]);
 
-            echo $content->render();
+            $content->render();
 
             $this->destroyToast();
         }

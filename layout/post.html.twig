@@ -1,0 +1,55 @@
+{% include('header.html.twig') %}
+<div class="dx-box-1 pb-100 bg-grey-6">
+    <div class="container">
+        <div class="row vertical-gap md-gap">
+            <div class="col-lg-8">
+                <div class="dx-blog-post dx-box dx-box-decorated">
+                    {% if not post.images[0].file_name is empty %}
+                        <div class="dx-gallery pt-10 pr-10 pl-10">
+                            <a href="{{ imgPath }}{{ post.images[0].file_name }}" data-fancybox="images" class="dx-gallery-item">
+                                <span class="dx-gallery-item-overlay"><span class="icon pe-7s-exapnd2"></span></span>
+                                <img src="{{ imgPath }}{{ post.images[0].file_name }}" class="dx-img" alt="">
+                            </a>
+                        </div>
+                    {% endif %}
+                    <div class="dx-blog-post-box">
+                        <h1 class="h3 dx-blog-post-title">{{ post.title }}</h1>
+                        <ul class="dx-blog-post-info">
+                            <li>Дата публикации: {{ post.published_at|date("d-m-Y") }}</li>
+                            <li>Автор: <a href="#">{{ post.user.first_name }} {{ post.user.last_name }}</a></li>
+                        </ul>
+                    </div>
+                    <div class="dx-blog-post-box">
+                        {{ post.content }}
+                    </div>
+                    {% if post.images|length > 0 %}
+                        <div class="dx-blog-post-box">
+                            <div class="dx-gallery">
+                                <div class="row vertical-gap">
+                                    {% for key, image in post.images %}
+                                        {% if key > 0 %}
+                                        <div class="col-6">
+                                            <a href="{{ imgPath }}{{ image.file_name }}" data-fancybox="images" class="dx-gallery-item">
+                                                <span class="dx-gallery-item-overlay dx-gallery-item-overlay-md"><span class="icon pe-7s-exapnd2"></span></span>
+                                                <img src="{{ imgPath }}{{ image.file_name }}" class="dx-img" alt="">
+                                            </a>
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                {% include('partials/comments_list.html.twig') %}
+            </div>
+            <div class="col-lg-4">
+                <div class="dx-sticky" data-sticky-offsetTop="120" data-sticky-offsetBot="40">
+                    {% include('section_right.html.twig') %}
+                </div>
+            </div>
+        </div>
+	    <div id="messageToast"></div>
+    </div>
+</div>
+{% include('footer.html.twig') %}
