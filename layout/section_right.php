@@ -11,8 +11,7 @@
  */
 
 require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/subscribe.php');
-
 /**
  * Блок Последние посты
  */
-require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/partials/latest_posts.php');
+((new \App\Controllers\PublicControllers\PublicPostController())->latestPosts())->render();

@@ -47,9 +47,10 @@ class View implements Renderable
             require $this->view;
             $out = ob_get_contents();
             ob_end_clean();
-            return $out;
+            echo $out;
+        } else {
+            echo "Данного шаблона не существует";
         }
-        return "Данного шаблона не существует";
     }
 
     /**

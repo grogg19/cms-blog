@@ -3,8 +3,6 @@
  * Шаблон вывода списка статей
  */
 
-use App\View;
-
 /**
  * @var array $posts
  * @var $token
