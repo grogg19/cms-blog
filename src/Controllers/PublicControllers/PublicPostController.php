@@ -22,7 +22,7 @@ class PublicPostController extends PublicController
     /**
      * @var mixed
      */
-    private static $configImages;
+    private $configImages;
 
     /**
      * @var PostRepository
@@ -36,7 +36,7 @@ class PublicPostController extends PublicController
     {
         parent::__construct();
 
-        self::$configImages = Config::getInstance()->getConfig('images');
+        $this->configImages = Config::getInstance()->getConfig('images');
         $this->postRepository = new PostRepository();
 
     }
@@ -49,32 +49,42 @@ class PublicPostController extends PublicController
     {
         $page = !empty($this->request->post('page')) ? $this->request->post('page') : 1;
 
-        $imgPath = self::$configImages['pathToUpload'] . DIRECTORY_SEPARATOR;
-
         if(!empty($this->request->post('page'))) {
-            $view = 'partials.posts_items';
+
+            $this->view = 'partials.posts_items';
             $postsData = [
                     'posts' => $this->postRepository->getAllPublishedPosts('desc', $page),
-                    'imgPath' => $imgPath,
-                    'ajax' => true
+                    'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+                    'token' => generateToken()
                 ];
         } else {
-            $view = 'posts';
+            $this->view = 'posts';
             $postsData = [
+                'title' => 'Курсовая работа CMS для Блога',
                 'posts' => $this->postRepository->getAllPublishedPosts('desc', $page),
-                'imgPath' => $imgPath,
+                'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+                'token' => generateToken(),
             ];
         }
 
-        $mergeData = [
-            'title' => 'Курсовая работа CMS для Блога',
-            'imgPath' => $imgPath,
-            'token' => generateToken(),
-            'latestPosts' => (new PostRepository())->getLatestPosts(),
-            'user' => (session_status() === 2) ? (new UserRepository())->getCurrentUser() : null // текущий пользователь
+        $this->data = array_merge($this->data, $postsData);
+
+        return new View($this->view, $this->data);
+    }
+
+    /**
+     * Вывод списка последних постов
+     * @param string $view
+     * @return Renderable
+     */
+    public function latestPosts(string $view = 'partials.latest_posts'): Renderable
+    {
+        $data = [
+            'latestPosts' => $this->postRepository->getLatestPosts(),
+            'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
         ];
 
-        return new View($view, $postsData, $mergeData);
+        return new View($view, $data);
     }
 
     /**
@@ -89,41 +99,33 @@ class PublicPostController extends PublicController
 
         $userRepository = new UserRepository();
         $avatarPath = $userRepository->getUserAvatarPath();
-        $imgPath = getImagesWebPath();
 
         if(empty($post)) {
             Redirect::to('/404');
         }
 
         if(session_status() == 2) {
-            $user = $userRepository->getCurrentUser();
+            $user = $this->data['user'];
             $userRole = $user->role->code;
         }
 
         $comments = new CommentRepository();
 
-
         $postData = [
             $module => $post,
-            'imgPath' => $imgPath,
+            'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
+            'token' => generateToken(),
             'userRole' => (!empty($userRole)) ? $userRole: 'none',
             'comments' => $comments->getAllowableCommentsByPostId($post->id),
-            'postId' => $post->id,
-            'avatarPath' => $avatarPath,
-            'token' => generateToken()
-        ];
-
-        $mergeData = [
             'title' => 'Блог | ' . $post->title,
-            'imgPath' => $imgPath,
-            'token' => generateToken(),
-            'latestPosts' => (new PostRepository())->getLatestPosts(),
-            'user' => (!empty($user)) ? $user : null
+            'postId' => $post->id,
+            'avatarPath' => $avatarPath
         ];
 
-        $view = 'post';
+        $this->view = 'post';
+        $this->data = array_merge($this->data, $postData);
 
-        return new View($view, $postData, $mergeData);
+        return new View($this->view, $this->data);
     }
 
 }
