@@ -33,14 +33,15 @@ class FormRenderer
      */
     private function generateForms($data = null)
     {
-        $content = '';
+
+        ob_start();
         foreach ($this->elements as $key => $element) {
 
             $valueAttribute = (!empty($data)) ?  $data->$key : '';
 
             if($element['form'] == "input") {
 
-                $content .= (new Input("forms/input",
+                (new Input("forms/input",
                     [
                         'element' => [$key => $element],
                         'valueAttribute' => $valueAttribute
@@ -50,25 +51,27 @@ class FormRenderer
             }
 
             if($element['form'] == "textarea") {
-                $content .= (new Textarea("forms/textarea", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                (new Textarea("forms/textarea", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                     ->render();
             }
 
             if($element['form'] == "editor") {
-                $content .= (new Editor("forms/editor", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                (new Editor("forms/editor", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                 ->render();
             }
 
             if($element['form'] == "datetimepicker") {
-                $content .= (new Input("forms/datetimepicker", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                (new Input("forms/datetimepicker", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                 ->render();
             }
 
             if($element['form'] == "switch") {
-                $content .= (new Input("forms/switch", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                (new Input("forms/switch", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                     ->render();
             }
         }
+        $content = ob_get_contents();
+        ob_end_clean();
         return $content;
     }
 
