@@ -1,1 +1,0 @@
-<p><?= !empty($message) ? $message : '' ?></p>

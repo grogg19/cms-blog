@@ -5,6 +5,10 @@
 
 namespace App;
 
+use Twig\Environment;
+use Twig\Extension\DebugExtension;
+use Twig\Loader\FilesystemLoader;
+
 /**
  * Class View
  * @package App
@@ -30,7 +34,7 @@ class View implements Renderable
     public function __construct(string $view, array $parameters = [])
     {
         // Преобразуем параметр $view в путь до нужного шаблона
-        $this->view = VIEW_DIR . strtolower(str_replace('.','/',$view)) . ".php";
+        $this->view = strtolower(str_replace('.','/',$view)) . ".html.twig";
         $this->parameters = $parameters;
     }
 
@@ -39,18 +43,19 @@ class View implements Renderable
      * Параметры для вывода находятся в массиве $parameters
      */
     public function render()
-    {
-        extract($this->parameters);
+{
+        $loader = new FilesystemLoader(VIEW_DIR . DIRECTORY_SEPARATOR);
 
-        if(file_exists($this->view)) {
-            ob_start();
-            require $this->view;
-            $out = ob_get_contents();
-            ob_end_clean();
-            echo $out;
-        } else {
-            echo "Данного шаблона не существует";
-        }
+        $twig = new Environment($loader, [
+            'debug' => true,
+            //'cache' => $_SERVER['DOCUMENT_ROOT']. DIRECTORY_SEPARATOR .'tmp',
+        ]);
+
+        $twig->addExtension(new DebugExtension());
+
+        $twig->addGlobal('CurrentUrl', $_SERVER['REQUEST_URI']);
+
+        echo $twig->render($this->view, $this->parameters);
     }
 
     /**

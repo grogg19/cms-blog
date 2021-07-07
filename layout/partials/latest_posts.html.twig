@@ -1,0 +1,16 @@
+{% if latestPosts|length > 0 %}
+<div class="dx-widget dx-box dx-box-decorated mnt-0">
+    <div class="dx-widget-title">Свежие публикации</div>
+	{% for latestPost in latestPosts %}
+    <a href="/post/{{ latestPost.slug }}" class="dx-widget-post">
+	    {% if not latestPost.images[0].file_name is empty %}
+            <span class="dx-widget-post-img"><img src="{{ imgPath }}{{ latestPost.images[0].file_name }}" alt=""></span>
+	    {% endif %}
+        <span class="dx-widget-post-text">
+            <span class="dx-widget-post-title">{{ latestPost.title }}</span>
+            <span class="dx-widget-post-date"><i class="far fa-clock" title="Опубликовано"></i> {{ latestPost.published_at|date('d-m-Y') }}</span>
+        </span>
+    </a>
+	{% endfor %}
+</div>
+{% endif %}

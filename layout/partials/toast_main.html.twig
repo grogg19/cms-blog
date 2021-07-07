@@ -1,0 +1,5 @@
+{% if not pathToast is empty and not toastMessage is empty %}
+<section class="toast__container">
+	{% include "#{pathToast}.html.twig" %}
+</section>
+{% endif %}
