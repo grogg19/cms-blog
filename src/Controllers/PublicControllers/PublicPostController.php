@@ -73,8 +73,11 @@ class PublicPostController extends PublicController
      * @param string $view
      * @return Renderable
      */
-    public function latestPosts(string $view = 'partials.latest_posts'): Renderable
+    public function latestPosts(string $view = ''): Renderable
     {
+        if(empty($view)) {
+            $view = 'partials.latest_posts';
+        }
         $data = [
             'latestPosts' => $this->postRepository->getLatestPosts(),
             'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
