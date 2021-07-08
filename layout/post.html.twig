@@ -20,7 +20,7 @@
                         </ul>
                     </div>
                     <div class="dx-blog-post-box">
-                        {{ post.content }}
+                        {{ post.content|raw }}
                     </div>
                     {% if post.images|length > 0 %}
                         <div class="dx-blog-post-box">
