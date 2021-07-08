@@ -49,27 +49,23 @@ class PublicPostController extends PublicController
     {
         $page = !empty($this->request->post('page')) ? $this->request->post('page') : 1;
 
-        if(!empty($this->request->post('page'))) {
+        $imgPath = $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR;
 
-            $this->view = 'partials.posts_items';
-            $postsData = [
-                    'posts' => $this->postRepository->getAllPublishedPosts('desc', $page),
-                    'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
-                    'token' => generateToken()
-                ];
+        $postsData = [
+            'posts' => $this->postRepository->getAllPublishedPosts('desc', $page),
+            'imgPath' => $imgPath,
+            'token' => generateToken()
+        ];
+
+        if(!empty($this->request->post('page'))) {
+            $view = 'partials.posts_items';
+            $postsData['ajax'] = true;
         } else {
-            $this->view = 'posts';
-            $postsData = [
-                'title' => 'Курсовая работа CMS для Блога',
-                'posts' => $this->postRepository->getAllPublishedPosts('desc', $page),
-                'imgPath' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR,
-                'token' => generateToken(),
-            ];
+            $view = 'posts';
+            $postsData['title'] = 'Курсовая работа CMS для Блога';
         }
 
-        $this->data = array_merge($this->data, $postsData);
-
-        return new View($this->view, $this->data);
+        return new View($view, $postsData);
     }
 
     /**
@@ -122,10 +118,9 @@ class PublicPostController extends PublicController
             'avatarPath' => $avatarPath
         ];
 
-        $this->view = 'post';
-        $this->data = array_merge($this->data, $postData);
+        $view = 'post';
 
-        return new View($this->view, $this->data);
+        return new View($view, $postData);
     }
 
 }
