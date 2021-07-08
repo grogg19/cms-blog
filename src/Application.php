@@ -7,7 +7,6 @@ namespace App;
 
 use App\Auth\Auth;
 use App\Controllers\System\MigrationController;
-use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\Cookie\Cookie;
 use App\Router as Router;
