@@ -5,6 +5,7 @@
 
 namespace App;
 
+use App\Twig\TemplatesBlocksExtension;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
@@ -52,6 +53,7 @@ class View implements Renderable
         ]);
 
         $twig->addExtension(new DebugExtension());
+        $twig->addExtension(new TemplatesBlocksExtension());
 
         $twig->addGlobal('CurrentUrl', $_SERVER['REQUEST_URI']);
 
