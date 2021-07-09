@@ -3,7 +3,6 @@
 
 namespace App\Migrations;
 
-use App\Config;
 use Illuminate\Database\Capsule\Manager as DB;
 use SplFileObject;
 use App\View;
@@ -22,26 +21,33 @@ class MigrationMySql implements Migratable
     {
         (new View('migrating_process', ['message' => 'Начинаем миграцию...']))->render();
 
-        $dbConfig = Config::getInstance()->getConfig("db");
-
         foreach ($files as $file) {
             if(file_exists($file)) {
                 $splObject = new SplFileObject($file);
                 (new View('migrating_process', ['message' => 'Записываем данные из ' . $splObject->getBasename()]))->render();
-                // генерируем команду для запуска импорта sql-файла
-                $command = sprintf('mysql -u%s -p%s -h %s -D %s < %s', $dbConfig['username'], $dbConfig['password'], $dbConfig['host'], $dbConfig['database'], $file);
-                // Выполняем shell-скрипт
-                shell_exec($command);
 
+                $content = $splObject->fread($splObject->getSize());
+
+                // получаем массив sql из файла
+                $sqlArray = explode(';', $content);
+
+                // Выполняем sql
+                foreach ($sqlArray as $sql) {
+                    $sql = trim($sql);
+                    if(!empty($sql)) {
+                        DB::connection()->statement($sql . ';');
+                    }
+                }
+
+                // записываем выполненную миграцию в таблицу migrations
                 DB::table('migrations')->insert([
                     'name' => $splObject->getBasename()
                 ]);
 
-
             }
+
         }
         (new View('migrating_process', ['message' => 'Миграция завершена.']))->render();
-
     }
 
     /**
