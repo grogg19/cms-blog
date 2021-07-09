@@ -1,23 +1,16 @@
-<?php
-/**
- * @var $timeToSend
- * @var $post
- * @var $subscriber;
- */
-?>
 ######################## Начало письма ###########################
-Адресат: <?= $subscriber->email . PHP_EOL ?>
-Время отправки: <?= $timeToSend . PHP_EOL ?>
+Адресат: {{ subscriber.email }}
+Время отправки: {{ timeToSend }}
 ###################### Заголовок письма ##########################
-На сайте добавлена новая запись: <?= $post->title . PHP_EOL ?>
+На сайте добавлена новая запись: {{ post.title }}
 ######################### Тело письма ############################
 
-Новая статья: <?= $post->title . PHP_EOL?>
+Новая статья: {{ post.title }}
 
-<?= $post->excerpt . PHP_EOL?>
+{{ post.excerpt }}
 
-Читать - <?= SITE_ROOT . '/post/' . $post->slug .PHP_EOL ?>
+Читать - {{ constant('SITE_ROOT') }}/post/{{ post.slug }}
 
-Отписаться от рассылки - <?= SITE_ROOT . '/manage-subscribes/unsubscribe-by-link?email=' . $subscriber->email .'&code=' . $subscriber->hash . PHP_EOL ?>
+Отписаться от рассылки - {{ constant('SITE_ROOT') }}/manage-subscribes/unsubscribe-by-link?email={{ subscriber.email }}&code={{ subscriber.hash }}
 ######################### Конец письма ###########################
 ------------------------------------------------------------------

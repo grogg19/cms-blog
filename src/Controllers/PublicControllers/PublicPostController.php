@@ -104,7 +104,7 @@ class PublicPostController extends PublicController
         }
 
         if(session_status() == 2) {
-            $user = $this->data['user'];
+            $user = $userRepository->getCurrentUser();
             $userRole = $user->role->code;
         }
 

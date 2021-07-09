@@ -61,17 +61,16 @@ class AdminUserManagerController extends AdminController
             'pathToAvatar' => $this->userRepository->getUserAvatarPath(),
             'roles' => $this->userRepository->getUserRoles(),
             'quantity' => $quantity,
-            'currentUser' => $this->data['user'],
+            'currentUser' => $this->userRepository->getCurrentUser(),
         ];
 
         if($quantity !== 'all') {
             $dataUsersList['paginator'] = $users;
         }
 
-        $this->view = 'admin.users_manager.list';
-        $this->data = array_merge($this->data, $dataUsersList);
+        $view = 'admin.users_manager.list';
 
-        return new View($this->view, $this->data);
+        return new View($view, $dataUsersList);
     }
 
     /**

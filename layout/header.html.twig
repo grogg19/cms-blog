@@ -12,8 +12,8 @@
 	        {% include 'partials/header/main_public_menu.html.twig' %}
 	        <ul class="dx-nav dx-nav-align-right">
 		        {% if user is not empty %}
-		        {% include 'partials/header/admin_menu.html.twig' %}
-		        {% elseif CurrentUrl not in ['/login', '/signup'] %}
+		            {% include 'partials/header/admin_menu.html.twig' %}
+		        {% elseif currentUrl not in ['/login', '/signup'] %}
 		        <li>
 			        <a data-fancybox data-type="ajax"  data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>
 		        </li>
@@ -34,8 +34,8 @@
 	        {% include 'partials/header/main_public_menu.html.twig' %}
 	        <ul class="dx-nav dx-nav-align-right">
 		        {% if user is not empty %}
-		        {% include 'partials/header/admin_menu.html.twig' %}
-		        {% elseif CurrentUrl not in ['/login', '/signup'] %}
+		            {% include 'partials/header/admin_menu.html.twig' %}
+		        {% elseif currentUrl not in ['/login', '/signup'] %}
 		        <li>
 			        <a data-fancybox data-type="ajax"  data-close-existing="true" data-touch="false" data-src="/login" data-filter="#block_login" href="javascript:;">Войти</a>
 		        </li>

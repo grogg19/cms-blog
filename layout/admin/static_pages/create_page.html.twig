@@ -1,17 +1,4 @@
-<?php
-/**
- * Шаблон
- * Создание страницы
- */
-
-/**
- * @var $title
- * @var $token
- * @var $user
- */
-
-require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
-?>
+{% include 'admin_header.html.twig' %}
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
         <div class="row justify-content-center">
@@ -20,7 +7,7 @@ require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
                     <div class="dx-box-content">
 	                    <div class="row align-items-center justify-content-between vertical-gap mnt-30 sm-gap mb-10">
 		                    <div class="col-auto">
-			                    <h2 class="h2 mb-0 mt-0"><?= $title ?></h2>
+			                    <h2 class="h2 mb-0 mt-0">{{ title }}</h2>
 		                    </div>
 		                    <div class="col pl-0 pr-0 d-none d-sm-block">
 			                    <div class="dx-separator ml-10 mr-10"></div>
@@ -34,12 +21,10 @@ require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
                         <!-- END: Breadcrumbs -->
                     </div>
                     <div class="dx-separator"></div>
-                    <form class="dx-form" name="form_create_page" id="form_create_page" action="<?= (isset($form['action'])) ? $form['action'] : ""?>">
-                        <input type="hidden" name="_token" value="<?=(!empty($token) ? $token : '')?>">
+                    <form class="dx-form" name="form_create_page" id="form_create_page" action="{{ form['action'] }}">
+                        <input type="hidden" name="_token" value="{{ token }}">
                         <div class="dx-box-content">
-                            <?php if(!empty($formFields)) {?>
-                                <?= htmlspecialchars_decode($formFields) ?>
-                            <?php } ?>
+                            {{ formFields|raw }}
                         </div>
                     </form>
 	                <div class="dx-box-content">
@@ -51,6 +36,4 @@ require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
         </div>
     </div>
 </div>
-<?php
-require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
-?>
+{% include 'footer.html.twig' %}

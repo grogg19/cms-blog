@@ -9,9 +9,9 @@
         {% for key, value in element[elementKey]['options'] %}
             {{ key }}="{{ value }}"
         {% endfor %}
-    {% endif %}>
+    {% endif %}
     {% if not valueAttribute is empty and element[elementKey]['options']['type'] != 'password' %}
         value="{{ valueAttribute }}"
-    {% endif %}
+    {% endif %} />
     </div>
 {% endfor %}

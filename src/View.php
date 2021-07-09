@@ -5,6 +5,7 @@
 
 namespace App;
 
+use App\Repository\UserRepository;
 use App\Twig\TemplatesBlocksExtension;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
@@ -44,18 +45,19 @@ class View implements Renderable
      * Параметры для вывода находятся в массиве $parameters
      */
     public function render()
-{
+    {
         $loader = new FilesystemLoader(VIEW_DIR . DIRECTORY_SEPARATOR);
 
         $twig = new Environment($loader, [
             'debug' => true,
-            //'cache' => $_SERVER['DOCUMENT_ROOT']. DIRECTORY_SEPARATOR .'tmp',
+            'cache' => $_SERVER['DOCUMENT_ROOT']. DIRECTORY_SEPARATOR .'tmp'
         ]);
 
         $twig->addExtension(new DebugExtension());
         $twig->addExtension(new TemplatesBlocksExtension());
 
-        $twig->addGlobal('CurrentUrl', $_SERVER['REQUEST_URI']);
+        $twig->addGlobal('currentUrl', $_SERVER['REQUEST_URI']);
+        $twig->addGlobal('user', (new UserRepository())->getCurrentUser());
 
         echo $twig->render($this->view, $this->parameters);
     }

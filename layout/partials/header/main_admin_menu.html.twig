@@ -1,8 +1,3 @@
-<?php
-/**
- * @var $user
- */
-?>
 <ul class="dx-nav dx-nav-align-left">
     <li class="dx-drop-item">
         <a href="/admin/blog/posts">Блог</a>
@@ -15,7 +10,7 @@
             </li>
         </ul>
     </li>
-    <?php if($user->role->code === 'admin') { ?>
+    {% if user.role.code is same as 'admin' %}
     <li class="dx-drop-item">
         <a href="/admin/static-pages">Страницы</a>
 	    <ul class="dx-navbar-dropdown">
@@ -27,7 +22,7 @@
             </li>
         </ul>
     </li>
-	<?php } ?>
+	{% endif %}
 	<li class="dx-drop-item">
 		<a href="/pravila-polzovaniya-sajtom">Пользовательское соглашение</a>
 	</li>

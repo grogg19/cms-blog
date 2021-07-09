@@ -8,7 +8,6 @@ namespace App\Controllers\PublicControllers;
 use App\FormRenderer;
 use App\Image\ImageManager;
 use App\Renderable;
-use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\Parse\Yaml;
 use App\Validate\Validator;
@@ -31,22 +30,19 @@ class LoginController extends PublicController
      */
     public function form(): Renderable
     {
-        if(!empty($this->session->get('userId'))) {
+        if(session_status() === 2) {
             Redirect::to('/admin/blog/posts');
         }
 
         $fields = (new Yaml())->parseFile(APP_DIR . '/src/Model/User/user_login_fields.yaml');
 
         $fields['token'] = generateToken();
+
         $fields['fieldsForms'] = (new FormRenderer($fields['fields']))->render();
+
         $view = 'login';
 
-        $mergeData = [
-            'title' => 'Авторизация пользователя',
-            'latestPosts' => (new PostRepository())->getLatestPosts(),
-        ];
-
-        return new View($view, $fields, $mergeData);
+        return new View($view, $fields);
     }
 
     /**

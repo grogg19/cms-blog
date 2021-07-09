@@ -40,21 +40,21 @@ class AdminAccountController extends AdminController
     public function editUserProfileForm(): Renderable
     {
         $form = $this->getUserAccountFields();
+        $user = $this->userRepository->getCurrentUser();
 
-        $formFields = (new FormRenderer($form['fields']))->render($this->data['user']);
+        $formFields = (new FormRenderer($form['fields']))->render($user);
 
         $dataUser = [
             'form' => $form,
             'token' => generateToken(),
             'pathToAvatar' => $this->userRepository->getUserAvatarPath(),
             'title' => 'Редактирование профиля пользователя',
-            'formFields' => htmlspecialchars($formFields)
+            'formFields' => $formFields
         ];
 
-        $this->view = 'admin.account.edit_account';
-        $this->data = array_merge($this->data, $dataUser);
+        $view = 'admin.account.edit_account';
 
-        return new View($this->view, $this->data);
+        return new View($view, $dataUser);
     }
 
     /**
@@ -64,16 +64,15 @@ class AdminAccountController extends AdminController
     public function getUserProfile(): Renderable
     {
         $dataUser = [
-            'user' => $this->data['user'],
+            'user' => $this->userRepository->getCurrentUser(),
             'pathAvatar' => $this->userRepository->getUserAvatarPath(),
             'title' => 'Профиль пользователя',
             'token' => generateToken()
         ];
 
-        $this->view = 'admin.account.view_account';
-        $this->data = array_merge($this->data, $dataUser);
+        $view = 'admin.account.view_account';
 
-        return new View($this->view, $this->data);
+        return new View($view, $dataUser);
     }
 
     /**
@@ -98,7 +97,7 @@ class AdminAccountController extends AdminController
         }
 
         // Если есть POST данные и токен соответствует,
-        $user = $this->data['user'];
+        $user = $this->userRepository->getCurrentUser();
 
         $data = $this->request->post();
 

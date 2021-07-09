@@ -74,10 +74,13 @@ class AdminStaticPagesController extends AdminController
             'quantity' => $quantity,
         ];
 
-        $this->view = 'admin.static_pages.list_pages_template';
-        $this->data = array_merge($this->data, $dataListStaticPages);
+        if($quantity !== 'all') {
+            $dataListStaticPages['paginator'] = $pages;
+        }
 
-        return new View($this->view, $this->data);
+        $view = 'admin.static_pages.list_pages_template';
+
+        return new View($view, $dataListStaticPages);
     }
 
     /**
@@ -97,10 +100,9 @@ class AdminStaticPagesController extends AdminController
             'formFields' => $formFields
         ];
 
-        $this->view = 'admin.static_pages.create_page';
-        $this->data = array_merge($this->data, $dataPage);
+        $view = 'admin.static_pages.create_page';
 
-        return new View($this->view, $this->data);
+        return new View($view, $dataPage);
     }
 
     /**
@@ -129,10 +131,9 @@ class AdminStaticPagesController extends AdminController
             'formFields' => $formFields
         ];
 
-        $this->view = 'admin.static_pages.edit_page';
-        $this->data = array_merge($this->data, $dataPage);
+        $view = 'admin.static_pages.edit_page';
 
-        return new View($this->view, $this->data);
+        return new View($view, $dataPage);
     }
 
     /**
