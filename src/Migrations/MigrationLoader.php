@@ -4,18 +4,16 @@
  *
  */
 
-namespace App\Controllers\System;
+namespace App\Migrations;
 
 use App\Controllers\Controller;
-use App\Migrations\Migration;
-use App\Migrations\MigrationMySql;
 use App\View;
 
 /**
- * Class MigrationController
+ * Class MigrationLoader
  * @package App\Controllers\System
  */
-class MigrationController extends Controller
+class MigrationLoader extends Controller
 {
     /**
      * Запускает миграции
@@ -28,6 +26,7 @@ class MigrationController extends Controller
             $migration->makeMigration();
 
             (new View('migrating_done', ['message' => 'БД в актуальном состоянии.']))->render();
+            exit();
         }
 
     }

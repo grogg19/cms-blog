@@ -6,7 +6,7 @@
 namespace App;
 
 use App\Auth\Auth;
-use App\Controllers\System\MigrationController;
+use App\Migrations\MigrationLoader;
 use App\Repository\UserRepository;
 use App\Cookie\Cookie;
 use App\Router as Router;
@@ -131,6 +131,6 @@ class Application
      */
     public function checkMigrations()
     {
-        (new MigrationController())->makeMigrations();
+        (new MigrationLoader())->makeMigrations();
     }
 }
