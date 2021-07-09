@@ -14,7 +14,7 @@ class PublicUserController extends PublicController
      */
     public function checkUserForComments(): bool
     {
-        $user = (!empty($this->data['user'])) ? $this->data['user'] : (new UserRepository())->getCurrentUser();
+        $user =  (new UserRepository())->getCurrentUser();
 
         if($user === null) {
             return false;

@@ -40,7 +40,7 @@ class AdminCommentController extends AdminController
     {
 
         $title = 'Модерация комментариев пользователей';
-        $avatarPath = $this->session->get('config')->getConfig('avatars')['pathToUpload'];
+        $avatarPath = $this->session->get('config')->getConfig('avatars')['pathToUpload'] . DIRECTORY_SEPARATOR;
         $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
         $page = (!empty($this->request->get('page'))) ? filter_var($_GET['page'], FILTER_SANITIZE_NUMBER_INT): 1;
 
@@ -63,10 +63,9 @@ class AdminCommentController extends AdminController
             $dataListComments['paginator'] = $comments;
         }
 
-        $this->view = 'admin.comments.list';
-        $this->data = array_merge($this->data, $dataListComments);
+        $view = 'admin.comments.list';
 
-        return new View($this->view, $this->data);
+        return new View($view, $dataListComments);
     }
 
     /**

@@ -1,18 +1,4 @@
-<?php
-/**
- * Шаблон "Создание поста"
- */
-
-/**
- * @var string $token
- * @var array $form
- * @var array $imgConfig
- * @var  $user
- * @var $title
- */
-
-require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
-?>
+{% include 'admin_header.html.twig' %}
 <div class="dx-box-5 pb-100 bg-grey-6">
     <div class="container">
         <div class="row justify-content-center">
@@ -28,12 +14,10 @@ require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
                         <!-- END: Breadcrumbs -->
                     </div>
                     <div class="dx-separator"></div>
-                    <form class="dx-form" name="form_create_post" id="form_create_post" action="<?= (isset($form['action'])) ? $form['action'] : ""?>">
-                        <input type="hidden" name="_token" value="<?=(!empty($token) ? $token : '')?>">
+                    <form class="dx-form" name="form_create_post" id="form_create_post" action="{{ form['action'] }}">
+                        <input type="hidden" name="_token" value="{{ token }}">
                         <div class="dx-box-content">
-                        <?php if(!empty($formFields)) {?>
-                            <?= htmlspecialchars_decode($formFields) ?>
-                        <?php } ?>
+                        {{ formFields|raw }}
                         </div>
                     </form>
                     <div class="dx-box-content pt-0">
@@ -44,15 +28,15 @@ require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
                             data-dropzone-maxMB
                             data-dropzone-maxFiles
                         -->
-                        <form class="dx-dropzone dz-started" enctype="multipart/form-data" action="/admin/blog/posts/img/upload" data-dropzone-maxMB="<?= $imgConfig['maxImageSize'] ?>" data-dropzone-maxFiles="<?= $imgConfig['maxFilesAtOnce'] ?>" multiple="">
+                        <form class="dx-dropzone dz-started" enctype="multipart/form-data" action="/admin/blog/posts/img/upload" data-dropzone-maxMB="{{ imgConfig["maxImageSize"] }}" data-dropzone-maxFiles="{{ imgConfig["maxFilesAtOnce"] }}" multiple="">
                             <div class="dz-message">
                                 <div class="dx-dropzone-icon">
                                     <span class="icon pe-7s-cloud-upload"></span>
-                                    <input type="hidden" name="_token" value="<?= $token ?>">
+                                    <input type="hidden" name="_token" value="{{ token }}">
                                 </div>
                                 <div class="h6 dx-dropzone-title">Перетащите картинки сюда или нажмите "Добавить изображение"</div>
                                 <div class="dx-dropzone-text">
-                                    <p class="mnb-5 mnt-1">Вы можете загрузить до <?= $imgConfig['maxFilesAtOnce'] ?> файлов (максимальный вес <?= $imgConfig['maxImageSize'] ?> MB каждый) следующих типов: .jpg, .jpeg, .png</p>
+                                    <p class="mnb-5 mnt-1">Вы можете загрузить до {{ imgConfig["maxFilesAtOnce"] }} файлов (максимальный вес {{ imgConfig["maxImageSize"] }} MB каждый) следующих типов: .jpg, .jpeg, .png</p>
                                 </div>
                             </div>
                         </form>
@@ -72,6 +56,4 @@ require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/admin_header.php');
         </div>
     </div>
 </div>
-<?php
-require (APP_DIR . DIRECTORY_SEPARATOR . 'layout/footer.php');
-?>
+{% include 'footer.html.twig' %}

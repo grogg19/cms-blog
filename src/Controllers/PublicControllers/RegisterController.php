@@ -41,7 +41,7 @@ class RegisterController extends PublicController
      */
     public function signUp(): Renderable
     {
-        if(!empty($this->data['user'])) {
+        if(session_status() === 2) {
             Redirect::to('/admin/blog/posts');
         }
         return $this->form();
@@ -64,14 +64,11 @@ class RegisterController extends PublicController
     private function form(): Renderable
     {
         $fields = (new Yaml())->parseFile(APP_DIR . '/src/Model/User/user_fields.yaml');
-
         $fields['fieldsForms'] = (new FormRenderer($fields['fields']))->render();
 
-        $this->view = 'signup';
+        $view = 'signup';
 
-        $this->data = array_merge($this->data, $fields);
-
-        return new View('signup', $this->data);
+        return new View($view, $fields);
     }
 
     /**

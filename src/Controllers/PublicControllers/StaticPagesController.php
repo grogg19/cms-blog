@@ -6,7 +6,6 @@ namespace App\Controllers\PublicControllers;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\StaticPagesRepository;
-use App\Request\Request;
 use App\StaticPages\Page;
 use App\StaticPages\PageList;
 use App\View;
@@ -34,7 +33,7 @@ class StaticPagesController extends PublicController
      */
     public function index(): ?Renderable
     {
-        $url = (new Request())->server('REQUEST_URI');
+        $url = $this->request->server('REQUEST_URI');
 
         $page = $this->staticPages->getPageByUrl($url);
 
@@ -48,10 +47,9 @@ class StaticPagesController extends PublicController
                 'title' => 'Блог | ' . $pageParameters['title'],
             ];
 
-            $this->view = 'static_pages';
-            $this->data = array_merge($this->data, $pageData);
+            $view = 'static_pages';
 
-            return new View($this->view, $this->data);
+            return new View($view, $pageData);
 
         } else {
             Redirect::to('/404');

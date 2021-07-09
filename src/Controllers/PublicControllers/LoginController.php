@@ -30,7 +30,7 @@ class LoginController extends PublicController
      */
     public function form(): Renderable
     {
-        if(!empty($this->data['user'])) {
+        if(session_status() === 2) {
             Redirect::to('/admin/blog/posts');
         }
 
@@ -40,11 +40,9 @@ class LoginController extends PublicController
 
         $fields['fieldsForms'] = (new FormRenderer($fields['fields']))->render();
 
-        $this->view = 'login';
+        $view = 'login';
 
-        $this->data = array_merge($this->data, $fields);
-
-        return new View($this->view, $this->data);
+        return new View($view, $fields);
     }
 
     /**

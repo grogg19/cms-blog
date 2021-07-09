@@ -15,6 +15,7 @@ use App\Parse\Yaml;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use App\Validate\Validator;
 use App\Image\ImageManager;
 use App\View;
@@ -36,11 +37,6 @@ class AdminPostController extends AdminController
     private $postRepository;
 
     /**
-     * @var User|null
-     */
-    private $user;
-
-    /**
      * AdminPostController constructor.
      */
     public function __construct()
@@ -59,8 +55,6 @@ class AdminPostController extends AdminController
 
             Redirect::to('/');
         }
-
-        $this->user = $this->data['user'];
     }
 
     /**
@@ -70,14 +64,14 @@ class AdminPostController extends AdminController
      */
     public function listPosts(): Renderable
     {
-
         $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
+        $user = (new UserRepository())->getCurrentUser();
 
-        if($this->user->role->code == 'admin') {
+        if($user->role->code == 'admin') {
             $posts = $this->postRepository->getAllPosts('desc', $quantity);
         } else {
             $posts = $this->postRepository
-                ->getPostsByUserId($this->user->id, $quantity);
+                ->getPostsByUserId($user->id, $quantity);
         }
 
         if($posts instanceof LengthAwarePaginator) {
@@ -96,10 +90,9 @@ class AdminPostController extends AdminController
             $dataListPosts['paginator'] = $posts;
         }
 
-        $this->view = 'admin.posts.list_posts';
-        $this->data = array_merge($this->data, $dataListPosts);
+        $view = 'admin.posts.list_posts';
 
-        return new View($this->view, $this->data);
+        return new View($view, $dataListPosts);
     }
 
     /**
@@ -125,10 +118,9 @@ class AdminPostController extends AdminController
             'formFields' => $formFields
         ];
 
-        $this->view = 'admin.posts.create_post';
-        $this->data = array_merge($this->data, $dataPost);
+        $view = 'admin.posts.create_post';
 
-        return new View($this->view, $this->data);
+        return new View($view, $dataPost);
     }
 
     /**
@@ -141,6 +133,7 @@ class AdminPostController extends AdminController
         $uriData = parseRequestUri();
 
         $postId = ((int) $uriData[3] && $uriData[4] == 'edit') ? $uriData[3] : 0;
+        $user = (new UserRepository())->getCurrentUser();
 
         // если postId == 0, редирект на страницу создания поста
         if($postId == 0) {
@@ -155,7 +148,7 @@ class AdminPostController extends AdminController
             throw new NotFoundException('Такого поста не существует');
         }
 
-        if($post->user_id == $this->session->get('userId') || $this->user->role->permissions == 1)
+        if($post->user_id == $this->session->get('userId') || $user->role->permissions == 1)
         {
             $form = $this->getFields();
 
@@ -170,10 +163,9 @@ class AdminPostController extends AdminController
                 'formFields' => $formFields
             ];
 
-            $this->view = 'admin.posts.edit_post';
-            $this->data = array_merge($this->data, $dataPost);
+            $view = 'admin.posts.edit_post';
 
-            return new View($this->view, $this->data);
+            return new View($view, $dataPost);
 
         } else {
             $this->toast->setToast('info', 'Вам доступны для редактирования только ваши статьи');
@@ -209,7 +201,8 @@ class AdminPostController extends AdminController
             // и пробуем сохранить
             try {
 
-                $post = $this->postRepository->saveToDb($this->request, $this->user);
+                $user = (new UserRepository())->getCurrentUser();
+                $post = $this->postRepository->saveToDb($this->request, $user);
 
                 if(empty($this->request->post('idPost'))) {
                     $this->mailNotification($post);
