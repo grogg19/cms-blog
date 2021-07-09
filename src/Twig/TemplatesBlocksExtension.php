@@ -3,6 +3,7 @@
 
 namespace App\Twig;
 
+use Symfony\Component\HttpFoundation\Session\Session;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use App\Controllers\PublicControllers\PublicPostController;
@@ -19,13 +20,28 @@ class TemplatesBlocksExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('latestPosts', [$this, 'callLatestPostsController']),
+            new TwigFunction('latestPosts', [$this, 'renderLatestPosts']),
+            new TwigFunction('quantityItems', [$this, 'quantityFormItems']),
         ];
     }
 
-    public function callLatestPostsController(string $view = '')
+    /**
+     * Отрисовка списка свежих постов
+     * @param string $view
+     */
+    public function renderLatestPosts(string $view = '')
     {
         $latestPosts = (new PublicPostController())->latestPosts($view);
         $latestPosts->render();
+    }
+
+    /**
+     * список вариантов количества элементов на странице
+     * @return array
+     */
+    public function quantityFormItems(): array
+    {
+        $session = new Session();
+        return $session->get('config')->getConfig('cms')['dropdown'];
     }
 }
