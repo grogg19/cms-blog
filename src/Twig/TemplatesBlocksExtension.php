@@ -3,7 +3,7 @@
 
 namespace App\Twig;
 
-use Symfony\Component\HttpFoundation\Session\Session;
+use App\Config;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use App\Controllers\PublicControllers\PublicPostController;
@@ -41,7 +41,6 @@ class TemplatesBlocksExtension extends AbstractExtension
      */
     public function quantityFormItems(): array
     {
-        $session = new Session();
-        return $session->get('config')->getConfig('cms')['dropdown'];
+        return Config::getInstance()->getConfig('cms')['dropdown'];
     }
 }
