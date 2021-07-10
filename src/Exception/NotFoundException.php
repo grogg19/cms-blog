@@ -40,11 +40,8 @@ class NotFoundException extends HttpException implements Renderable
     public function render(): void
     {
         $data['message'] = $this->message;
-        $title = 'Объект не найден';
-        (new View('index', [
-            'view' => '404',
-            'data' => $data,
-            'title' => $title
-        ]))->render();
+        $data['title'] = 'Страница не найдена';
+
+        (new View('404', $data))->render();
     }
 }
