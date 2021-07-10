@@ -6,10 +6,10 @@
 
 namespace App;
 
-use App\Form\Input;
-use App\Form\Textarea;
-use App\Form\Editor;
-
+/**
+ * Class FormRenderer
+ * @package App
+ */
 class FormRenderer
 {
     /**
@@ -41,7 +41,7 @@ class FormRenderer
 
             if($element['form'] == "input") {
 
-                (new Input("forms/input",
+                (new Form("forms/input",
                     [
                         'element' => [$key => $element],
                         'valueAttribute' => $valueAttribute
@@ -51,22 +51,22 @@ class FormRenderer
             }
 
             if($element['form'] == "textarea") {
-                (new Textarea("forms/textarea", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                (new Form("forms/textarea", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                     ->render();
             }
 
             if($element['form'] == "editor") {
-                (new Editor("forms/editor", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                (new Form("forms/editor", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                 ->render();
             }
 
             if($element['form'] == "datetimepicker") {
-                (new Input("forms/datetimepicker", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                (new Form("forms/datetimepicker", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                 ->render();
             }
 
             if($element['form'] == "switch") {
-                (new Input("forms/switch", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
+                (new Form("forms/switch", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                     ->render();
             }
         }
