@@ -47,9 +47,7 @@ class StaticPagesController extends PublicController
                 'title' => 'Блог | ' . $pageParameters['title'],
             ];
 
-            $view = 'static_pages';
-
-            return new View($view, $pageData);
+            return new View('static_pages', $pageData);
 
         } else {
             Redirect::to('/404');

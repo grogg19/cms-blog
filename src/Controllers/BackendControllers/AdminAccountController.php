@@ -52,9 +52,7 @@ class AdminAccountController extends AdminController
             'formFields' => $formFields
         ];
 
-        $view = 'admin.account.edit_account';
-
-        return new View($view, $dataUser);
+        return new View('admin.account.edit_account', $dataUser);
     }
 
     /**
@@ -70,9 +68,7 @@ class AdminAccountController extends AdminController
             'token' => generateToken()
         ];
 
-        $view = 'admin.account.view_account';
-
-        return new View($view, $dataUser);
+        return new View('admin.account.view_account', $dataUser);
     }
 
     /**

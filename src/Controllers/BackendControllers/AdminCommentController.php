@@ -63,9 +63,7 @@ class AdminCommentController extends AdminController
             $dataListComments['paginator'] = $comments;
         }
 
-        $view = 'admin.comments.list';
-
-        return new View($view, $dataListComments);
+        return new View('admin.comments.list', $dataListComments);
     }
 
     /**

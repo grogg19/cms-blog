@@ -46,9 +46,7 @@ class AdminSettingsController extends AdminController
             'parameters' => json_decode($settings->value),
         ];
 
-        $view = 'admin.settings.settings_admin';
-
-        return new View($view, $dataSettings);
+        return new View('admin.settings.settings_admin', $dataSettings);
 
     }
 

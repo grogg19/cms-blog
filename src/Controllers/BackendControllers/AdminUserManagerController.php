@@ -68,9 +68,7 @@ class AdminUserManagerController extends AdminController
             $dataUsersList['paginator'] = $users;
         }
 
-        $view = 'admin.users_manager.list';
-
-        return new View($view, $dataUsersList);
+        return new View('admin.users_manager.list', $dataUsersList);
     }
 
     /**

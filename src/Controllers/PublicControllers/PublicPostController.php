@@ -58,14 +58,16 @@ class PublicPostController extends PublicController
         ];
 
         if (!empty($this->request->post('page'))) {
-            $view = 'partials.posts_items';
-            $postsData['ajax'] = true;
-        } else {
-            $view = 'posts';
-            $postsData['title'] = 'Курсовая работа CMS для Блога';
-        }
 
-        return new View($view, $postsData);
+            $postsData['ajax'] = true;
+            return new View('partials.posts_items', $postsData);
+
+        } else {
+
+            $postsData['title'] = 'Курсовая работа CMS для Блога';
+            return new View('posts', $postsData);
+
+        }
     }
 
     /**
@@ -121,9 +123,7 @@ class PublicPostController extends PublicController
             'avatarPath' => $avatarPath
         ];
 
-        $view = 'post';
-
-        return new View($view, $postData);
+        return new View('post', $postData);
     }
 
 }

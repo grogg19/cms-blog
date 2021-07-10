@@ -23,7 +23,6 @@ use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\QueryException;
 use App\Uploader\Upload;
-use App\Model\User;
 
 /**
  * Class AdminPostController
@@ -90,9 +89,7 @@ class AdminPostController extends AdminController
             $dataListPosts['paginator'] = $posts;
         }
 
-        $view = 'admin.posts.list_posts';
-
-        return new View($view, $dataListPosts);
+        return new View('admin.posts.list_posts', $dataListPosts);
     }
 
     /**
@@ -118,9 +115,7 @@ class AdminPostController extends AdminController
             'formFields' => $formFields
         ];
 
-        $view = 'admin.posts.create_post';
-
-        return new View($view, $dataPost);
+        return new View('admin.posts.create_post', $dataPost);
     }
 
     /**
@@ -163,9 +158,7 @@ class AdminPostController extends AdminController
                 'formFields' => $formFields
             ];
 
-            $view = 'admin.posts.edit_post';
-
-            return new View($view, $dataPost);
+            return new View('admin.posts.edit_post', $dataPost);
 
         } else {
             $this->toast->setToast('info', 'Вам доступны для редактирования только ваши статьи');

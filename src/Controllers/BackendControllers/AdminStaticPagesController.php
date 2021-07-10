@@ -78,9 +78,7 @@ class AdminStaticPagesController extends AdminController
             $dataListStaticPages['paginator'] = $pages;
         }
 
-        $view = 'admin.static_pages.list_pages_template';
-
-        return new View($view, $dataListStaticPages);
+        return new View('admin.static_pages.list_pages_template', $dataListStaticPages);
     }
 
     /**
@@ -100,9 +98,7 @@ class AdminStaticPagesController extends AdminController
             'formFields' => $formFields
         ];
 
-        $view = 'admin.static_pages.create_page';
-
-        return new View($view, $dataPage);
+        return new View('admin.static_pages.create_page', $dataPage);
     }
 
     /**
@@ -131,9 +127,7 @@ class AdminStaticPagesController extends AdminController
             'formFields' => $formFields
         ];
 
-        $view = 'admin.static_pages.edit_page';
-
-        return new View($view, $dataPage);
+        return new View('admin.static_pages.edit_page', $dataPage);
     }
 
     /**

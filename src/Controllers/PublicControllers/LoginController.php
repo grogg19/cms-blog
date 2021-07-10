@@ -40,9 +40,7 @@ class LoginController extends PublicController
 
         $fields['fieldsForms'] = (new FormRenderer($fields['fields']))->render();
 
-        $view = 'login';
-
-        return new View($view, $fields);
+        return new View('login', $fields);
     }
 
     /**
