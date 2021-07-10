@@ -942,7 +942,7 @@
                         $this.text($btnAttr);
                     }
                     //$this.addClass('dx-btn-loaded');
-                    if(!$this.hasClass('dx-btn-loaded')){
+                    if (!$this.hasClass('dx-btn-loaded')){
                         loadMorePostsButton();
                     }
                 }, 2000);
@@ -1609,7 +1609,7 @@
                         const form = document.querySelector('.dx-dropzone');
                         const formData = new FormData(form);
 
-                        if(postId == null) {
+                        if (postId == null) {
                             formData.append("_token",  _token.value );
                         } else {
                             formData.append("postId", postId.value );
@@ -1624,16 +1624,13 @@
 
                         let result = await response.json();
 
-                        if(result.files != '') {
+                        if (result.files !== '') {
                             result.files.forEach(function(image) {
                                 var mockFile = { name: image.fileName, size: image.fileSize };
                                 myDropzone.displayExistingFile(mockFile, image.path);
-
                             });
                         }
-
                     }
-
                 });
 
 
@@ -1662,7 +1659,7 @@
 
                     const formData = new FormData(form);
 
-                    if(file.hasOwnProperty('upload')) {
+                    if (file.hasOwnProperty('upload')) {
                         formData.append("imgToDelete", file.upload.filename );
                     } else {
                         formData.append("imgToDelete", file.name );
@@ -1695,7 +1692,7 @@
                     const form = document.querySelector('.dx-dropzone');
                     const formData = new FormData(form);
 
-                    if(postId == null) {
+                    if (postId == null) {
                         formData.append("_token",  _token.value );
                     } else {
                         formData.append("postId", postId.value );
@@ -1710,7 +1707,7 @@
 
                     let result = await response.json();
 
-                    if(result.files != '') {
+                    if (result.files != '') {
                         result.files.forEach(function(image) {
                             var mockFile = { name: image.fileName, size: image.fileSize };
                             myDropzone.displayExistingFile(mockFile, image.path);

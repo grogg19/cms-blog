@@ -59,7 +59,7 @@ class AdminSettingsController extends AdminController
      */
     public function saveSettings(): string
     {
-        if(empty($this->request->post()) || !checkToken()) {
+        if (empty($this->request->post()) || !checkToken()) {
             return $this->toast->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
@@ -72,11 +72,11 @@ class AdminSettingsController extends AdminController
 
         $resultValidation = (new Validator($data, SystemSetting::class, $rules))->makeValidation();
 
-        if(!empty($resultValidation['error'])) {
+        if (!empty($resultValidation['error'])) {
             return $this->toast->getToast('warning', $resultValidation['error']['per_page']['errorMessage']);
         }
 
-        if((new SystemSettingsRepository())->updateSystemSettings('preferences', $data)) {
+        if ((new SystemSettingsRepository())->updateSystemSettings('preferences', $data)) {
 
             $this->toast->setToast('success', 'Настройки успешно сохранены');
 

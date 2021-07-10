@@ -37,7 +37,7 @@ class StaticPagesController extends PublicController
 
         $page = $this->staticPages->getPageByUrl($url);
 
-        if($page->getParameter('isHidden') != 0 && $page instanceof Page) {
+        if ($page->getParameter('isHidden') != 0 && $page instanceof Page) {
             $content = cleanJSTags($page->getHtmlContent());
             $pageParameters = $page->getParameters();
 

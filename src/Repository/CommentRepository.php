@@ -25,7 +25,7 @@ class CommentRepository extends Repository
      */
     public function getAllComments(string $orderByDirection = 'asc', string $quantity = '20', int $page = 1)
     {
-        if($quantity == 'all') {
+        if ($quantity == 'all') {
             return Comment::orderBy('has_moderated',$orderByDirection)->get();
         }
 
@@ -107,7 +107,7 @@ class CommentRepository extends Repository
     public function getAllowableCommentsByPostId($postId): Collection
     {
 
-        if((new PublicUserController())->checkUserForComments()) {
+        if ((new PublicUserController())->checkUserForComments()) {
 
             return $this->getAllCommentsByPostId($postId);
         }

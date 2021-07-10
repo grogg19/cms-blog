@@ -21,11 +21,11 @@ class PublicCommentController extends PublicController
     public function addComment(): string
     {
 
-        if((new Auth())->checkAuthorization()['access'] === 'denied') {
+        if ((new Auth())->checkAuthorization()['access'] === 'denied') {
             return $this->toast->getToast('warning', 'Оставлять комментарии могут только зарегистрированные пользователи');
         }
 
-        if(empty($this->request->post()) || !checkToken()) {
+        if (empty($this->request->post()) || !checkToken()) {
             return $this->toast->getToast('warning', 'Нет входящих данных, обновите страницу');
         }
 
@@ -46,14 +46,14 @@ class PublicCommentController extends PublicController
         $resultValidateForms = $validator->makeValidation();
 
         // если есть ошибки, возвращаем Тост с ошибкой
-        if(!empty($resultValidateForms['error'])) {
+        if (!empty($resultValidateForms['error'])) {
             return $this->toast->getToast('warning', 'Ошибка записи данных комментария');
         }
 
         $comment = new Comment($commentDataToSave);
         $post = (new PostRepository())->getPostById((int) $this->request->post('postId'));
 
-        if($post !== null) {
+        if ($post !== null) {
 
             $post->comments()->save($comment);
 

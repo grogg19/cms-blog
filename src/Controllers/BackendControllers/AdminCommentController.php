@@ -24,7 +24,7 @@ class AdminCommentController extends AdminController
     {
         parent::__construct();
 
-        if(!$this->auth->checkPermissons(['admin', 'content-manager'])) {
+        if (!$this->auth->checkPermissons(['admin', 'content-manager'])) {
 
             $this->toast->setToast('info', 'У вас недостаточно прав для этого действия');
 
@@ -46,7 +46,7 @@ class AdminCommentController extends AdminController
 
         $comments = (new CommentRepository())->getAllComments('asc', $quantity, $page);
 
-        if($comments instanceof LengthAwarePaginator) {
+        if ($comments instanceof LengthAwarePaginator) {
             $query = (!empty($quantity)) ? '?quantity=' . $quantity : '';
             $comments->setPath('comments' . $query);
         }
@@ -59,7 +59,7 @@ class AdminCommentController extends AdminController
             'quantity' => $quantity
         ];
 
-        if($quantity !== 'all') {
+        if ($quantity !== 'all') {
             $dataListComments['paginator'] = $comments;
         }
 
@@ -74,13 +74,13 @@ class AdminCommentController extends AdminController
      */
     public function toApproveComment(): string
     {
-        if(empty($this->request->post('commentId')) || !checkToken()) {
+        if (empty($this->request->post('commentId')) || !checkToken()) {
             return $this->toast->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
         $commentRepository = new CommentRepository();
         $comment = $commentRepository->setHasModeratedApprove((int) $this->request->post('commentId'));
-        if($comment == null) {
+        if ($comment == null) {
             return $this->toast->getToast('warning', 'Комментарий не найден');
         }
 
@@ -96,14 +96,14 @@ class AdminCommentController extends AdminController
      */
     public function toRejectComment(): string
     {
-        if(empty($this->request->post('commentId')) || !checkToken()) {
+        if (empty($this->request->post('commentId')) || !checkToken()) {
             return $this->toast->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
         $commentRepository = new CommentRepository();
         $comment = $commentRepository->setHasModeratedReject((int) $this->request->post('commentId'));
 
-        if($comment == null) {
+        if ($comment == null) {
             return $this->toast->getToast('warning', 'Комментарий не найден');
         }
 

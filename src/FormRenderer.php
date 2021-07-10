@@ -39,7 +39,7 @@ class FormRenderer
 
             $valueAttribute = (!empty($data)) ?  $data->$key : '';
 
-            if($element['form'] == "input") {
+            if ($element['form'] == "input") {
 
                 (new Form("forms/input",
                     [
@@ -50,22 +50,22 @@ class FormRenderer
 
             }
 
-            if($element['form'] == "textarea") {
+            if ($element['form'] == "textarea") {
                 (new Form("forms/textarea", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                     ->render();
             }
 
-            if($element['form'] == "editor") {
+            if ($element['form'] == "editor") {
                 (new Form("forms/editor", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                 ->render();
             }
 
-            if($element['form'] == "datetimepicker") {
+            if ($element['form'] == "datetimepicker") {
                 (new Form("forms/datetimepicker", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                 ->render();
             }
 
-            if($element['form'] == "switch") {
+            if ($element['form'] == "switch") {
                 (new Form("forms/switch", ['element' => [$key => $element], 'valueAttribute' => $valueAttribute]))
                     ->render();
             }

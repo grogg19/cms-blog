@@ -20,7 +20,7 @@ class FilesList implements PageListCompatible
      */
     public function __construct()
     {
-        if(!$this->checkOwnerDir()) {
+        if (!$this->checkOwnerDir()) {
             throw new HttpException('Не хватает прав на запись в каталог ' . $this->filesDirectory, 503);
         }
     }
@@ -47,7 +47,7 @@ class FilesList implements PageListCompatible
      */
     private function checkOwnerDir(): bool
     {
-        if(!file_exists(APP_DIR . $this->filesDirectory)) {
+        if (!file_exists(APP_DIR . $this->filesDirectory)) {
             mkdir(APP_DIR . $this->filesDirectory, 0775);
         }
         return true;

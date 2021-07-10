@@ -37,7 +37,7 @@ class Router
     public function dispatch()
     {
         foreach ($this->routes as $route) {
-            if($route->match(strtolower($_SERVER['REQUEST_METHOD']), $_SERVER['REQUEST_URI']) == true)
+            if ($route->match(strtolower($_SERVER['REQUEST_METHOD']), $_SERVER['REQUEST_URI']) == true)
             {
                 return $route->run();
             }
@@ -62,7 +62,7 @@ class Router
     public function isRouteExist(string $uri): bool
     {
         foreach ($this->routes as $route) {
-            if($route->getPath() === $uri) {
+            if ($route->getPath() === $uri) {
                 return true;
             }
         }

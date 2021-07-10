@@ -20,7 +20,7 @@ class Redirect
     {
         $url = new Url();
 
-        if($pathToRedirect !== $_SERVER['REQUEST_URI']) {
+        if ($pathToRedirect !== $_SERVER['REQUEST_URI']) {
             header("Location: " . $url->baseUrl() . $pathToRedirect );
         }
     }

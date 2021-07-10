@@ -39,7 +39,7 @@ class PostRepository extends Repository
      */
     public function getAllPosts(string $sortDirection = 'desc', string $quantity = '20')
     {
-        if($quantity !== 'all') {
+        if ($quantity !== 'all') {
             $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
 
             return ModelPost::orderBy('published_at',$sortDirection)
@@ -97,7 +97,7 @@ class PostRepository extends Repository
      */
     public function getPostsByUserId(int $userId, string $quantity, string $sortDirection = 'desc')
     {
-        if($quantity !== 'all') {
+        if ($quantity !== 'all') {
             $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
 
             return ModelPost::where('user_id', $userId)
@@ -146,7 +146,7 @@ class PostRepository extends Repository
     public function saveToDb(Request $request, User $user = null): ModelPost
     {
 
-        if(!empty($request->post('idPost'))) {
+        if (!empty($request->post('idPost'))) {
             $post = $this->getPostById((int) $request->post('idPost'));
         } else {
             $post = $this->createNewPost();
@@ -162,9 +162,7 @@ class PostRepository extends Repository
 
         $post->save();
 
-
-
-        if(!empty(Cookie::getArray('uploadImages')) && $this->session->get('postBusy') == true) {
+        if (!empty(Cookie::getArray('uploadImages')) && $this->session->get('postBusy') == true) {
 
             $sort = 0;
             $configImages = $this->session->get('config')->getConfig('images');
@@ -172,7 +170,7 @@ class PostRepository extends Repository
             foreach (Cookie::getArray('uploadImages') as $imageFileName) {
                 $pathToFile = $_SERVER['DOCUMENT_ROOT'] . $configImages['pathToUpload'] . DIRECTORY_SEPARATOR . $imageFileName;
 
-                if(file_exists($pathToFile)) {
+                if (file_exists($pathToFile)) {
                     $data[] = [
                         'file_name' => $imageFileName,
                         'post_id' => $post->id,

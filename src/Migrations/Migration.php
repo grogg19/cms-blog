@@ -37,7 +37,7 @@ class Migration
         $allMigrationsFiles = glob($migrationsFolder . DIRECTORY_SEPARATOR . '*.sql');
 
         // проверяем наличие таблицы migrations
-        if($this->migration->checkMigrationsTable()) {
+        if ($this->migration->checkMigrationsTable()) {
             // Если таблицы нет, то выводим список всех файлов миграций
             return $allMigrationsFiles;
         }

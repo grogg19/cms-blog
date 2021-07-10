@@ -24,11 +24,11 @@ final class Config
     {
         $dir = $_SERVER['DOCUMENT_ROOT'] . "/configs/";
 
-        if($handle = opendir($dir)) {
+        if ($handle = opendir($dir)) {
             while (false !== ($file = readdir($handle))) {
                 if ($file != "." && $file != "..") {
                     $filename = explode('.',$file);
-                    if(file_exists($dir . $file) && $filename[1] = "php")
+                    if (file_exists($dir . $file) && $filename[1] = "php")
                     {
                         $this->configs[$filename[0]] = require_once $dir . $file;
                     }
@@ -42,7 +42,7 @@ final class Config
      */
     public static function getInstance(): Config
     {
-        if(null === static::$instance) {
+        if (null === static::$instance) {
             static::$instance = new static();
         }
 

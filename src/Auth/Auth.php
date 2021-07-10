@@ -48,11 +48,11 @@ class Auth
      */
     public function isActivated(User $user = null): bool
     {
-        if($user !== null) {
+        if ($user !== null) {
             return !($user->is_activated === 0);
         }
 
-        if($this->session->get('userId') === null) {
+        if ($this->session->get('userId') === null) {
             $user = (new UserRepository())->getUserByHash($this->getHashUser());
         } else {
             $user = (new UserRepository())->getUserById($this->session->get('userId'));
@@ -118,7 +118,7 @@ class Auth
      */
     public function checkPersistCode(User $user): bool
     {
-        if(isset($_COOKIE['persistCode'])) {
+        if (isset($_COOKIE['persistCode'])) {
             return $user->persist_code === $_COOKIE['persistCode'];
         }
         return false;
@@ -131,7 +131,7 @@ class Auth
      */
     public function checkPermissons(array $roles): bool
     {
-        if(in_array($this->session->get('userRole'), $roles)) {
+        if (in_array($this->session->get('userRole'), $roles)) {
            return true;
         }
         return false;
@@ -144,7 +144,7 @@ class Auth
      */
     public function checkSuperUser(User $user): bool
     {
-        if($user->role->code === 'admin' &&  $user->is_superuser === 1) {
+        if ($user->role->code === 'admin' &&  $user->is_superuser === 1) {
             return true;
         }
         return false;
@@ -155,7 +155,7 @@ class Auth
      */
     public function checkAuthorization(): array
     {
-        if($this->getHashUser() == null) {
+        if ($this->getHashUser() == null) {
             return [
                 'access' => 'denied',
                 'message' => 'Вы не авторизованы'
@@ -164,14 +164,14 @@ class Auth
 
         $this->setAuthorized($this->getHashUser());
 
-        if(!$this->isAuthorized()) {
+        if (!$this->isAuthorized()) {
             return [
                 'access' => 'denied',
                 'message' => 'Вы не авторизованы'
             ];
         }
 
-        if(!$this->isActivated()) {
+        if (!$this->isActivated()) {
             return [
                 'access' => 'denied',
                 'message' => 'Ваша учетная запись недоступна'

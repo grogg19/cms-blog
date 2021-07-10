@@ -22,7 +22,7 @@ class MigrationMySql implements Migratable
         (new View('migrating_process', ['message' => 'Начинаем миграцию...']))->render();
 
         foreach ($files as $file) {
-            if(file_exists($file)) {
+            if (file_exists($file)) {
                 $splObject = new SplFileObject($file);
                 (new View('migrating_process', ['message' => 'Записываем данные из ' . $splObject->getBasename()]))->render();
 
@@ -34,7 +34,7 @@ class MigrationMySql implements Migratable
                 // Выполняем sql
                 foreach ($sqlArray as $sql) {
                     $sql = trim($sql);
-                    if(!empty($sql)) {
+                    if (!empty($sql)) {
                         DB::connection()->statement($sql . ';');
                     }
                 }

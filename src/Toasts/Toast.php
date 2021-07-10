@@ -33,7 +33,7 @@ class Toast
      */
     public function index()
     {
-        if(!empty($this->request->post('typeToast'))
+        if (!empty($this->request->post('typeToast'))
             && !empty($this->request->post('dataToast'))
             && checkToken()
         ) {
@@ -73,7 +73,7 @@ class Toast
      */
     private function issetToast(): bool
     {
-        if(!empty(Cookie::get('toast'))) {
+        if (!empty(Cookie::get('toast'))) {
             return true;
         } else {
             return false;
@@ -105,13 +105,12 @@ class Toast
         Cookie::delete('toast');
     }
 
-
     /**
      * Метод проверяет наличие тоста в куках и при наличии выводит его и удаляет его из куки
      */
     public function checkToast(): void
     {
-        if($this->issetToast()) {
+        if ($this->issetToast()) {
 
             $type = json_decode(Cookie::get('toast'))->typeToast;
             $message = json_decode(Cookie::get('toast'))->dataToast->message;

@@ -47,7 +47,7 @@ class BetweenRange extends Validation
     {
         $lengthDataField = mb_strlen($this->data); // длина строки
 
-        if(!in_array($lengthDataField, range($this->range[0], $this->range[1]))) {
+        if (!in_array($lengthDataField, range($this->range[0], $this->range[1]))) {
             $this->message = 'Значение должно быть от ' . $this->range[0] . ' до ' . $this->range[1];
             return false;
         }

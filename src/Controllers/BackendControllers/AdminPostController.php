@@ -45,11 +45,11 @@ class AdminPostController extends AdminController
 
         $this->postRepository = new PostRepository();
 
-        if(!empty($this->session->get('postId'))) {
+        if (!empty($this->session->get('postId'))) {
             $this->onCloseCleanImage();
         }
 
-        if(!$this->auth->checkPermissons(['admin', 'content-manager'])) {
+        if (!$this->auth->checkPermissons(['admin', 'content-manager'])) {
 
             $this->toast->setToast('info', 'У вас недостаточно прав для этого действия');
 
@@ -67,14 +67,14 @@ class AdminPostController extends AdminController
         $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
         $user = (new UserRepository())->getCurrentUser();
 
-        if($user->role->code == 'admin') {
+        if ($user->role->code == 'admin') {
             $posts = $this->postRepository->getAllPosts('desc', $quantity);
         } else {
             $posts = $this->postRepository
                 ->getPostsByUserId($user->id, $quantity);
         }
 
-        if($posts instanceof LengthAwarePaginator) {
+        if ($posts instanceof LengthAwarePaginator) {
             $query = (!empty($quantity)) ? '?quantity=' . $quantity : '';
             $posts->setPath('posts' . $query);
         }
@@ -86,7 +86,7 @@ class AdminPostController extends AdminController
             'quantity' => $quantity
         ];
 
-        if($quantity !== 'all') {
+        if ($quantity !== 'all') {
             $dataListPosts['paginator'] = $posts;
         }
 
@@ -101,7 +101,7 @@ class AdminPostController extends AdminController
      */
     public function createPost(): Renderable
     {
-        if(!empty(Cookie::getArray('uploadImages'))) {
+        if (!empty(Cookie::getArray('uploadImages'))) {
             (new ImageManager())->imageDestructor(Cookie::getArray('uploadImages'));
             Cookie::delete('uploadImages');
         }
@@ -136,7 +136,7 @@ class AdminPostController extends AdminController
         $user = (new UserRepository())->getCurrentUser();
 
         // если postId == 0, редирект на страницу создания поста
-        if($postId == 0) {
+        if ($postId == 0) {
             Redirect::to('/admin/blog/posts/create');
         }
 
@@ -144,11 +144,11 @@ class AdminPostController extends AdminController
         $post = $this->postRepository->getPostById($postId);
 
         // если такого поста нет, выбрасываем исключение 404
-        if($post == null) {
+        if ($post == null) {
             throw new NotFoundException('Такого поста не существует');
         }
 
-        if($post->user_id == $this->session->get('userId') || $user->role->permissions == 1)
+        if ($post->user_id == $this->session->get('userId') || $user->role->permissions == 1)
         {
             $form = $this->getFields();
 
@@ -181,7 +181,7 @@ class AdminPostController extends AdminController
      */
      public function savePost(): string
     {
-        if(!checkToken()) {
+        if (!checkToken()) {
             return $this->toast->getToast('warning', 'Неверный токен, обновите страницу');
         }
 
@@ -190,7 +190,7 @@ class AdminPostController extends AdminController
         $validateResult = $validator->makeValidation();
 
         // Если валидация полей не прошла и вернулся массив с ошибками
-        if(!empty($validateResult)) {
+        if (!empty($validateResult)) {
 
             // то возвращаем этот массив обработчику в клиент в формате json
             return json_encode($validateResult);
@@ -204,7 +204,7 @@ class AdminPostController extends AdminController
                 $user = (new UserRepository())->getCurrentUser();
                 $post = $this->postRepository->saveToDb($this->request, $user);
 
-                if(empty($this->request->post('idPost'))) {
+                if (empty($this->request->post('idPost'))) {
                     $this->mailNotification($post);
                 }
 
@@ -258,12 +258,12 @@ class AdminPostController extends AdminController
     public function imgUpload(): string
     {
 
-        if(!empty($this->request->post('imgToDelete')))
+        if (!empty($this->request->post('imgToDelete')))
         {
             return $this->imgDelete($this->request->post('imgToDelete'));
         }
 
-        if(!empty($this->request->files())) {
+        if (!empty($this->request->files())) {
             $imageUploader = new Upload($this->request->files());
 
             return json_encode([$imageUploader->upload()]);
@@ -278,7 +278,7 @@ class AdminPostController extends AdminController
      */
     public function imgDelete($fileName): string
     {
-        if(!empty(Cookie::getArray('uploadImages'))) {
+        if (!empty(Cookie::getArray('uploadImages'))) {
 
             $cookieArray = Cookie::getArray('uploadImages');
 
@@ -304,7 +304,7 @@ class AdminPostController extends AdminController
      */
     public function onCloseCleanImage(): void
     {
-        if(!empty(Cookie::getArray('uploadImages'))) {
+        if (!empty(Cookie::getArray('uploadImages'))) {
             (new ImageManager())->cacheImageClean();
             $this->session->remove('postBusy');
         }

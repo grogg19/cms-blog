@@ -20,7 +20,7 @@ function listenButtonClick() {
     const buttons = document.querySelectorAll('[type=submit]');
     const quill = document.querySelector('#form_editor');
 
-    if(buttons) {
+    if (buttons) {
         buttons.forEach(button => {
             button.addEventListener('click', async (e) => {
                 e.preventDefault();
@@ -39,7 +39,7 @@ function listenButtonClick() {
 
                 let result = await response.json();
 
-                if(result.url) {
+                if (result.url) {
                     location.href = result.url;
                 }
 
@@ -54,7 +54,7 @@ function listenButtonClick() {
                     jump(Object.keys(result.error).shift());
                 }
 
-                if(result.toast) {
+                if (result.toast) {
                     await getToast(result.toast.typeToast, result.toast.dataToast);
                 }
                 //console.log(result);
@@ -230,12 +230,12 @@ if(elementsForSend) {
             e.preventDefault();
 
             const formData = new FormData();
-            if(document.querySelector('[name = _token]')) {
+            if (document.querySelector('[name = _token]')) {
                 formData.append("_token", document.querySelector('[name = _token]').value);
             }
             if (element.getAttribute('data-for-send')) {
                 formData.append("user", element.getAttribute('data-for-send'));
-                if(element.getAttribute('type') === 'checkbox') {
+                if (element.getAttribute('type') === 'checkbox') {
                     formData.append(element.getAttribute('data-field'), element.checked);
                 } else {
                     formData.append(element.getAttribute('data-field'), element.value);
@@ -249,7 +249,7 @@ if(elementsForSend) {
 
             let result = await response.json();
 
-            if(result.toast) {
+            if (result.toast) {
                 await getToast(result.toast.typeToast,  result.toast.dataToast);
             }
         });
@@ -291,15 +291,15 @@ if (requestButtons) {
 
             let result = await response.json();
 
-            if(result.url) {
+            if (result.url) {
                 location.href = result.url;
             }
 
-            if(result.comment) {
+            if (result.comment) {
                 await commentApproved(result.comment);
             }
 
-            if(result.toast) {
+            if (result.toast) {
                 await getToast(result.toast.typeToast,  result.toast.dataToast);
             }
 
@@ -329,7 +329,7 @@ let getToast = async (type, data) => {
 
     let result = await response.text();
 
-    if(result !== '' && result !== 'undefined') {
+    if (result !== '' && result !== 'undefined') {
 
         await executeToast(result);
 
@@ -364,7 +364,7 @@ const jump = async (h) => {
 // при добавлении комментария вывести его в конце списка
 // const addComment = async (comment) => {
 //     let commentBlock = document.querySelector('.comments-block');
-//     if(commentBlock) {
+//     if (commentBlock) {
 //         commentBlock.appendChild(comment);
 //     }
 // };
@@ -401,7 +401,7 @@ const loadMorePostsButton = async () => {
 
     let result = await response.text();
 
-    if(result.length > 1) {
+    if (result.length > 1) {
         document.querySelector('#list-posts').insertAdjacentHTML('beforeend', result);
     } else {
         postButton.textContent = "Постов больше нет";
@@ -414,12 +414,12 @@ const subscribeBlock = document.querySelector('.subscribe-block');
 
 if(subscribeElement) {
     subscribeElement.forEach(element => {
-        if(element.getAttribute('type') === 'checkbox') {
+        if (element.getAttribute('type') === 'checkbox') {
             $(element).change( async (e) => {
                 await getSubscribeResponse(element);
             });
         }
-        if(element.getAttribute('type') === 'button') {
+        if (element.getAttribute('type') === 'button') {
             $(element).click( async (e) => {
                 await getSubscribeResponse(element);
             });
@@ -432,7 +432,7 @@ const getSubscribeResponse = async (element) => {
         const form = document.querySelector('#subscribe_form');
         const formData = new FormData(form);
 
-        if(element.getAttribute('type') === 'checkbox') {
+        if (element.getAttribute('type') === 'checkbox') {
             formData.append('emailSubscribe', element.getAttribute('data-email'));
             formData.append('switch', element.checked);
         }
@@ -444,17 +444,17 @@ const getSubscribeResponse = async (element) => {
 
         let result = await response.json();
 
-        if(result.url) {
+        if (result.url) {
             location.href = result.url;
         }
 
-        if(result.toast) {
+        if (result.toast) {
             await getToast(result.toast.typeToast,  result.toast.dataToast);
         }
 
-        if(result.toast.typeToast === 'success') {
+        if (result.toast.typeToast === 'success') {
 
-            if(subscribeBlock) {
+            if (subscribeBlock) {
                 setTimeout(function () {
                     subscribeBlock.remove();
                 }, 1000)
@@ -476,7 +476,7 @@ const checkToast = async () => {
 
     let result = await response.text();
 
-    if(result !== '' && result !== 'undefined' && result !== null) {
+    if (result !== '' && result !== 'undefined' && result !== null) {
         await executeToast(result);
     }
 }

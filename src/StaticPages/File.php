@@ -23,8 +23,7 @@ class File implements PageCompatible
      */
     public function __construct(string $pathToFile= '')
     {
-        if(!empty($pathToFile) && (file_exists($pathToFile))) {
-
+        if (!empty($pathToFile) && (file_exists($pathToFile))) {
             $this->file = new SplFileObject($pathToFile, 'r+');
             $this->getContent();
         }
@@ -37,13 +36,13 @@ class File implements PageCompatible
      */
     public function create(string $url): void
     {
-        if($this->checkExistUrl($url)) {
+        if ($this->checkExistUrl($url)) {
             throw new Exception('Такой url уже существует', 405);
         }
 
         $pattern = '/^[a-z0-9_\-\.\/]+$/i';
 
-        if($url[0] === '/' && preg_match($pattern, $url, $fileName)) {
+        if ($url[0] === '/' && preg_match($pattern, $url, $fileName)) {
 
             $fileName = substr($url, 1, strlen($url));
             $fileName = str_replace(['/', '.', ' '], ['-', '', ''], $fileName) ;
@@ -69,7 +68,7 @@ class File implements PageCompatible
      */
     public function getData(): array
     {
-        if(empty($this->file) && empty($this->parameters)) {
+        if (empty($this->file) && empty($this->parameters)) {
             throw new Exception('Объект не найден', 400);
         } else {
             return $this->parameters;
@@ -102,7 +101,7 @@ class File implements PageCompatible
      */
     public function delete(): bool
     {
-        if(file_exists($this->file->getRealPath())) {
+        if (file_exists($this->file->getRealPath())) {
             unlink($this->file->getRealPath());
             return true;
         }
@@ -153,7 +152,7 @@ class File implements PageCompatible
     {
         $filesList = new FilesList();
         foreach ($filesList->list() as $item) {
-            if($item->parameters['url'] === $url) {
+            if ($item->parameters['url'] === $url) {
                 return true;
             }
         }

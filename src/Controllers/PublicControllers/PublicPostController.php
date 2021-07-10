@@ -57,7 +57,7 @@ class PublicPostController extends PublicController
             'token' => generateToken()
         ];
 
-        if(!empty($this->request->post('page'))) {
+        if (!empty($this->request->post('page'))) {
             $view = 'partials.posts_items';
             $postsData['ajax'] = true;
         } else {
@@ -75,7 +75,7 @@ class PublicPostController extends PublicController
      */
     public function latestPosts(string $view = ''): Renderable
     {
-        if(empty($view)) {
+        if (empty($view)) {
             $view = 'partials.latest_posts';
         }
         $data = [
@@ -99,11 +99,11 @@ class PublicPostController extends PublicController
         $userRepository = new UserRepository();
         $avatarPath = $userRepository->getUserAvatarPath();
 
-        if(empty($post)) {
+        if (empty($post)) {
             Redirect::to('/404');
         }
 
-        if(session_status() == 2) {
+        if (session_status() == 2) {
             $user = $userRepository->getCurrentUser();
             $userRole = $user->role->code;
         }

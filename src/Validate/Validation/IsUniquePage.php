@@ -42,11 +42,11 @@ class IsUniquePage extends Validation
     {
         $router = require APP_DIR . '/routes/web.php';
 
-        if(!$router instanceof Router) {
+        if (!$router instanceof Router) {
             return false;
         }
 
-        if(!$router->isRouteExist($this->data)) {
+        if (!$router->isRouteExist($this->data)) {
             return true;
         };
 

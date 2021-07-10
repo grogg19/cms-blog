@@ -37,7 +37,7 @@ class PublicSubscribeController extends Controller
      */
     public function subscribe(): string
     {
-        if(empty($this->request->post('emailSubscribe')) && !checkToken()) {
+        if (empty($this->request->post('emailSubscribe')) && !checkToken()) {
             return $this->toast->getToast('warning', 'Данные недействительны, обновите страницу');
         }
 
@@ -50,7 +50,7 @@ class PublicSubscribeController extends Controller
         // Проверка введеного email
         $resultValidation = $this->getValidate($data);
 
-        if(empty($resultValidation['error'])) {
+        if (empty($resultValidation['error'])) {
 
             $subscriber = $this->subscribeRepository->createSubscriber($email);
             $subscriber->save();
@@ -102,14 +102,14 @@ class PublicSubscribeController extends Controller
      */
     public function unsubscribeByLink()
     {
-        if(empty($this->request->get('email')) || empty($this->request->get('code'))) {
+        if (empty($this->request->get('email')) || empty($this->request->get('code'))) {
             $this->toast->setToast('warning', 'Не хватает данных, чтобы отписаться');
             Redirect::to('/');
         }
         $email = (string) $this->request->get('email');
         $code = (string) $this->request->get('code');
 
-        if($this->unsubscribe($email, $code)) {
+        if ($this->unsubscribe($email, $code)) {
             $this->toast->setToast('success', 'Вы успешно отписались');
         } else {
             $this->toast->setToast('warning', 'В данный момент невозможно отписаться');

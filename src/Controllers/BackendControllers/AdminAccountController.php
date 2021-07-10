@@ -91,7 +91,7 @@ class AdminAccountController extends AdminController
      */
     public function updateUserProfile(): string
     {
-        if(empty($this->request->post()) || !checkToken() || empty($this->session->get('userId'))) {
+        if (empty($this->request->post()) || !checkToken() || empty($this->session->get('userId'))) {
             //  возвращаем сообщение об ошибке записи в БД.
             return $this->toast->getToast('warning', 'Невозможно обновить данные пользователя');
         }
@@ -102,7 +102,7 @@ class AdminAccountController extends AdminController
         $data = $this->request->post();
 
         // Подготовка правил для валидации
-        if(!empty($data['password'])) {
+        if (!empty($data['password'])) {
             $ownRules = [
                 'first_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/iu'],
                 'last_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/iu'],
@@ -123,7 +123,7 @@ class AdminAccountController extends AdminController
         $resultValidateForms = $validator->makeValidation();
 
         // если есть ошибки
-        if(isset($resultValidateForms['error']))  {
+        if (isset($resultValidateForms['error']))  {
 
             // возвращаем результат валидации в json
             return json_encode($resultValidateForms);
@@ -137,7 +137,7 @@ class AdminAccountController extends AdminController
         $uploadAvatar = $this->uploadAvatar($user); // Пробуем загрузить аватарку
 
         // если получили сообщение об ошибке, то выведем его в блок аватара
-        if(isset($uploadAvatar->error)) {
+        if (isset($uploadAvatar->error)) {
             $error = implode(', ', $uploadAvatar->error);
             return $this->toast->getToast('warning', $error);
 
@@ -147,7 +147,7 @@ class AdminAccountController extends AdminController
         }
 
         // записываем изменения в БД
-        if($this->userRepository->updateUser($user, $data)) {
+        if ($this->userRepository->updateUser($user, $data)) {
 
             $this->toast->setToast('success', 'Изменения успешно сохранены.');
 
@@ -170,9 +170,9 @@ class AdminAccountController extends AdminController
 
         // Очищаем post - массив от пустых элементов
         foreach ($this->request->post() as $key => $field) {
-            if($key === 'self_description') // исключение, это поле может быть пустым
+            if ($key === 'self_description') // исключение, это поле может быть пустым
                 continue;
-            if(empty($field)) {
+            if (empty($field)) {
                 unset($postData[$key]);
             }
         }
@@ -187,7 +187,7 @@ class AdminAccountController extends AdminController
     protected function uploadAvatar(User $user)
     {
         // Если есть файл на загрузку в массиве $_FILES
-        if($this->request->files('avatar')['size'] !== 0) {
+        if ($this->request->files('avatar')['size'] !== 0) {
 
             // Создаем загрузчик и кладем в него этот файл
             $uploader = new Upload($this->request->files());
@@ -196,7 +196,7 @@ class AdminAccountController extends AdminController
             $resultUpload = json_decode($uploader->upload('avatars'));
 
             // Удаляем старый аватар если он был
-            if(!empty($user->avatar) && file_exists($this->userRepository->getUserAvatarRootPath() . $user->avatar) && !isset($resultUpload->error)) {
+            if (!empty($user->avatar) && file_exists($this->userRepository->getUserAvatarRootPath() . $user->avatar) && !isset($resultUpload->error)) {
                 unlink($this->userRepository->getUserAvatarRootPath() . $user->avatar);
             }
 

@@ -45,12 +45,12 @@ class Identity extends Validation
      */
     private function AreObjectsIdentically(): bool
     {
-        if(empty($this->data) || empty($this->dataConfirmation)) {
+        if (empty($this->data) || empty($this->dataConfirmation)) {
             $this->message = "Поля не совпадают";
             return false;
         }
 
-        if($this->data === $this->dataConfirmation) {
+        if ($this->data === $this->dataConfirmation) {
             return true;
         }
 

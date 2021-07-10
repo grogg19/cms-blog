@@ -34,9 +34,9 @@ class Validator extends AbstractValidator
     {
         parent::__construct($data, $rules);
 
-        if($model !== '') {
+        if ($model !== '') {
             $this->model = new $model;
-            if(empty($this->rules)) {
+            if (empty($this->rules)) {
                 $this->rules = $this->model->rules;
             }
         }
@@ -51,7 +51,7 @@ class Validator extends AbstractValidator
     {
         $messagesValidations = []; // массив сообщений всех валидаций
 
-        if(empty($this->rules)) {
+        if (empty($this->rules)) {
             throw new ValidationException('Отсутствуют правила валидации', 503);
         }
 
@@ -59,7 +59,7 @@ class Validator extends AbstractValidator
 
             $result = $this->hasError($key, $rule, $messagesValidations);
 
-            if(!empty($result)) {
+            if (!empty($result)) {
                 $messagesValidations['error'][$key] = $result;
             }
 
@@ -77,24 +77,24 @@ class Validator extends AbstractValidator
      */
     private function hasError(string $key, $rule, array $messagesValidations = []): array
     {
-        if(is_array($rule)) {
+        if (is_array($rule)) {
             foreach ($rule as $r) {
                 $result = $this->hasError($key, $r, $messagesValidations);
 
-                if(!empty($result)) {
+                if (!empty($result)) {
                     return $result;
                 }
             }
             return [];
         }
 
-        if(!isset($this->data[$key]) || isset($messagesValidations['error'][$key])) {
+        if (!isset($this->data[$key]) || isset($messagesValidations['error'][$key])) {
             return [];
         }
 
         $validation = $this->createValidation($rule, $key);
 
-        if($validation->run() !== true) {
+        if ($validation->run() !== true) {
 
             return [
                 'field' => $key,
@@ -116,7 +116,7 @@ class Validator extends AbstractValidator
     {
         $parameters = '';
 
-        if(str_contains($type, ':')) {
+        if (str_contains($type, ':')) {
             list($type, $parameters) = explode(':', $type, 2);
         }
 

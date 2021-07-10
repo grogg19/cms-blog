@@ -36,7 +36,7 @@ class AdminController extends Controller
         // Проверяем факт авторизации пользователя
         $check = $this->auth->checkAuthorization();
 
-        if($check['access'] !== 'allowed') {
+        if ($check['access'] !== 'allowed') {
 
             $this->toast->setToast('warning', $check['message']);
 

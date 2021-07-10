@@ -26,7 +26,7 @@ class Page
      */
      public function __construct(PageCompatible $compatibleDataObject = null)
     {
-        if($compatibleDataObject !== null) {
+        if ($compatibleDataObject !== null) {
             $this->compatibleDataObject = $compatibleDataObject;
             $this->parameters = $compatibleDataObject->getData();
         }

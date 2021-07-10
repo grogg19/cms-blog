@@ -16,11 +16,11 @@ class PublicUserController extends PublicController
     {
         $user =  (new UserRepository())->getCurrentUser();
 
-        if($user === null) {
+        if ($user === null) {
             return false;
         }
 
-        if(in_array($user->role->code, ['admin', 'content-manager'])) {
+        if (in_array($user->role->code, ['admin', 'content-manager'])) {
             return true;
         }
 

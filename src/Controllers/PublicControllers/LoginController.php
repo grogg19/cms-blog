@@ -30,7 +30,7 @@ class LoginController extends PublicController
      */
     public function form(): Renderable
     {
-        if(session_status() === 2) {
+        if (session_status() === 2) {
             Redirect::to('/admin/blog/posts');
         }
 
@@ -52,7 +52,7 @@ class LoginController extends PublicController
      */
     public function adminAuth(): string
     {
-        if(empty($this->request->post()) || !checkToken()) {
+        if (empty($this->request->post()) || !checkToken()) {
             return $this->toast->getToast('warning', 'Нет хватает данных для входа, обновите страницу!');
         }
 
@@ -70,7 +70,7 @@ class LoginController extends PublicController
         // и проверяем данные валидатором созданными правилами $ownRules
         $resultValidateForms = $validator->makeValidation();
 
-        if(isset($resultValidateForms['error'])) {
+        if (isset($resultValidateForms['error'])) {
 
             return json_encode($resultValidateForms);
         }
@@ -79,13 +79,13 @@ class LoginController extends PublicController
         // то ищем юзера с парой email-пароль в бд
         $user = (new UserRepository())->findUser($this->request->post('email'), $this->request->post('password'));
 
-        if($user === null) {
+        if ($user === null) {
             // Если пользователя нет, возвращаем сообщение, что такого пользователя нет.
             return $this->toast->getToast('warning', 'Пользователь с такими данными не найден!');
         }
 
         $auth = new Auth();
-        if(!$auth->isActivated($user)) {
+        if (!$auth->isActivated($user)) {
             return $this->toast->getToast('warning', 'Ваша учетная запись деактивирована');
         }
         // Если есть такой юзер, то авторизуем его и возвращаем на страницу, с которой он логинился

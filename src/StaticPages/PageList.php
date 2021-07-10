@@ -49,7 +49,7 @@ class PageList
     {
         foreach ($this->pageList->list() as $item) {
 
-           if($item->parameters['url'] === $url) {
+           if ($item->parameters['url'] === $url) {
                return new Page($item);
            }
 
@@ -66,7 +66,7 @@ class PageList
     {
         foreach ($this->pageList->list() as $item) {
 
-            if($item->file->getFilename() === $fileName . '.htm') {
+            if ($item->file->getFilename() === $fileName . '.htm') {
                 return new Page($item);
             }
         }

@@ -41,7 +41,7 @@ class StaticPagesRepository extends Repository
     {
         $config = Config::getInstance()->getConfig('cms');
 
-        if(!empty($config['staticPages'])) {
+        if (!empty($config['staticPages'])) {
 
             switch ($config['staticPages']) {
                 case 'files':

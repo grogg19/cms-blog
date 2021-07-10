@@ -30,10 +30,10 @@ class UserRepository extends Repository
      */
     public function getCurrentUser()
     {
-        if(session_status() == 1) {
+        if (session_status() == 1) {
             return null;
         }
-        if(!empty($this->session->get('userId'))) {
+        if (!empty($this->session->get('userId'))) {
 
             return $this->getUserById($this->session->get('userId'));
 
@@ -49,7 +49,7 @@ class UserRepository extends Repository
      */
     public function getAllUsers(string $sortDirection = 'asc', string $quantity = '20')
     {
-        if($quantity !== 'all') {
+        if ($quantity !== 'all') {
 
             $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
 
@@ -130,11 +130,11 @@ class UserRepository extends Repository
      */
     public function updateUser(User $user, array $data): bool
     {
-        if(!checkToken()) {
+        if (!checkToken()) {
             return false;
         }
 
-        if(!empty($data['password'])) {
+        if (!empty($data['password'])) {
             $data['password'] = hashPassword($data['password']);
         }
 
@@ -142,7 +142,7 @@ class UserRepository extends Repository
 
         $user->update($data);
 
-        if($this->session->get('userId') === $user->id) {
+        if ($this->session->get('userId') === $user->id) {
             (new Auth())->setUserAttributes($user);
         }
 
@@ -188,6 +188,5 @@ class UserRepository extends Repository
     public function getUserRoles(): Collection
     {
         return (new UserRoleRepository())->getUserRolesList();
-
     }
 }

@@ -43,7 +43,7 @@ class Application
         try {
             $result = $this->router->dispatch();
             // проверяем, является ли экземпляр потомком Renderable
-            if(is_object($result) && $result instanceof Renderable) {
+            if (is_object($result) && $result instanceof Renderable) {
                 // Если да, то выводим его методом render()
                 echo $result->render();
             } else {
@@ -63,7 +63,7 @@ class Application
     public function renderException($e)
     {
         // Если экземпляр Renderable
-        if($e instanceof Renderable) {
+        if ($e instanceof Renderable) {
             // то запускаем его метод render()
             $e->render();
         } else {
@@ -110,17 +110,17 @@ class Application
         $this->session = new Session();
 
         // Если существует кука авторизации, стартуем сессию
-        if(!empty(Cookie::get('authUser'))) {
+        if (!empty(Cookie::get('authUser'))) {
             $this->session->start();
             $currentUser = (new UserRepository())->getCurrentUser();
 
             // если текущего пользователя не существует, то уничтожаем авторизацию
-            if($currentUser === null) {
+            if ($currentUser === null) {
                 (new Auth())->unAuthorize();
             }
 
             // если нет userId в куки, то уничтожаем авторизацию
-            if($this->session->get('userId') === null) {
+            if ($this->session->get('userId') === null) {
                 (new Auth())->unAuthorize();
             }
         }

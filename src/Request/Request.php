@@ -68,7 +68,7 @@ class Request
      */
     public function cookie(string $key = "")
     {
-        if(!empty($key) && is_string($key)) {
+        if (!empty($key) && is_string($key)) {
             return $this->cookie[$key];
         }
         return $this->cookie;
@@ -80,7 +80,7 @@ class Request
      */
     public function get(string $key = "")
     {
-        if(!empty($key) && is_string($key)) {
+        if (!empty($key) && is_string($key)) {
             return (isset($this->get[$key])) ? $this->get[$key] : null;
         }
         return $this->get;
@@ -92,7 +92,7 @@ class Request
      */
     public function post(string $key = "")
     {
-        if(!empty($key) && is_string($key)) {
+        if (!empty($key) && is_string($key)) {
             return (isset($this->post[$key])) ? $this->post[$key] : null;
         }
         return $this->post;
@@ -103,7 +103,7 @@ class Request
      */
     public function files($key = "")
     {
-        if(!empty($key) && is_string($key)) {
+        if (!empty($key) && is_string($key)) {
             return (isset($this->files[$key])) ? $this->files[$key] : null;
         }
         return $this->files;
@@ -115,7 +115,7 @@ class Request
      */
     public function server(string $key = "")
     {
-        if(!empty($key) && is_string($key)) {
+        if (!empty($key) && is_string($key)) {
             return $this->server[$key];
         }
         return $this->server;

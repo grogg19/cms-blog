@@ -22,7 +22,7 @@ class MigrationLoader extends Controller
     {
         $migration = new Migration(new MigrationMySql());
 
-        if(!empty($migration->getMigrationFiles())) {
+        if (!empty($migration->getMigrationFiles())) {
             $migration->makeMigration();
 
             (new View('migrating_done', ['message' => 'БД в актуальном состоянии.']))->render();

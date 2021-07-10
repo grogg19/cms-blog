@@ -41,7 +41,7 @@ class RegisterController extends PublicController
      */
     public function signUp(): Renderable
     {
-        if(session_status() === 2) {
+        if (session_status() === 2) {
             Redirect::to('/admin/blog/posts');
         }
         return $this->form();
@@ -86,7 +86,7 @@ class RegisterController extends PublicController
         // Если есть POST данные и токен соответствует,
 
         // Проверяем согласие с пользовательским соглашением
-        if(empty($parameters['agreement']) || $parameters['agreement'] !== 'on') {
+        if (empty($parameters['agreement']) || $parameters['agreement'] !== 'on') {
             return $this->toast->getToast('warning', 'Необходимо согласие с пользовательским соглашением');
         }
         // Валидируем введеные данные с формы
@@ -112,7 +112,7 @@ class RegisterController extends PublicController
         $user = $userRepository->addUser($parameters);
 
         // Если все сохранено, авторизируем пользователя
-        if($user !== null && $user instanceof User) {
+        if ($user !== null && $user instanceof User) {
 
             // Если успешно сохранился, то авторизуем его и возвращаем на страницу, с которой он логинился
 

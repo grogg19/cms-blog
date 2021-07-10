@@ -54,7 +54,7 @@ class Upload extends AdminController
             $maxImageSize = $configImages['maxImageSize'] * pow(1024,2);
 
             // Проверяем загружаемые файлы на соответствие mime-типам и максимальному размеру для загрузки
-            if(!in_array($fileMimeType, $configImages['mimeTypes']) || $file['size'] > ($maxImageSize)) {
+            if (!in_array($fileMimeType, $configImages['mimeTypes']) || $file['size'] > ($maxImageSize)) {
 
                 $message['error'][] = 'Файл "'.$file["name"].'" не удовлетворяет требованиям к загрузке.';
                 return json_encode($message);
@@ -63,7 +63,7 @@ class Upload extends AdminController
             }
 
 
-            if(!file_exists($file['tmp_name'])) {
+            if (!file_exists($file['tmp_name'])) {
                 $message['error'][] = 'Временный файл "'.$file["name"].'" отсутствует, выберите загружаемые файлы заново.';
                 return json_encode($message);
             }
@@ -73,7 +73,7 @@ class Upload extends AdminController
             $fileName = time() . '_' . $file['name'];
             $pathToFileHttp = SITE_ROOT . $configImages['pathToUpload'] . DIRECTORY_SEPARATOR . $fileName;
 
-            if(!move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $configImages['pathToUpload'] . DIRECTORY_SEPARATOR . $fileName)) {
+            if (!move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $configImages['pathToUpload'] . DIRECTORY_SEPARATOR . $fileName)) {
                 $message['error'][] = 'При загрузке файла "'.$file["name"].'" произошла ошибка.';
                 return json_encode($message);
             }
@@ -88,9 +88,9 @@ class Upload extends AdminController
             $this->session->set('postBusy', true);
 
         }
-        if(!empty($filesToCookie) && $configName = 'images') {
+        if (!empty($filesToCookie) && $configName = 'images') {
 
-            if(!empty(Cookie::getArray('uploadImages'))) {
+            if (!empty(Cookie::getArray('uploadImages'))) {
 
                 $merge = array_merge(Cookie::getArray('uploadImages'), $filesToCookie);
                 Cookie::setArray('uploadImages', $merge);

@@ -37,20 +37,20 @@ class Route
     {
         if (is_string($callback)) { // Если значение $callback строка, разделяем ее по разделителю "@"
             // Если ссылка на стандартный метод
-            if(str_contains($callback, "@"))
+            if (str_contains($callback, "@"))
             {
                 list($controller, $method) = explode("@", $callback);
                 return (new $controller())->$method();
             }
 
             // Если ссылка на статический метод
-            if(str_contains($callback, "::"))
+            if (str_contains($callback, "::"))
             {
                 list($controller, $method) = explode("::", $callback);
                 return $controller::$method();
             }
 
-        } else if(is_object($callback)) { // Если значение $callback объект, то выводим значение методом __invoke()
+        } else if (is_object($callback)) { // Если значение $callback объект, то выводим значение методом __invoke()
             return $callback->__invoke();
         }
         return null;
@@ -75,19 +75,19 @@ class Route
     public function match($method, $uri): bool
     {
         // Проверка совападение метода
-        if(is_array($this->method))
+        if (is_array($this->method))
         {
-            if(!in_array($method, $this->method)) {
+            if (!in_array($method, $this->method)) {
                 return false;
             }
         } else {
-            if($method != $this->method) {
+            if ($method != $this->method) {
                 return false;
             }
         }
 
         // Проверка совпадения URI
-        if(!preg_match('/^' . str_replace(['*', '/'], ['[a-zA-Z0-9\-]+', '\/'], $this->getPath()) .'$/', explode('?',$uri)[0])) {
+        if (!preg_match('/^' . str_replace(['*', '/'], ['[a-zA-Z0-9\-]+', '\/'], $this->getPath()) .'$/', explode('?',$uri)[0])) {
             return false;
         }
         return true;

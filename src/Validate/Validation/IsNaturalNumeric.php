@@ -36,7 +36,7 @@ class IsNaturalNumeric extends Validation
      */
     private function isNaturalNumeric(): bool
     {
-        if(!preg_match('/^[0-9]+$/i', $this->data) || $this->data == 0) {
+        if (!preg_match('/^[0-9]+$/i', $this->data) || $this->data == 0) {
             $this->message = 'В поле должно быть целое число > 0' ;
             return false;
         }

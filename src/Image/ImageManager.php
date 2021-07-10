@@ -38,7 +38,7 @@ class ImageManager
     public function imageDestructor(array $fileNames = []): string
     {
 
-        if(!empty(Cookie::getArray('uploadImages'))) {
+        if (!empty(Cookie::getArray('uploadImages'))) {
             $listFilesForDelete = array_diff($fileNames, $this->imageCheckAvailabilityInDb($fileNames));
         } else {
             $listFilesForDelete = $fileNames;
@@ -90,7 +90,7 @@ class ImageManager
      */
     public function cacheImageClean() {
 
-        if(!empty(Cookie::getArray('uploadImages'))) {
+        if (!empty(Cookie::getArray('uploadImages'))) {
 
             $this->imageDestructor(Cookie::getArray('uploadImages'));
 
@@ -104,11 +104,11 @@ class ImageManager
      */
     public function getImageNameFromStorages(): string
     {
-        if(!checkToken()) {
+        if (!checkToken()) {
             return json_encode(['error' => 'Ошибка доступа']);
         }
 
-        if(!empty(request()->post('postId'))) {
+        if (!empty(request()->post('postId'))) {
             $result = Image::where('post_id', request()->post('postId'))->get('file_name');
 
             foreach ($result as $imageFileName) {
@@ -120,7 +120,7 @@ class ImageManager
             }
         }
 
-        if(!empty(Cookie::getArray('uploadImages'))) {
+        if (!empty(Cookie::getArray('uploadImages'))) {
 
             foreach (Cookie::getArray('uploadImages') as $imageFileName) {
                 $imagesPath[] = [
@@ -144,7 +144,7 @@ class ImageManager
      */
     public function checkImageUploadActuality(): void
     {
-        if(!empty(Cookie::getArray('uploadImages')) && ((new Session())->get('postBusy') !== true || session_status() !== PHP_SESSION_ACTIVE) ) {
+        if (!empty(Cookie::getArray('uploadImages')) && ((new Session())->get('postBusy') !== true || session_status() !== PHP_SESSION_ACTIVE) ) {
 
             $this->cacheImageClean();
 

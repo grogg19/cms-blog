@@ -47,11 +47,11 @@ class IsUniqueModel extends Validation
      */
     private function isUnique(): bool
     {
-        if(empty($this->model)) {
+        if (empty($this->model)) {
             $this->message = 'Не определен объект валидации';
             return false;
         }
-        if($this->model::where($this->key, $this->data)->count() > 0) {
+        if ($this->model::where($this->key, $this->data)->count() > 0) {
             $this->message = "Это значение уже существует";
             return false;
         }

@@ -59,7 +59,7 @@ class SubscribeRepository extends Repository
      */
     public function deleteSubscriber(string $email, string $hash): bool
     {
-        if(Subscriber::where('email', $email)
+        if (Subscriber::where('email', $email)
             ->where('hash', $hash)
             ->delete()) {
             return true;

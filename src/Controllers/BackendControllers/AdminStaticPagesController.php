@@ -36,7 +36,7 @@ class AdminStaticPagesController extends AdminController
     {
         parent::__construct();
 
-        if(!$this->auth->checkPermissons(['admin'])) {
+        if (!$this->auth->checkPermissons(['admin'])) {
 
             $this->toast->setToast('info', 'У вас недостаточно прав для этого действия');
 
@@ -56,13 +56,13 @@ class AdminStaticPagesController extends AdminController
         $page = (!empty($this->request->get('page'))) ? filter_var($_GET['page'], FILTER_SANITIZE_NUMBER_INT): 1;
         $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
 
-        if($quantity !== 'all') {
+        if ($quantity !== 'all') {
             $pages = (new PaginateMaker())->paginate($items, $quantity, $page);
         } else {
             $pages = Collection::make($items);
         }
 
-        if($pages instanceof LengthAwarePaginator) {
+        if ($pages instanceof LengthAwarePaginator) {
             $query = (!empty($quantity)) ? '?quantity=' . $quantity : '';
             $pages->setPath('static-pages' . $query);
         }
@@ -74,7 +74,7 @@ class AdminStaticPagesController extends AdminController
             'quantity' => $quantity,
         ];
 
-        if($quantity !== 'all') {
+        if ($quantity !== 'all') {
             $dataListStaticPages['paginator'] = $pages;
         }
 
@@ -112,7 +112,7 @@ class AdminStaticPagesController extends AdminController
     public function editPage(): Renderable
     {
 
-        if(empty($this->request->post('pageName')) && !checkToken()) {
+        if (empty($this->request->post('pageName')) && !checkToken()) {
             Redirect::to('/admin/static-pages');
         }
 
@@ -143,16 +143,16 @@ class AdminStaticPagesController extends AdminController
      */
     public function savePage(): string
     {
-        if(!checkToken()) {
+        if (!checkToken()) {
             return $this->toast->getToast('warning', 'Сессия устарела, обновите страницу!');
         }
 
-        if(!empty($this->request->post('edit_form'))) {
+        if (!empty($this->request->post('edit_form'))) {
 
             $pages = (new StaticPagesRepository())->getStaticPages();
             $existPage = $pages->getPageByUrl(filter_var($this->request->post('url'), FILTER_SANITIZE_STRING));
 
-            if($existPage !== null) {
+            if ($existPage !== null) {
                 $existPage->deletePage();
             } else {
                 return $this->toast->getToast('warning', 'Такой страницы не существует!');
@@ -163,7 +163,7 @@ class AdminStaticPagesController extends AdminController
         $validation = new Validator($this->request->post(), '', $this->rules);
         $resultValidation = $validation->makeValidation();
 
-        if(!empty($resultValidation)) {
+        if (!empty($resultValidation)) {
             return json_encode($resultValidation);
         }
 
@@ -197,13 +197,13 @@ class AdminStaticPagesController extends AdminController
      */
     public function deletePage(): string
     {
-        if(!checkToken() || empty($this->request->post('pageName'))) {
+        if (!checkToken() || empty($this->request->post('pageName'))) {
             return $this->toast->getToast('warning', 'Не хватает данных для удаления попробуйте еще раз!');
         }
 
         $page = (new StaticPagesRepository())->getPageByFileName( (string) $this->request->post('pageName'));
 
-        if($page->deletePage()) {
+        if ($page->deletePage()) {
 
             $this->toast->setToast('success', 'Страница успешно удалена.');
 
