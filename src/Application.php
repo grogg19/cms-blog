@@ -113,7 +113,9 @@ class Application
 
         // Если существует кука авторизации, стартуем сессию
         if (!empty(Cookie::get('authUser'))) {
-            $session->start();
+            if(session_status() === 1) {
+                $session->start();
+            }
 
             $currentUser = (new UserRepository())->getCurrentUser();
 
