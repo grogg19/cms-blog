@@ -29,7 +29,6 @@ class Application
     {
         $this->router = $router;
         $this->initialize();
-        $this->initSession();
     }
 
     /**
@@ -43,6 +42,7 @@ class Application
             $result = $this->router->dispatch();
             // проверяем, является ли экземпляр потомком Renderable
             if (is_object($result) && $result instanceof Renderable) {
+                $this->initSession();
                 // Если да, то выводим его методом render()
                 echo $result->render();
             } else {
@@ -61,6 +61,10 @@ class Application
      */
     public function renderException($e)
     {
+        if($e->getCode() === '42S02') {
+            Redirect::to('/installdb');
+            exit();
+        }
         // Если экземпляр Renderable
         if ($e instanceof Renderable) {
             // то запускаем его метод render()
@@ -105,11 +109,12 @@ class Application
      */
     public function initSession()
     {
-        $this->session = new Session();
+        $session = new Session();
 
         // Если существует кука авторизации, стартуем сессию
         if (!empty(Cookie::get('authUser'))) {
-            $this->session->start();
+            $session->start();
+
             $currentUser = (new UserRepository())->getCurrentUser();
 
             // если текущего пользователя не существует, то уничтожаем авторизацию
@@ -118,7 +123,7 @@ class Application
             }
 
             // если нет userId в куки, то уничтожаем авторизацию
-            if ($this->session->get('userId') === null) {
+            if ($session->get('userId') === null) {
                 (new Auth())->unAuthorize();
             }
         }
