@@ -13,12 +13,16 @@ use App\Controllers\PublicControllers\PublicPostController;
 use App\Controllers\PublicControllers\PublicSubscribeController;
 use App\Controllers\PublicControllers\StaticPagesController;
 use App\Controllers\BackendControllers\AdminStaticPagesController;
+use App\Migrations\MigrationLoader;
 use App\Toasts\Toast;
 use App\Exception\NotFoundException;
 use App\Repository\StaticPagesRepository;
 use App\Router;
 
 $router = new Router(); // создаем маршрутизатор
+
+/** Главная страница с лентой постов  */
+$router->get('get','/installdb', MigrationLoader::class . '@makeMigrations');
 
 /** Главная страница с лентой постов  */
 $router->get('get','/', PublicPostController::class . '@allPosts');
