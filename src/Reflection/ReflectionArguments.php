@@ -37,7 +37,7 @@ class ReflectionArguments
 
             $reflectionClass = new ReflectionClass($parameter->getType()->getName());
 
-            if($reflectionClass->isInstantiable()) {
+            if ($reflectionClass->isInstantiable()) {
                 $parameters[] = $reflectionClass->newInstance();
             }
 

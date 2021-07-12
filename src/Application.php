@@ -61,7 +61,7 @@ class Application
      */
     public function renderException($e)
     {
-        if($e->getCode() === '42S02') {
+        if ($e->getCode() === '42S02') {
             Redirect::to('/installdb');
             exit();
         }
