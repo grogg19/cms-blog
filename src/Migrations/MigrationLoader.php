@@ -6,14 +6,14 @@
 
 namespace App\Migrations;
 
-use App\Controllers\Controller;
+use App\Renderable;
 use App\View;
 
 /**
  * Class MigrationLoader
  * @package App\Controllers\System
  */
-class MigrationLoader extends Controller
+class MigrationLoader implements Renderable
 {
     /**
      * Запускает миграции
@@ -24,10 +24,15 @@ class MigrationLoader extends Controller
 
         if (!empty($migration->getMigrationFiles())) {
             $migration->makeMigration();
-
-            (new View('migrating_done', ['message' => 'БД в актуальном состоянии.']))->render();
-            exit();
         }
 
+        $this->render();
+        exit();
+
+    }
+
+    public function render()
+    {
+        (new View('migrating_done', ['message' => 'БД в актуальном состоянии.']))->render();
     }
 }
