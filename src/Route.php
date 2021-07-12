@@ -5,6 +5,9 @@
 
 namespace App;
 
+use App\Reflection\ReflectionArguments;
+use ReflectionMethod;
+
 /**
  * Class Route
  * @package App
@@ -32,6 +35,7 @@ class Route
      * Метод в зависимости от типа возвращает либо результат статического метода, метода объекта, либо как результат функции
      * @param $callback
      * @return Renderable|string|null
+     * @throws \ReflectionException
      */
     private function prepareCallback($callback)
     {
@@ -40,7 +44,12 @@ class Route
             if (str_contains($callback, "@"))
             {
                 list($controller, $method) = explode("@", $callback);
-                return (new $controller())->$method();
+
+                $parameters = (new ReflectionArguments($controller, $method))->getParameters();
+
+                $reflectionMethod = new ReflectionMethod($controller, $method);
+
+                return $reflectionMethod->invokeArgs(new $controller, $parameters);
             }
 
             // Если ссылка на статический метод
