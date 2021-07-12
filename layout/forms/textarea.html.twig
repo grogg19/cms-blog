@@ -7,7 +7,6 @@
         <textarea name="{{ elementKey }}"
         {% for key, value in element[elementKey]['options'] %}
             {{ key }}="{{ value }}"
-        {% endfor %}>{{ valueAttribute }}
-        </textarea>
+        {% endfor %}>{{ valueAttribute }}</textarea>
     </div>
 {% endfor %}
