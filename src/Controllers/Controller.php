@@ -5,10 +5,6 @@
 
 namespace App\Controllers;
 
-use App\Request\Request;
-use App\Toasts\Toast;
-use Symfony\Component\HttpFoundation\Session\Session;
-
 /**
  * Class Controller
  * @package App
@@ -16,28 +12,11 @@ use Symfony\Component\HttpFoundation\Session\Session;
 abstract class Controller
 {
     /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * @var Session
-     */
-    protected $session;
-
-    /**
-     * @var Toast
-     */
-    protected $toast;
-
-    /**
      * Controller constructor.
      */
     public function __construct()
     {
-        $this->session = new Session();
-        $this->request = new Request();
-        $this->toast = new Toast();
+
     }
 
 }

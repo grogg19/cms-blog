@@ -6,7 +6,6 @@
 namespace App;
 
 use App\Auth\Auth;
-use App\Migrations\MigrationLoader;
 use App\Repository\UserRepository;
 use App\Cookie\Cookie;
 use App\Router as Router;
@@ -99,7 +98,6 @@ class Application
 
         $capsule->bootEloquent();
 
-        $this->checkMigrations();
     }
 
     /**
@@ -124,13 +122,5 @@ class Application
                 (new Auth())->unAuthorize();
             }
         }
-    }
-
-    /**
-     * Проверка наличия миграций
-     */
-    public function checkMigrations()
-    {
-        (new MigrationLoader())->makeMigrations();
     }
 }

@@ -33,9 +33,9 @@ class UserRepository extends Repository
         if (session_status() == 1) {
             return null;
         }
-        if (!empty($this->session->get('userId'))) {
+        if (!empty(session()->get('userId'))) {
 
-            return $this->getUserById($this->session->get('userId'));
+            return $this->getUserById(session()->get('userId'));
 
         }
         return null;
@@ -45,16 +45,13 @@ class UserRepository extends Repository
      * возвращает коллекцию всех пользователей кроме супер-пользователя и текущего админа
      * @param string $sortDirection
      * @param string $quantity
+     * @param int $page
      * @return LengthAwarePaginator|Collection
      */
-    public function getAllUsers(string $sortDirection = 'asc', string $quantity = '20')
+    public function getAllUsers(string $sortDirection = 'asc', string $quantity = '20', int $page = 1)
     {
         if ($quantity !== 'all') {
-
-            $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
-
             return User::where('is_superuser', 0)
-                //->where('id', '!=', $this->getCurrentUser()->id)
                 ->orderBy('is_activated', $sortDirection)
                 ->paginate($quantity, '*', 'page', $page);
         }
@@ -97,9 +94,8 @@ class UserRepository extends Repository
     public function getUserByHash($hash): ?User
     {
         // Ищем пользователя с логином $login
-        $userData = User::where('persist_code', $hash)
+        return User::where('persist_code', $hash)
             ->first();
-        return $userData;
     }
 
     /**
@@ -142,7 +138,7 @@ class UserRepository extends Repository
 
         $user->update($data);
 
-        if ($this->session->get('userId') === $user->id) {
+        if (session()->get('userId') === $user->id) {
             (new Auth())->setUserAttributes($user);
         }
 

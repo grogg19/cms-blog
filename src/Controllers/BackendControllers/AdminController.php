@@ -10,6 +10,8 @@ use App\Cookie\Cookie;
 use App\Auth\Auth;
 use App\Image\ImageManager;
 use App\Redirect;
+use App\Request\Request;
+use App\Toasts\Toast;
 
 /**
  * Class AdminController
@@ -24,6 +26,11 @@ class AdminController extends Controller
     protected $auth;
 
     /**
+     * @var Toast
+     */
+    protected $toast;
+
+    /**
      * AdminController constructor.
      */
     public function __construct()
@@ -33,6 +40,10 @@ class AdminController extends Controller
         $this->auth = new Auth();
         $this->initCheckers();
 
+        $request = new Request();
+        
+        $this->toast = new Toast();
+
         // Проверяем факт авторизации пользователя
         $check = $this->auth->checkAuthorization();
 
@@ -41,10 +52,10 @@ class AdminController extends Controller
             $this->toast->setToast('warning', $check['message']);
 
             // если не авторизован, его целевой адрес сохраняется и пользователь направляется на страницу авторизации
-            Cookie::set('targetUrl', $this->request->server('REQUEST_URI'));
+            Cookie::set('targetUrl', $request->server('REQUEST_URI'));
 
             // Чистка сессии
-            $this->session->invalidate();
+            session()->invalidate();
             Redirect::to('/login');
         }
 

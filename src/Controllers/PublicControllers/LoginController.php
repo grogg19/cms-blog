@@ -10,6 +10,7 @@ use App\Image\ImageManager;
 use App\Renderable;
 use App\Repository\UserRepository;
 use App\Parse\Yaml;
+use App\Request\Request;
 use App\Validate\Validator;
 use App\Auth\Auth;
 use App\Model\User;
@@ -48,9 +49,9 @@ class LoginController extends PublicController
      * @return string
      * @throws \App\Exception\ValidationException
      */
-    public function adminAuth(): string
+    public function adminAuth(Request $request): string
     {
-        if (empty($this->request->post()) || !checkToken()) {
+        if (empty($request->post()) || !checkToken()) {
             return $this->toast->getToast('warning', 'Нет хватает данных для входа, обновите страницу!');
         }
 
@@ -64,7 +65,7 @@ class LoginController extends PublicController
         ];
 
         // Создаем валидатор
-        $validator = new Validator($this->request->post(), User::class, $ownRules);
+        $validator = new Validator($request->post(), User::class, $ownRules);
         // и проверяем данные валидатором созданными правилами $ownRules
         $resultValidateForms = $validator->makeValidation();
 
@@ -75,7 +76,7 @@ class LoginController extends PublicController
 
         // если ошибок в валидации не было,
         // то ищем юзера с парой email-пароль в бд
-        $user = (new UserRepository())->findUser($this->request->post('email'), $this->request->post('password'));
+        $user = (new UserRepository())->findUser($request->post('email'), $request->post('password'));
 
         if ($user === null) {
             // Если пользователя нет, возвращаем сообщение, что такого пользователя нет.
@@ -99,7 +100,7 @@ class LoginController extends PublicController
         $this->toast->setToast('success', 'Вы успешно вошли в систему управления.');
 
         return json_encode([
-            'url' => (!empty(Cookie::get('targetUrl'))) ? Cookie::get('targetUrl') : $this->request->server('HTTP_REFERER')
+            'url' => (!empty(Cookie::get('targetUrl'))) ? Cookie::get('targetUrl') : $request->server('HTTP_REFERER')
         ]);
     }
 

@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-
 use App\Cookie\Cookie;
 use App\Model\Image;
 use App\Model\User;
@@ -11,6 +10,7 @@ use App\Request\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use App\Controllers\PublicControllers\PublicSettingsController;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class PostRepository
@@ -35,12 +35,12 @@ class PostRepository extends Repository
      * Возвращает коллекцию всех постов
      * @param string $sortDirection
      * @param string $quantity
-     * @return LengthAwarePaginator|Collection
+     * @param int $page
+     * @return mixed
      */
-    public function getAllPosts(string $sortDirection = 'desc', string $quantity = '20')
+    public function getAllPosts(string $sortDirection = 'desc', string $quantity = '20', int $page = 1)
     {
         if ($quantity !== 'all') {
-            $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
 
             return ModelPost::orderBy('published_at',$sortDirection)
                 ->paginate($quantity, '*', 'page', $page);
@@ -93,12 +93,12 @@ class PostRepository extends Repository
      * @param int $userId
      * @param string $quantity
      * @param string $sortDirection
+     * @param int $page
      * @return LengthAwarePaginator|Collection
      */
-    public function getPostsByUserId(int $userId, string $quantity, string $sortDirection = 'desc')
+    public function getPostsByUserId(int $userId, string $quantity, string $sortDirection = 'desc', int $page = 1)
     {
         if ($quantity !== 'all') {
-            $page = empty($this->request->get('page')) ? 1 : $this->request->get('page');
 
             return ModelPost::where('user_id', $userId)
                 ->orderBy('published_at',$sortDirection)
@@ -143,7 +143,7 @@ class PostRepository extends Repository
      * @param User|null $user
      * @return ModelPost
      */
-    public function saveToDb(Request $request, User $user = null): ModelPost
+    public function saveToDb(Request $request, Session $session, User $user = null): ModelPost
     {
 
         if (!empty($request->post('idPost'))) {
@@ -162,10 +162,10 @@ class PostRepository extends Repository
 
         $post->save();
 
-        if (!empty(Cookie::getArray('uploadImages')) && $this->session->get('postBusy') == true) {
+        if (!empty(Cookie::getArray('uploadImages')) && $session->get('postBusy') == true) {
 
             $sort = 0;
-            $configImages = $this->session->get('config')->getConfig('images');
+            $configImages = $session->get('config')->getConfig('images');
 
             foreach (Cookie::getArray('uploadImages') as $imageFileName) {
                 $pathToFile = $_SERVER['DOCUMENT_ROOT'] . $configImages['pathToUpload'] . DIRECTORY_SEPARATOR . $imageFileName;
@@ -181,7 +181,7 @@ class PostRepository extends Repository
 
             Image::insert($data); // Добавляем изображения в БД
 
-            $this->session->set('postBusy', false); // снимаем метку блокировки поста
+            $session->set('postBusy', false); // снимаем метку блокировки поста
             Cookie::delete('uploadImages'); // Чистим список загруженных изображений в куках
         }
         return $post;

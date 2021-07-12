@@ -12,6 +12,7 @@ use App\StaticPages\File;
 use App\StaticPages\Page;
 use App\Validate\Validator;
 use App\View;
+use App\Request\Request;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -48,13 +49,13 @@ class AdminStaticPagesController extends AdminController
      * Метод выводит список статических страниц
      * @return Renderable
      */
-    public function index(): Renderable
+    public function index(Request $request): Renderable
     {
         $items = (new StaticPagesRepository())->getStaticPagesCollection();
 
         $title = 'Cтатические страницы';
-        $page = (!empty($this->request->get('page'))) ? filter_var($_GET['page'], FILTER_SANITIZE_NUMBER_INT): 1;
-        $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
+        $page = !empty($request->get('page')) ? filter_var($request->get('page'), FILTER_SANITIZE_NUMBER_INT): 1;
+        $quantity = !empty($request->get('quantity')) ? filter_var($request->get('quantity'), FILTER_SANITIZE_STRING) : 20;
 
         if ($quantity !== 'all') {
             $pages = (new PaginateMaker())->paginate($items, $quantity, $page);
@@ -105,14 +106,14 @@ class AdminStaticPagesController extends AdminController
      * Форма редактирования содержимого статической страницы
      * @return Renderable
      */
-    public function editPage(): Renderable
+    public function editPage(Request $request): Renderable
     {
 
-        if (empty($this->request->post('pageName')) && !checkToken()) {
+        if (empty($request->post('pageName')) && !checkToken()) {
             Redirect::to('/admin/static-pages');
         }
 
-        $page = (new StaticPagesRepository())->getPageByFileName( (string) $this->request->post('pageName'));
+        $page = (new StaticPagesRepository())->getPageByFileName( (string) $request->post('pageName'));
 
         $form = $this->getFields();
 
@@ -135,16 +136,16 @@ class AdminStaticPagesController extends AdminController
      * @return string
      * @throws \App\Exception\ValidationException
      */
-    public function savePage(): string
+    public function savePage(Request $request): string
     {
         if (!checkToken()) {
             return $this->toast->getToast('warning', 'Сессия устарела, обновите страницу!');
         }
 
-        if (!empty($this->request->post('edit_form'))) {
+        if (!empty($request->post('edit_form'))) {
 
             $pages = (new StaticPagesRepository())->getStaticPages();
-            $existPage = $pages->getPageByUrl(filter_var($this->request->post('url'), FILTER_SANITIZE_STRING));
+            $existPage = $pages->getPageByUrl(filter_var($request->post('url'), FILTER_SANITIZE_STRING));
 
             if ($existPage !== null) {
                 $existPage->deletePage();
@@ -154,7 +155,7 @@ class AdminStaticPagesController extends AdminController
 
         }
 
-        $validation = new Validator($this->request->post(), '', $this->rules);
+        $validation = new Validator($request->post(), '', $this->rules);
         $resultValidation = $validation->makeValidation();
 
         if (!empty($resultValidation)) {
@@ -163,12 +164,12 @@ class AdminStaticPagesController extends AdminController
 
         $page = new Page;
         $page->setParameters([
-            'title' => filter_var($this->request->post('title'), FILTER_SANITIZE_STRING),
-            'url' => filter_var($this->request->post('url'), FILTER_SANITIZE_STRING),
-            'isHidden' => !empty($this->request->post('isHidden')) && $this->request->post('isHidden') == 'on' ? 1 : 0,
-            'navigationHidden' => !empty($this->request->post('navigationHidden')) && $this->request->post('navigationHidden') == 'on' ? 1 : 0,
+            'title' => filter_var($request->post('title'), FILTER_SANITIZE_STRING),
+            'url' => filter_var($request->post('url'), FILTER_SANITIZE_STRING),
+            'isHidden' => !empty($request->post('isHidden')) && $request->post('isHidden') == 'on' ? 1 : 0,
+            'navigationHidden' => !empty($request->post('navigationHidden')) && $request->post('navigationHidden') == 'on' ? 1 : 0,
         ]);
-        $page->setHtmlContent(cleanJSTags((string) $this->request->post('content')));
+        $page->setHtmlContent(cleanJSTags((string) $request->post('content')));
         $page->makePage(new File);
 
         $this->toast->setToast('success', 'Данные страницы успешно сохранены.');
@@ -189,13 +190,13 @@ class AdminStaticPagesController extends AdminController
      * Удаление страницы
      * @return string
      */
-    public function deletePage(): string
+    public function deletePage(Request $request): string
     {
-        if (!checkToken() || empty($this->request->post('pageName'))) {
+        if (!checkToken() || empty($request->post('pageName'))) {
             return $this->toast->getToast('warning', 'Не хватает данных для удаления попробуйте еще раз!');
         }
 
-        $page = (new StaticPagesRepository())->getPageByFileName( (string) $this->request->post('pageName'));
+        $page = (new StaticPagesRepository())->getPageByFileName( (string) $request->post('pageName'));
 
         if ($page->deletePage()) {
 

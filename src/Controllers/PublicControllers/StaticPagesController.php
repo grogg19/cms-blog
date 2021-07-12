@@ -6,6 +6,7 @@ namespace App\Controllers\PublicControllers;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\StaticPagesRepository;
+use App\Request\Request;
 use App\StaticPages\Page;
 use App\StaticPages\PageList;
 use App\View;
@@ -31,9 +32,9 @@ class StaticPagesController extends PublicController
      * метод рендерит статические страницы
      * @return Renderable|null
      */
-    public function index(): ?Renderable
+    public function index(Request $request): ?Renderable
     {
-        $url = $this->request->server('REQUEST_URI');
+        $url = $request->server('REQUEST_URI');
 
         $page = $this->staticPages->getPageByUrl($url);
 

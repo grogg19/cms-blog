@@ -16,6 +16,7 @@ use App\Redirect;
 use App\Renderable;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
+use App\Request\Request;
 use App\Validate\Validator;
 use App\Image\ImageManager;
 use App\View;
@@ -23,6 +24,7 @@ use Exception;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\QueryException;
 use App\Uploader\Upload;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class AdminPostController
@@ -44,7 +46,7 @@ class AdminPostController extends AdminController
 
         $this->postRepository = new PostRepository();
 
-        if (!empty($this->session->get('postId'))) {
+        if (!empty(session()->get('postId'))) {
             $this->onCloseCleanImage();
         }
 
@@ -61,16 +63,17 @@ class AdminPostController extends AdminController
      * @var $quantity -  Количество записей на страницу
      * @return Renderable
      */
-    public function listPosts(): Renderable
+    public function listPosts(Request $request): Renderable
     {
         $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
         $user = (new UserRepository())->getCurrentUser();
+        $page = empty($request->get('page')) ? 1 : $request->get('page');
 
         if ($user->role->code == 'admin') {
-            $posts = $this->postRepository->getAllPosts('desc', $quantity);
+            $posts = $this->postRepository->getAllPosts('desc', $quantity, $page);
         } else {
             $posts = $this->postRepository
-                ->getPostsByUserId($user->id, $quantity);
+                ->getPostsByUserId($user->id, $quantity, $page);
         }
 
         if ($posts instanceof LengthAwarePaginator) {
@@ -111,7 +114,7 @@ class AdminPostController extends AdminController
             'title' => 'Создание новой статьи',
             'form' => $form,
             'token' => generateToken(),
-            'imgConfig' => $this->session->get('config')->getConfig('images'),
+            'imgConfig' => session()->get('config')->getConfig('images'),
             'formFields' => $formFields
         ];
 
@@ -143,7 +146,7 @@ class AdminPostController extends AdminController
             throw new NotFoundException('Такого поста не существует');
         }
 
-        if ($post->user_id == $this->session->get('userId') || $user->role->permissions == 1)
+        if ($post->user_id == session()->get('userId') || $user->role->permissions == 1)
         {
             $form = $this->getFields();
 
@@ -154,7 +157,7 @@ class AdminPostController extends AdminController
                 'form' => $form,
                 'post' => $post,
                 'token' => generateToken(),
-                'imgConfig' => $this->session->get('config')->getConfig('images'),
+                'imgConfig' => session()->get('config')->getConfig('images'),
                 'formFields' => $formFields
             ];
 
@@ -169,17 +172,18 @@ class AdminPostController extends AdminController
 
     /**
      * Метод валидирует данные, отправляет на сохранение
+     * @param Request $request
      * @return string
      * @throws \App\Exception\ValidationException
      */
-     public function savePost(): string
+     public function savePost(Request $request, Session $session): string
     {
         if (!checkToken()) {
             return $this->toast->getToast('warning', 'Неверный токен, обновите страницу');
         }
 
         // Валидируем данные формы
-        $validator = new Validator($this->request->post(), Post::class);
+        $validator = new Validator($request->post(), Post::class);
         $validateResult = $validator->makeValidation();
 
         // Если валидация полей не прошла и вернулся массив с ошибками
@@ -195,9 +199,9 @@ class AdminPostController extends AdminController
             try {
 
                 $user = (new UserRepository())->getCurrentUser();
-                $post = $this->postRepository->saveToDb($this->request, $user);
+                $post = $this->postRepository->saveToDb($request, $session, $user);
 
-                if (empty($this->request->post('idPost'))) {
+                if (empty($request->post('idPost'))) {
                     $this->mailNotification($post);
                 }
 
@@ -224,11 +228,12 @@ class AdminPostController extends AdminController
 
     /**
      * Удаление поста
+     * @param Request $request
      * @return string
      */
-    public function deletePost(): string
+    public function deletePost(Request $request): string
     {
-        $post = $this->postRepository->getPostById((int) $this->request->post('postId'));
+        $post = $this->postRepository->getPostById((int) $request->post('postId'));
         try {
             foreach ($post->images as $image) {
                 $this->imgDelete($image->file_name);
@@ -248,16 +253,16 @@ class AdminPostController extends AdminController
     /**
      * Загрузка изображений
      */
-    public function imgUpload(): string
+    public function imgUpload(Request $request): string
     {
 
-        if (!empty($this->request->post('imgToDelete')))
+        if (!empty($request->post('imgToDelete')))
         {
-            return $this->imgDelete($this->request->post('imgToDelete'));
+            return $this->imgDelete($request->post('imgToDelete'));
         }
 
-        if (!empty($this->request->files())) {
-            $imageUploader = new Upload($this->request->files());
+        if (!empty($request->files())) {
+            $imageUploader = new Upload($request->files());
 
             return json_encode([$imageUploader->upload()]);
         }
@@ -299,7 +304,7 @@ class AdminPostController extends AdminController
     {
         if (!empty(Cookie::getArray('uploadImages'))) {
             (new ImageManager())->cacheImageClean();
-            $this->session->remove('postBusy');
+            session()->remove('postBusy');
         }
     }
 

@@ -4,6 +4,7 @@ namespace App\Controllers\BackendControllers;
 
 use App\Controllers\PublicControllers\PublicSubscribeController;
 use App\Repository\SubscribeRepository;
+use App\Request\Request;
 
 /**
  * Class AdminSubscribeController
@@ -14,17 +15,18 @@ class AdminSubscribeController extends AdminController
 
     /**
      * Подписка на уведомления
+     * @param Request $request
      * @return string
      * @throws \App\Exception\ValidationException
      */
-    public function subscribe(): string
+    public function subscribe(Request $request): string
     {
-        if ($this->request->post('switch') === 'false') {
-            return $this->unsubscribe();
+        if ($request->post('switch') === 'false') {
+            return $this->unsubscribe($request);
         }
 
-        if ($this->request->post('switch') === 'true') {
-            return (new PublicSubscribeController())->subscribe();
+        if ($request->post('switch') === 'true') {
+            return (new PublicSubscribeController())->subscribe($request);
         }
 
         return '';
@@ -32,15 +34,16 @@ class AdminSubscribeController extends AdminController
 
     /**
      * Отписка от уведомлений
+     * @param Request $request
      * @return string
      */
-    public function unsubscribe(): string
+    public function unsubscribe(Request $request): string
     {
-        if (empty($this->request->post('emailSubscribe')) || !checkToken()) {
+        if (empty($request->post('emailSubscribe')) || !checkToken()) {
             return $this->toast->getToast('warning', 'Данные недействительны, обновите страницу');
         }
 
-        $email = (string) $this->request->post('emailSubscribe');
+        $email = (string) $request->post('emailSubscribe');
 
         if ((new SubscribeRepository())->deleteSubscriberByEmail($email)) {
             return $this->toast->getToast('success', 'Вы успешно отписались от рассылки');

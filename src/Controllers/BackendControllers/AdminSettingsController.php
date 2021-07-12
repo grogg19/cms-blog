@@ -8,6 +8,7 @@ namespace App\Controllers\BackendControllers;
 use App\Redirect;
 use App\Renderable;
 use App\Model\SystemSetting;
+use App\Request\Request;
 use App\Validate\Validator;
 use App\Repository\SystemSettingsRepository;
 use App\View;
@@ -52,16 +53,17 @@ class AdminSettingsController extends AdminController
 
     /**
      * Сохранение настроек
+     * @param Request $request
      * @return string
      * @throws \App\Exception\ValidationException
      */
-    public function saveSettings(): string
+    public function saveSettings(Request $request): string
     {
-        if (empty($this->request->post()) || !checkToken()) {
+        if (empty($request->post()) || !checkToken()) {
             return $this->toast->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
-        $data = $this->request->post();
+        $data = $request->post();
         unset($data['_token']);
 
         $rules = [

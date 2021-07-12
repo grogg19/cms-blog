@@ -10,7 +10,6 @@ use App\Model\Comment;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
-
 /**
  * Class CommentRepository
  * @package App\Controllers
@@ -86,7 +85,7 @@ class CommentRepository extends Repository
      */
     public function getAllModeratedCommentsByPostId(int $postId): Collection
     {
-        $userId = session_status() === 2 ? $this->session->get('userId') : 0;
+        $userId = session_status() === 2 ? session()->get('userId') : 0;
 
         return Comment::where(function ($query) use ($postId) {
             $query->where('has_moderated', 1)

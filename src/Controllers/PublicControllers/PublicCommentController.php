@@ -6,7 +6,9 @@ use App\Auth\Auth;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\Model\Comment;
+use App\Request\Request;
 use App\Validate\Validator;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class PublicCommentController
@@ -18,20 +20,20 @@ class PublicCommentController extends PublicController
      * @return string
      * @throws \App\Exception\ValidationException
      */
-    public function addComment(): string
+    public function addComment(Request $request, Session $session): string
     {
 
         if ((new Auth())->checkAuthorization()['access'] === 'denied') {
             return $this->toast->getToast('warning', 'Оставлять комментарии могут только зарегистрированные пользователи');
         }
 
-        if (empty($this->request->post()) || !checkToken()) {
+        if (empty($request->post()) || !checkToken()) {
             return $this->toast->getToast('warning', 'Нет входящих данных, обновите страницу');
         }
 
         $commentDataToSave = [
-            'user_id' => $this->session->get('userId'),
-            'content' => strip_tags((string) $this->request->post('commentContent')),
+            'user_id' => $session->get('userId'),
+            'content' => strip_tags((string) $request->post('commentContent')),
         ];
 
         $commentDataToSave['has_moderated'] = (in_array((new UserRepository())
@@ -51,7 +53,7 @@ class PublicCommentController extends PublicController
         }
 
         $comment = new Comment($commentDataToSave);
-        $post = (new PostRepository())->getPostById((int) $this->request->post('postId'));
+        $post = (new PostRepository())->getPostById((int) $request->post('postId'));
 
         if ($post !== null) {
 

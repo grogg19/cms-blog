@@ -11,6 +11,7 @@ use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\Config;
 use App\Redirect;
+use App\Request\Request;
 use App\View;
 
 /**
@@ -45,9 +46,9 @@ class PublicPostController extends PublicController
      * Вывод всех опубликованных постов
      * @return Renderable
      */
-    public function allPosts(): Renderable
+    public function allPosts(Request $request): Renderable
     {
-        $page = !empty($this->request->post('page')) ? $this->request->post('page') : 1;
+        $page = !empty($request->post('page')) ? $request->post('page') : 1;
 
         $imgPath = $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR;
 
@@ -57,7 +58,7 @@ class PublicPostController extends PublicController
             'token' => generateToken()
         ];
 
-        if (!empty($this->request->post('page'))) {
+        if (!empty($request->post('page'))) {
 
             $postsData['ajax'] = true;
             return new View('partials.posts_items', $postsData);

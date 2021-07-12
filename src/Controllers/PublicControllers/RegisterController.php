@@ -10,6 +10,7 @@ use App\Redirect;
 use App\Renderable;
 use App\Repository\UserRepository;
 use App\Model\User;
+use App\Request\Request;
 use App\Validate\Validator;
 use App\Parse\Yaml;
 use App\Auth\Auth;
@@ -52,9 +53,9 @@ class RegisterController extends PublicController
      * @return string
      * @throws \App\Exception\ValidationException
      */
-    public function registerUser(): string
+    public function registerUser(Request $request): string
     {
-        return $this->createUser($this->request->post());
+        return $this->createUser($request->post());
     }
 
     /**
@@ -65,6 +66,7 @@ class RegisterController extends PublicController
     {
         $fields = (new Yaml())->parseFile(APP_DIR . '/src/Model/User/user_fields.yaml');
         $fields['fieldsForms'] = (new FormRenderer($fields['fields']))->render();
+        $fields['token'] = generateToken();
 
         return new View('signup', $fields);
     }

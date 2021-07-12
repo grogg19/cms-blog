@@ -5,17 +5,17 @@
 
 namespace App\Controllers\PublicControllers;
 
-use App\Controllers\Controller;
 use App\Repository\SubscribeRepository;
 use App\Model\Subscriber;
 use App\Redirect;
+use App\Request\Request;
 use App\Validate\Validator;
 
 /**
  * Class PublicSubscribeController
  * @package App\Controllers\PublicControllers
  */
-class PublicSubscribeController extends Controller
+class PublicSubscribeController extends PublicController
 {
     /**
      * @var SubscribeRepository
@@ -35,16 +35,16 @@ class PublicSubscribeController extends Controller
      * @return string
      * @throws \App\Exception\ValidationException
      */
-    public function subscribe(): string
+    public function subscribe(Request $request): string
     {
-        if (empty($this->request->post('emailSubscribe')) && !checkToken()) {
+        if (empty($request->post('emailSubscribe')) && !checkToken()) {
             return $this->toast->getToast('warning', 'Данные недействительны, обновите страницу');
         }
 
-        $email = (string) $this->request->post('emailSubscribe');
+        $email = (string) $request->post('emailSubscribe');
 
         $data = [
-            'email' => $this->request->post('emailSubscribe')
+            'email' => $request->post('emailSubscribe')
         ];
 
         // Проверка введеного email
@@ -100,14 +100,14 @@ class PublicSubscribeController extends Controller
     /**
      *  метод отписывает email от рассылки
      */
-    public function unsubscribeByLink()
+    public function unsubscribeByLink(Request $request)
     {
-        if (empty($this->request->get('email')) || empty($this->request->get('code'))) {
+        if (empty($request->get('email')) || empty($request->get('code'))) {
             $this->toast->setToast('warning', 'Не хватает данных, чтобы отписаться');
             Redirect::to('/');
         }
-        $email = (string) $this->request->get('email');
-        $code = (string) $this->request->get('code');
+        $email = (string) $request->get('email');
+        $code = (string) $request->get('code');
 
         if ($this->unsubscribe($email, $code)) {
             $this->toast->setToast('success', 'Вы успешно отписались');

@@ -10,6 +10,7 @@ namespace App\Controllers\BackendControllers;
 use App\FormRenderer;
 use App\Model\User;
 use App\Renderable;
+use App\Request\Request;
 use App\Uploader\Upload;
 use App\Validate\Validator;
 use App\Repository\UserRepository;
@@ -82,12 +83,13 @@ class AdminAccountController extends AdminController
 
     /**
      * Метод обновляет информацию о пользователе и сообщает о результате работы
+     * @param Request $request
      * @return string
      * @throws \App\Exception\ValidationException
      */
-    public function updateUserProfile(): string
+    public function updateUserProfile(Request $request): string
     {
-        if (empty($this->request->post()) || !checkToken() || empty($this->session->get('userId'))) {
+        if (empty($request->post()) || !checkToken() || empty(session()->get('userId'))) {
             //  возвращаем сообщение об ошибке записи в БД.
             return $this->toast->getToast('warning', 'Невозможно обновить данные пользователя');
         }
@@ -95,7 +97,7 @@ class AdminAccountController extends AdminController
         // Если есть POST данные и токен соответствует,
         $user = $this->userRepository->getCurrentUser();
 
-        $data = $this->request->post();
+        $data = $request->post();
 
         // Подготовка правил для валидации
         if (!empty($data['password'])) {
@@ -128,9 +130,9 @@ class AdminAccountController extends AdminController
         // если ошибок в валидации не было
 
         // Подготовка данных к апдейту
-        $data = $this->prepareDataToUpdate();
+        $data = $this->prepareDataToUpdate($data);
 
-        $uploadAvatar = $this->uploadAvatar($user); // Пробуем загрузить аватарку
+        $uploadAvatar = $this->uploadAvatar($user, $request); // Пробуем загрузить аватарку
 
         // если получили сообщение об ошибке, то выведем его в блок аватара
         if (isset($uploadAvatar->error)) {
@@ -158,14 +160,14 @@ class AdminAccountController extends AdminController
 
     /**
      * Метод подготавливает данные формы профиля для перезаписи профиля
+     * @param array $postData
      * @return array
      */
-    protected function prepareDataToUpdate(): array
+    protected function prepareDataToUpdate(array $postData): array
     {
-        $postData = $this->request->post();
 
         // Очищаем post - массив от пустых элементов
-        foreach ($this->request->post() as $key => $field) {
+        foreach ($postData as $key => $field) {
             if ($key === 'self_description') // исключение, это поле может быть пустым
                 continue;
             if (empty($field)) {
@@ -176,17 +178,18 @@ class AdminAccountController extends AdminController
     }
 
     /**
-     *  Метод загружает аватар и возвращает результат его загрузки
+     * Метод загружает аватар и возвращает результат его загрузки
      * @param User $user
-     * @return object|null
+     * @param Request $request
+     * @return mixed|null
      */
-    protected function uploadAvatar(User $user)
+    protected function uploadAvatar(User $user, Request $request)
     {
         // Если есть файл на загрузку в массиве $_FILES
-        if ($this->request->files('avatar')['size'] !== 0) {
+        if ($request->files('avatar')['size'] !== 0) {
 
             // Создаем загрузчик и кладем в него этот файл
-            $uploader = new Upload($this->request->files());
+            $uploader = new Upload($request->files());
 
             // Получаем результат загрузки файла с его новыми реквизитами
             $resultUpload = json_decode($uploader->upload('avatars'));

@@ -8,6 +8,7 @@ namespace App\Uploader;
 use App\Config;
 use App\Controllers\BackendControllers\AdminController;
 use App\Cookie\Cookie;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class Upload
@@ -58,7 +59,6 @@ class Upload extends AdminController
 
                 $message['error'][] = 'Файл "'.$file["name"].'" не удовлетворяет требованиям к загрузке.';
                 return json_encode($message);
-                //Toast::getToast('warning', 'Файл "'.$file["name"].'" не удовлетворяет требованиям к загрузке.');
 
             }
 
@@ -85,7 +85,8 @@ class Upload extends AdminController
             ];
 
             $filesToCookie[] = $fileName;
-            $this->session->set('postBusy', true);
+
+            (new Session())->set('postBusy', true);
 
         }
         if (!empty($filesToCookie) && $configName = 'images') {

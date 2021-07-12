@@ -8,6 +8,7 @@ namespace App\Controllers\BackendControllers;
 use App\Redirect;
 use App\Renderable;
 use App\Repository\CommentRepository;
+use App\Request\Request;
 use App\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -34,15 +35,16 @@ class AdminCommentController extends AdminController
 
     /**
      * Рендер списка комментариев
+     * @param Request $request
      * @return Renderable
      */
-    public function listComments(): Renderable
+    public function listComments(Request $request): Renderable
     {
 
         $title = 'Модерация комментариев пользователей';
-        $avatarPath = $this->session->get('config')->getConfig('avatars')['pathToUpload'] . DIRECTORY_SEPARATOR;
-        $quantity = (!empty($_GET['quantity'])) ? filter_var($_GET['quantity'], FILTER_SANITIZE_STRING) : 20;
-        $page = (!empty($this->request->get('page'))) ? filter_var($_GET['page'], FILTER_SANITIZE_NUMBER_INT): 1;
+        $avatarPath = session()->get('config')->getConfig('avatars')['pathToUpload'] . DIRECTORY_SEPARATOR;
+        $quantity = (!empty($request->get('quantity'))) ? filter_var($request->get('quantity'), FILTER_SANITIZE_STRING) : 20;
+        $page = (!empty($request->get('page'))) ? filter_var($request->get('page'), FILTER_SANITIZE_NUMBER_INT): 1;
 
         $comments = (new CommentRepository())->getAllComments('asc', $quantity, $page);
 
@@ -68,16 +70,17 @@ class AdminCommentController extends AdminController
 
     /**
      * Одобрение комментария
+     * @param Request $request
      * @return string
      */
-    public function toApproveComment(): string
+    public function toApproveComment(Request $request): string
     {
-        if (empty($this->request->post('commentId')) || !checkToken()) {
+        if (empty($request->post('commentId')) || !checkToken()) {
             return $this->toast->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
         $commentRepository = new CommentRepository();
-        $comment = $commentRepository->setHasModeratedApprove((int) $this->request->post('commentId'));
+        $comment = $commentRepository->setHasModeratedApprove((int) $request->post('commentId'));
         if ($comment == null) {
             return $this->toast->getToast('warning', 'Комментарий не найден');
         }
@@ -90,16 +93,17 @@ class AdminCommentController extends AdminController
 
     /**
      * Отменяет одобрение комментария
+     * @param Request $request
      * @return string
      */
-    public function toRejectComment(): string
+    public function toRejectComment(Request $request): string
     {
-        if (empty($this->request->post('commentId')) || !checkToken()) {
+        if (empty($request->post('commentId')) || !checkToken()) {
             return $this->toast->getToast('warning', 'Недостоверные данные, обновите страницу');
         }
 
         $commentRepository = new CommentRepository();
-        $comment = $commentRepository->setHasModeratedReject((int) $this->request->post('commentId'));
+        $comment = $commentRepository->setHasModeratedReject((int) $request->post('commentId'));
 
         if ($comment == null) {
             return $this->toast->getToast('warning', 'Комментарий не найден');
