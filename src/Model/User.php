@@ -25,8 +25,8 @@ class User extends Model
      * Validation rules
      */
     public $rules = [
-        'first_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/i'],
-        'last_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/i'],
+        'first_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/iu'],
+        'last_name' => ['required', 'regex:/^[a-zA-Zа-яА-Яё -]+$/iu'],
         'email' => ['required', 'between:6,255', 'email', 'unique'],
         'password' => ['required', 'between:6,255', 'identityWith:password_confirm'],
         'password_confirm' => ['identityWith:password', 'between:6,255']
