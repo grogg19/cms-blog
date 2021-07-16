@@ -7,6 +7,7 @@ namespace App\Exception;
 
 use App\Exception\HttpException as HttpException;
 use App\Renderable as Renderable;
+use App\Repository\UserRepository;
 use App\View;
 use Throwable;
 
@@ -41,6 +42,9 @@ class NotFoundException extends HttpException implements Renderable
     {
         $data['message'] = $this->message;
         $data['title'] = 'Страница не найдена';
+
+        $data['user'] = (new UserRepository())->getCurrentUser();
+
 
         (new View('404', $data))->render();
     }
