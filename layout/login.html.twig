@@ -3,6 +3,10 @@
 <div class="dx-popup dx-popup-signin" id="block_login" >
     <button type="button" data-fancybox-close class="fancybox-button fancybox-close-small" title="Закрыть"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 12l5-5-1-1-5 5-5-5-1 1 5 5-5 5 1 1 5-5 5 5 1-1z"></path></svg></button>
     <div class="dx-signin-content dx-signin text-center">
+        {% if not user is empty %}
+            <h1 class="h3 text-white mb-30">{{ user.first_name }} {{ user.last_name }},</h1>
+            <h1 class="h4 text-white mb-30">Вы успешно вошли в систему</h1>
+        {% else %}
         <h1 class="h3 text-white mb-30">Вход</h1>
         <form method="post" action="{{ action }}" class="dx-form" name="form_login" id="form_login" >
             <input type="hidden" name="_token" value="{{ token }}">
@@ -16,6 +20,7 @@
                 </div>
             </div>
         </form>
+        {% endif %}
     </div>
 	<div id="messageToast"></div>
 </div>
