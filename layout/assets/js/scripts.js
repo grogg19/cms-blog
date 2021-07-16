@@ -58,7 +58,7 @@ function listenButtonClick() {
                 }
 
                 if (result.toast) {
-                    await getToast(result.toast.typeToast, result.toast.dataToast.message);
+                    await getToast(result.toast.typeToast, result.toast.dataToast);
                 }
                 //console.log(result);
             });
@@ -316,7 +316,6 @@ if (requestButtons) {
                 // for (let key in result.error) {
                 //     document.querySelector(result.error[key].field).setAttribute('tooltip', result.error[key].errorMessage);
                 // }
-
                 await getToast('warning',  result.error);
 
             }
@@ -340,7 +339,6 @@ let getToast = async (type, data) => {
     });
 
     let result = await response.text();
-
     if (result !== '' && result !== 'undefined') {
 
         await executeToast(result);
