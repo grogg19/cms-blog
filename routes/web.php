@@ -15,6 +15,7 @@ use App\Controllers\PublicControllers\StaticPagesController;
 use App\Controllers\BackendControllers\AdminStaticPagesController;
 use App\Migrations\MigrationLoader;
 use App\Toasts\Toast;
+use App\Image\ImageManager;
 use App\Exception\NotFoundException;
 use App\Repository\StaticPagesRepository;
 use App\Router;
@@ -55,7 +56,7 @@ $router->get('get','/admin/blog/posts/*/edit', AdminPostController::class . '@ed
 $router->get('post','/admin/blog/posts/save', AdminPostController::class . '@savePost');
 $router->get('post','/admin/blog/posts/delete', AdminPostController::class . '@deletePost');
 $router->get('post','/admin/blog/posts/img/upload', AdminPostController::class . '@imgUpload');
-$router->get(['get', 'post'],'/admin/blog/posts/img/get', AdminPostController::class . '@getImages');
+$router->get(['get', 'post'],'/admin/blog/posts/img/get', ImageManager::class . '@getImageNameFromStorages');
 
 /** Управление личным аккаунтом  */
 $router->get('get','/admin/account/edit', AdminAccountController::class . '@editUserProfileForm');
