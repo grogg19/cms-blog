@@ -89,14 +89,19 @@ class AdminAccountController extends AdminController
      */
     public function updateUserProfile(Request $request): string
     {
-        if (empty($request->post()) || !checkToken() || empty(session()->get('userId'))) {
+        if (empty($request->post()) || !checkToken()) {
             //  возвращаем сообщение об ошибке записи в БД.
-            return $this->toast->getToast('warning', 'Невозможно обновить данные пользователя');
+            $this->toast->setToast('warning', 'Невозможно обновить данные пользователя');
+            return json_encode(['url' => '/login']);
         }
 
         // Если есть POST данные и токен соответствует,
         $user = $this->userRepository->getCurrentUser();
 
+        if ($user === null) {
+            $this->toast->getToast('warning', 'Сначала необходимо авторизироваться');
+            return json_encode(['url' => '/login']);
+        }
         $data = $request->post();
 
         // Подготовка правил для валидации

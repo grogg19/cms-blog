@@ -38,7 +38,6 @@ class AdminController extends Controller
         parent::__construct();
 
         $this->auth = new Auth();
-        $this->initCheckers();
 
         $request = new Request();
         
@@ -56,9 +55,19 @@ class AdminController extends Controller
 
             // Чистка сессии
             session()->invalidate();
-            Redirect::to('/login');
+
+            if(!empty($request->server('HTTP_X_REQUESTED_WITH'))) {
+                return json_encode(['url' => '/login']);
+            } else {
+                Redirect::to('/login');
+            }
         }
 
+    }
+
+    public function __destruct()
+    {
+        $this->initCheckers();
     }
 
 

@@ -68,6 +68,7 @@ class Application
         // Если экземпляр Renderable
         if ($e instanceof Renderable) {
             // то запускаем его метод render()
+            $this->initSession();
             $e->render();
         } else {
             // Иначе выводим сообщение исключения
@@ -113,9 +114,6 @@ class Application
 
         // Если существует кука авторизации, стартуем сессию
         if (!empty(Cookie::get('authUser'))) {
-            if(session_status() === 1) {
-                $session->start();
-            }
 
             $currentUser = (new UserRepository())->getCurrentUser();
 

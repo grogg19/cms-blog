@@ -167,7 +167,9 @@ class PostRepository extends Repository
             $sort = 0;
             $configImages = $session->get('config')->getConfig('images');
 
-            foreach (Cookie::getArray('uploadImages') as $imageFileName) {
+            $arrayCookieImages = Cookie::getArray('uploadImages')[key(Cookie::getArray('uploadImages'))];
+
+            foreach ($arrayCookieImages as $imageFileName) {
                 $pathToFile = $_SERVER['DOCUMENT_ROOT'] . $configImages['pathToUpload'] . DIRECTORY_SEPARATOR . $imageFileName;
 
                 if (file_exists($pathToFile)) {

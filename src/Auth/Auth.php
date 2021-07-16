@@ -176,13 +176,20 @@ class Auth
                 'access' => 'denied',
                 'message' => 'Ваша учетная запись недоступна'
             ];
-        } else {
+        }
+
+        if(!empty($this->session->get('userId'))) {
             $user = (new UserRepository())->getUserById($this->session->get('userId'));
             $this->setUserAttributes($user);
             return [
                 'access' => 'allowed'
             ];
         }
+
+        return [
+            'access' => 'denied',
+            'message' => 'Вы не авторизованы'
+        ];
 
     }
 

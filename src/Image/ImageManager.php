@@ -8,7 +8,6 @@ namespace App\Image;
 use App\Model\Image;
 use App\Config;
 use App\Cookie\Cookie;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 
 /**
@@ -31,7 +30,7 @@ class ImageManager
     }
 
     /**
-     * метод удаляет файлы ищображений
+     * метод удаляет файлы изображений
      * @param array $fileNames
      * @return string
      */
@@ -90,9 +89,14 @@ class ImageManager
      */
     public function cacheImageClean() {
 
-        if (!empty(Cookie::getArray('uploadImages'))) {
+        if(!empty(Cookie::getArray('uploadImages'))) {
+            $images = Cookie::getArray('uploadImages')[key(Cookie::getArray('uploadImages'))];
+        }
 
-            $this->imageDestructor(Cookie::getArray('uploadImages'));
+
+        if (!empty($images)) {
+
+            $this->imageDestructor($images);
 
             Cookie::delete('uploadImages');
         }
@@ -121,8 +125,8 @@ class ImageManager
         }
 
         if (!empty(Cookie::getArray('uploadImages'))) {
-
-            foreach (Cookie::getArray('uploadImages') as $imageFileName) {
+            //dd(Cookie::getArray('uploadImages')[key(Cookie::getArray('uploadImages'))]);
+            foreach (Cookie::getArray('uploadImages')[key(Cookie::getArray('uploadImages'))] as $imageFileName) {
                 $imagesPath[] = [
                     'path' => $this->configImages['pathToUpload'] . DIRECTORY_SEPARATOR . $imageFileName,
                     'fileName' => $imageFileName,
@@ -144,7 +148,8 @@ class ImageManager
      */
     public function checkImageUploadActuality(): void
     {
-        if (!empty(Cookie::getArray('uploadImages')) && ((new Session())->get('postBusy') !== true || session_status() !== PHP_SESSION_ACTIVE) ) {
+        //if (!empty(Cookie::getArray('uploadImages')) && ((new Session())->get('postBusy') !== true || session_status() !== PHP_SESSION_ACTIVE) ) {
+        if ((!empty(Cookie::getArray('uploadImages')) && Cookie::getArray('uploadImages')[key(Cookie::getArray('uploadImages'))] !== SITE_ROOT . $_SERVER['REQUEST_URI']) || session_status() !== PHP_SESSION_ACTIVE ) {
 
             $this->cacheImageClean();
 

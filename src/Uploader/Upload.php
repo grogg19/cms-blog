@@ -8,7 +8,6 @@ namespace App\Uploader;
 use App\Config;
 use App\Controllers\BackendControllers\AdminController;
 use App\Cookie\Cookie;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class Upload
@@ -84,9 +83,9 @@ class Upload extends AdminController
                 'fileName' => $fileName
             ];
 
-            $filesToCookie[] = $fileName;
+            $filesToCookie[$_SERVER['HTTP_REFERER']][] = $fileName;
 
-            (new Session())->set('postBusy', true);
+            //(new Session())->set('postBusy', true);
 
         }
         if (!empty($filesToCookie) && $configName = 'images') {

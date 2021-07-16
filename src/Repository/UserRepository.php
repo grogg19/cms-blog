@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Auth\Auth;
 use App\Config;
+use App\Cookie\Cookie;
 use App\Model\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -30,9 +31,15 @@ class UserRepository extends Repository
      */
     public function getCurrentUser()
     {
-        if (session_status() == 1) {
+
+        if (session_status() == 1 && empty(Cookie::get('authUser'))) {
             return null;
         }
+
+        if(session_status() == 1 && !empty(Cookie::get('authUser'))) {
+            session_start();
+        }
+
         if (!empty(session()->get('userId'))) {
 
             return $this->getUserById(session()->get('userId'));

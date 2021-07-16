@@ -31,7 +31,7 @@ class LoginController extends PublicController
      */
     public function form(): Renderable
     {
-        if (session_status() === 2) {
+        if (session_status() == 2) {
             Redirect::to('/admin/blog/posts');
         }
 
