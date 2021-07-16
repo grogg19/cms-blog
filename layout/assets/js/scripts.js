@@ -34,7 +34,10 @@ function listenButtonClick() {
 
                 let response = await fetch(form.action, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
                 });
 
                 let result = await response.json();
@@ -55,7 +58,7 @@ function listenButtonClick() {
                 }
 
                 if (result.toast) {
-                    await getToast(result.toast.typeToast, result.toast.dataToast);
+                    await getToast(result.toast.typeToast, result.toast.dataToast.message);
                 }
                 //console.log(result);
             });
@@ -244,7 +247,10 @@ if(elementsForSend) {
 
             let response = await fetch(elementSendUrl.getAttribute('data-send-url') + element.getAttribute('data-method'), {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
             });
 
             let result = await response.json();
@@ -286,7 +292,10 @@ if (requestButtons) {
 
             let response = await fetch(element.getAttribute('href'), {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
             });
 
             let result = await response.json();
@@ -324,7 +333,10 @@ let getToast = async (type, data) => {
 
     let response = await fetch('/toasts/index', {
         method: 'POST',
-        body: formData
+        body: formData,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
     });
 
     let result = await response.text();
@@ -396,7 +408,10 @@ const loadMorePostsButton = async () => {
 
     let response = await fetch('/morePosts', {
         method: 'POST',
-        body: formData
+        body: formData,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
     });
 
     let result = await response.text();
@@ -439,7 +454,10 @@ const getSubscribeResponse = async (element) => {
 
         let response = await fetch(form.action, {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
         });
 
         let result = await response.json();
@@ -471,6 +489,9 @@ const checkToast = async () => {
 
     let response = await fetch('/checkToast', {
         method: 'POST',
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
 
     });
 
