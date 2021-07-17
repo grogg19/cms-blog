@@ -85,8 +85,6 @@ class Upload extends AdminController
 
             $filesToCookie[$_SERVER['HTTP_REFERER']][] = $fileName;
 
-            //(new Session())->set('postBusy', true);
-
         }
         if (!empty($filesToCookie) && $configName = 'images') {
 

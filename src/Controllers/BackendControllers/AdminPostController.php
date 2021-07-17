@@ -304,7 +304,6 @@ class AdminPostController extends AdminController
     {
         if (!empty(Cookie::getArray('uploadImages'))) {
             (new ImageManager())->cacheImageClean();
-            session()->remove('postBusy');
         }
     }
 

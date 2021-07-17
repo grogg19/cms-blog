@@ -145,7 +145,6 @@ class PostRepository extends Repository
      */
     public function saveToDb(Request $request, Session $session, User $user = null): ModelPost
     {
-
         if (!empty($request->post('idPost'))) {
             $post = $this->getPostById((int) $request->post('idPost'));
         } else {
@@ -162,7 +161,7 @@ class PostRepository extends Repository
 
         $post->save();
 
-        if (!empty(Cookie::getArray('uploadImages')) && $session->get('postBusy') == true) {
+        if (!empty(Cookie::getArray('uploadImages'))) {
 
             $sort = 0;
             $configImages = $session->get('config')->getConfig('images');
@@ -183,7 +182,6 @@ class PostRepository extends Repository
 
             Image::insert($data); // Добавляем изображения в БД
 
-            $session->set('postBusy', false); // снимаем метку блокировки поста
             Cookie::delete('uploadImages'); // Чистим список загруженных изображений в куках
         }
         return $post;
