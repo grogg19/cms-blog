@@ -24,6 +24,7 @@
                     <form class="dx-form" name="form_edit_page" id="form_edit_page" action="{{ form['action'] }}">
                         <input type="hidden" name="_token" value="{{ token }}">
 	                    <input type="hidden" name="edit_form" value="1">
+                        <input type="hidden" name="pageName" value="{{ pageName }}">
                         <div class="dx-box-content">
                             {{ formFields|raw }}
                         </div>

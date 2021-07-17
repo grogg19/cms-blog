@@ -41,12 +41,19 @@ class AdminStaticPagesController extends AdminController
 
             $this->toast->setToast('info', 'У вас недостаточно прав для этого действия');
 
-            Redirect::to('/');
+            if(!empty(request()->server('HTTP_X_REQUESTED_WITH'))) {
+                die(json_encode(['url' => '/']));
+            } else {
+                Redirect::to('/');
+            }
+
         }
+
     }
 
     /**
      * Метод выводит список статических страниц
+     * @param Request $request
      * @return Renderable
      */
     public function index(Request $request): Renderable
@@ -104,6 +111,7 @@ class AdminStaticPagesController extends AdminController
 
     /**
      * Форма редактирования содержимого статической страницы
+     * @param Request $request
      * @return Renderable
      */
     public function editPage(Request $request): Renderable
@@ -116,16 +124,18 @@ class AdminStaticPagesController extends AdminController
         $page = (new StaticPagesRepository())->getPageByFileName( (string) $request->post('pageName'));
 
         $form = $this->getFields();
-
         $pageParameters = (object) $page->getParameters();
 
         $formFields = (new FormRenderer($form['fields']))->render($pageParameters);
+
+
 
         $dataPage = [
             'form' => $form,
             'token' => generateToken(),
             'title' => 'Редактирование страницы',
-            'formFields' => $formFields
+            'formFields' => $formFields,
+            'pageName' => $request->post('pageName')
         ];
 
         return new View('admin.static_pages.edit_page', $dataPage);
@@ -133,19 +143,20 @@ class AdminStaticPagesController extends AdminController
 
     /**
      * Сохранение данных страницы
+     * @param Request $request
      * @return string
      * @throws \App\Exception\ValidationException
      */
     public function savePage(Request $request): string
     {
         if (!checkToken()) {
-            return $this->toast->getToast('warning', 'Сессия устарела, обновите страницу!');
+            $this->toast->getToast('info', 'Сессия закончилась, обновите пожалуйста страницу!');
+            exit();
         }
-
         if (!empty($request->post('edit_form'))) {
 
             $pages = (new StaticPagesRepository())->getStaticPages();
-            $existPage = $pages->getPageByUrl(filter_var($request->post('url'), FILTER_SANITIZE_STRING));
+            $existPage = $pages->getPageByFileName($request->post('pageName'));
 
             if ($existPage !== null) {
                 $existPage->deletePage();
@@ -188,6 +199,7 @@ class AdminStaticPagesController extends AdminController
 
     /**
      * Удаление страницы
+     * @param Request $request
      * @return string
      */
     public function deletePage(Request $request): string
