@@ -35,7 +35,6 @@ class Toast
     {
         if (!empty($this->request->post('typeToast'))
             && !empty($this->request->post('dataToast'))
-            && checkToken()
         ) {
 
             $content = new View('partials.toast_main', [

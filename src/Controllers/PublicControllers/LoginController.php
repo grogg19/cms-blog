@@ -31,9 +31,6 @@ class LoginController extends PublicController
      */
     public function form(): Renderable
     {
-        if (session_status() == 2) {
-            Redirect::to('/admin/blog/posts');
-        }
 
         $fields = (new Yaml())->parseFile(APP_DIR . '/src/Model/User/user_login_fields.yaml');
 
@@ -46,6 +43,7 @@ class LoginController extends PublicController
 
     /**
      * Авторизация в админке
+     * @param Request $request
      * @return string
      * @throws \App\Exception\ValidationException
      */

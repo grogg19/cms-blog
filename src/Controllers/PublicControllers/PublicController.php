@@ -15,7 +15,6 @@ class PublicController extends Controller
 
     public function __construct()
     {
-        parent::__construct();
         $this->toast = new Toast();
     }
 }

@@ -27,6 +27,7 @@ class Application
      */
     public function __construct(Router $router)
     {
+        generateToken();
         $this->router = $router;
         $this->initialize();
     }

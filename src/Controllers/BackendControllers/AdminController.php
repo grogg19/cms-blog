@@ -35,18 +35,15 @@ class AdminController extends Controller
      */
     public function __construct()
     {
-        parent::__construct();
-
         $this->auth = new Auth();
 
         $request = new Request();
         
         $this->toast = new Toast();
-
         // Проверяем факт авторизации пользователя
         $check = $this->auth->checkAuthorization();
 
-        if ($check['access'] !== 'allowed') {
+        if ($check['access'] != 'allowed') {
 
             $this->toast->setToast('warning', $check['message']);
 
@@ -54,15 +51,14 @@ class AdminController extends Controller
             Cookie::set('targetUrl', $request->server('REQUEST_URI'));
 
             // Чистка сессии
-            session()->invalidate();
-
-            if(!empty($request->server('HTTP_X_REQUESTED_WITH'))) {
-                return json_encode(['url' => '/login']);
-            } else {
-                Redirect::to('/login');
-            }
+           $this->auth->unAuthorize();
+           generateToken();
+           if (!empty($request->server('HTTP_X_REQUESTED_WITH'))) {
+               die(json_encode(['url' => '/login']));
+           }
+           Redirect::to('/login');
+           exit();
         }
-
     }
 
     public function __destruct()
