@@ -36,7 +36,7 @@ class UserRepository extends Repository
             return null;
         }
 
-        if(session_status() == 1 && !empty(Cookie::get('authUser'))) {
+        if (session_status() == 1 && !empty(Cookie::get('authUser'))) {
             session_start();
         }
 

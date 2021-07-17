@@ -41,7 +41,7 @@ class AdminStaticPagesController extends AdminController
 
             $this->toast->setToast('info', 'У вас недостаточно прав для этого действия');
 
-            if(!empty(request()->server('HTTP_X_REQUESTED_WITH'))) {
+            if (!empty(request()->server('HTTP_X_REQUESTED_WITH'))) {
                 die(json_encode(['url' => '/']));
             } else {
                 Redirect::to('/');

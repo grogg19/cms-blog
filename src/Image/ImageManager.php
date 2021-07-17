@@ -89,7 +89,7 @@ class ImageManager
      */
     public function cacheImageClean() {
 
-        if(!empty(Cookie::getArray('uploadImages'))) {
+        if (!empty(Cookie::getArray('uploadImages'))) {
             $images = Cookie::getArray('uploadImages')[key(Cookie::getArray('uploadImages'))];
         }
 
@@ -148,7 +148,6 @@ class ImageManager
      */
     public function checkImageUploadActuality(): void
     {
-        //if (!empty(Cookie::getArray('uploadImages')) && ((new Session())->get('postBusy') !== true || session_status() !== PHP_SESSION_ACTIVE) ) {
         if ((!empty(Cookie::getArray('uploadImages')) && Cookie::getArray('uploadImages')[key(Cookie::getArray('uploadImages'))] !== SITE_ROOT . $_SERVER['REQUEST_URI']) || session_status() !== PHP_SESSION_ACTIVE ) {
 
             $this->cacheImageClean();

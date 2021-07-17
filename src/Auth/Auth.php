@@ -178,7 +178,7 @@ class Auth
             ];
         }
 
-        if(!empty($this->session->get('userId'))) {
+        if (!empty($this->session->get('userId'))) {
             $user = (new UserRepository())->getUserById($this->session->get('userId'));
             $this->setUserAttributes($user);
             return [
