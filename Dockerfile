@@ -64,7 +64,7 @@ RUN mkdir /home/www
 RUN chown -R www-data:www-data /home/www
 RUN chmod 0777 -R /var/run/mysqld
 
-EXPOSE 3306 80
+EXPOSE 80 3306
 
 RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
 
